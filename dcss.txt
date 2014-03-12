@@ -267,10 +267,10 @@ automagic_fight = false
 # % = food
 # } = miscellaneous
 # \ = rods
-autopickup += $?!:"/%}\
+# | = staves
+autopickup += $?!:"/%}\|
 
 # Unused
-# | = staves
 # ) = weapon
 # ( = missiles
 # [ = armour
@@ -313,9 +313,6 @@ ae += useless_item, dangerous_item, evil_item
 
 # Autopickup artefacts
 ae += <artefact
-
-# Autopickup unknown staffs
-ae += <unknown magical staff
 
 # Ammo autopickup 
 # Set any of the local variables to false to disable that category
@@ -1129,6 +1126,7 @@ msc += $item_dmg:You feel your flesh rotting away
 msc += $item_dmg:You are engulfed in dark miasma
 msc += $item_dmg:You feel guilty
 msc += $item_dmg:Done waiting
+msc += $item_dmg:That really hurt
 
 #msc += $warning:
 msc += $warning:You smell decay
@@ -1853,6 +1851,7 @@ msc += $positive:The scroll dissolves into smoke
 msc += $positive:Your.*reflects
 msc += $positive:is no longer unusually agile
 msc += $positive:the former slaves? thank you
+msc += $positive:[^y].*rots
 msc += $positive:the hog turns into a human
 msc += $positive:Your new body merges with your icy armour
 msc += $positive:You feel the strange sensation of being on two planes at once
@@ -1897,9 +1896,11 @@ msc += $positive:but delicious nonetheless
 msc += $positive:The disc of vapour around you crackles
 msc ^= $positive:grand avatar fades into the ether
 msc += $positive:turns into a zombie
+msc += $positive:You feel a.*surge of power
 msc += $positive:magic leaks into the air
 msc += $positive:You focus on the pain
 msc += $positive:Your.*darts out from under the net
+msc += $positive:submits to your will
 
 msc += $verypositive:Your magma supply has returned
 msc += $verypositive:(HP|Magic) restored
@@ -1941,7 +1942,6 @@ msc += $verypositive:You feel studious about
 msc += $verypositive:You feel telepathic
 msc += $verypositive:You feel your magic capacity increase
 msc += $verypositive:You feel the abyssal rune guiding you out of this place
-msc += $verypositive:You feel a.*surge of power
 msc += $verypositive:You feel fantastic
 msc += $verypositive:You feel life coursing into your body
 msc += $verypositive:Found.*altar
@@ -2147,12 +2147,13 @@ msc += $interface:Done exploring
 
 # Muted - unnecessary 
 #msc += mute:
-msc += mute:Cast which spell\? \(
+msc += mute:Cast which spell
+msc += mute:Use which ability
+msc += mute:Evoke which item
 msc += mute:Confirm with
 msc += mute:Casting\:
 msc += mute:Aiming\:
 msc += mute:Aim\:
-msc += mute:Evoke which item\?
 msc += mute:You can\'t see any susceptible monsters within range
 msc += mute:Press\: \? \- help, Shift\-Dir \- straight line, f \- you
 msc += mute:for a list of commands and other information
