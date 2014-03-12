@@ -288,10 +288,6 @@ add_autopickup_func(function(item, name)
 		if (good_slots[sub_type] ~= nil) and (current_item == nil) then
 			return true 
 		end
-		
-    if not (current_item == nil) then
-      crawl.mpr("Wearing " .. current_item .. "in slot " .. sub_type)
-    end 
     
 		return false
     
@@ -317,6 +313,9 @@ ae += useless_item, dangerous_item, evil_item
 
 # Autopickup artefacts
 ae += <artefact
+
+# Autopickup unknown staffs
+ae += <unknown magical staff
 
 # Ammo autopickup 
 # Set any of the local variables to false to disable that category
@@ -555,7 +554,7 @@ stop += You feel yourself come back to life
 stop += uncertain
 # Deaths Door
 stop += time is quickly running out
-stop += life is in your own hands
+stop += life is in your own
 # Enslavement
 stop += is no longer charmed
 # Shroud
@@ -795,7 +794,7 @@ more += Your hearing returns
 more += You have a feeling this form
 more += You feel yourself come back to life
 more += time is quickly running out
-more += life is in your own hands
+more += life is in your own
 more += is no longer charmed
 more += shroud falls apart
 more += Your extra speed is starting to run out
@@ -1253,7 +1252,7 @@ msc += $warning:The water rises up and takes form
 msc += $warning:You stop dropping stuff
 msc += $warning:You enter the shallow water
 msc += $warning:You see a puff of smoke
-msc += $warning:pour from your hands
+msc += $warning:pour from your
 msc += $warning:Tentacles burst out of the water
 msc += $warning:calls forth a grand avatar
 msc += $warning:begins absorbing vital energies
@@ -1434,6 +1433,7 @@ msc += $warning:starcursed mass shudders and
 msc += $warning:The kraken squirts a massive cloud of ink
 msc += $warning:Wisps of shadow whirl around you
 msc += $warning:You are blown backwards
+msc += $warning:shakes off its lethargy
 msc += $warning:I don't know how to get there
 msc += $warning:There is a magical portal here
 msc += $warning:pulses with an eldritch light
@@ -1478,10 +1478,10 @@ msc += $boring:You feel lost and a long
 msc += $boring:The world around you seems to dim momentarily
 msc += $boring:tears through a web
 msc += $boring:Pikel waves his whip at you
-msc += $boring:Wisps of condensation drift from your hands
+msc += $boring:Wisps of condensation drift from your
 msc += $boring:A chill runs through your body
 msc += $boring:Frost covers your body
-msc += $boring:Your hands feel numb with cold
+msc += $boring:Your.*feel numb with cold
 msc += $boring:That.*was very bland
 msc += $boring:That lemon was rather sour
 msc += $boring:vibrates crazily for a second
@@ -1491,6 +1491,7 @@ msc += $boring:Maurice looks sneaky
 msc += $boring:Suddenly you are surrounded with a pale green light
 msc += $boring:really hit the spot
 msc += $boring:Mmmm... Yummy
+msc += $boring:The shadow imp grinds its teeth
 msc += $boring:looks to the heavens
 msc += $boring:beckons to you
 msc += $boring:Your.*struggles to escape the
@@ -1500,7 +1501,7 @@ msc += $boring:You feel electric
 msc += $boring:sharp shower of sparks
 msc += $boring:pulsates ominously
 msc += $boring:You feel earthy
-msc += $boring:Sparks of electricity dance between your hands
+msc += $boring:Sparks of electricity dance between your
 msc += $boring:Edmund gestures with his flail
 msc += $boring:You feel very uncomfortable
 msc += $boring:tastes (great|very good|good|unpleasant)
@@ -1542,7 +1543,7 @@ msc += $boring:The briar patch crumbles away
 msc += $boring:You feel momentarily lethargic
 msc += $boring:It was a (potion|scroll)
 msc += $boring:...but nothing happens
-msc += $boring:Wisps of smoke drift from your hands
+msc += $boring:Wisps of smoke drift from your
 msc += $boring:You smell salt
 msc += $boring:tries to hide in the shadows
 msc += $boring:stops crackling
@@ -1561,7 +1562,7 @@ msc += $boring:You have identified the last
 msc += $boring:You can't see any susceptible monsters within range! (Use Z to cast anyway.)
 msc += $boring:You can't go (up|down) here
 msc += $boring:Your hair stands on end
-msc += $boring:Wisps of vapour drift from your hands
+msc += $boring:Wisps of vapour drift from your
 msc += $boring:This raw flesh tastes terrible
 msc += $boring:the (plant|fungus)
 msc += $boring:You are momentarily dazzled by a (brilliant|flash of) light
@@ -1655,7 +1656,7 @@ msc += $boring:There is a web.*here
 msc += $boring:You pick your way through the web
 msc += $boring:You hold your ground
 msc += $boring:The floor vibrates
-msc += $boring:Sand pours from your hands
+msc += $boring:Sand pours from your
 msc += $boring:Strange energies run through your body
 msc += $boring:You smell something strange
 msc += $boring:The.*evades a web
@@ -1678,7 +1679,7 @@ msc += $boring:tears the web
 msc += $boring:lashes its tail
 msc += $boring:smirks and points a slender finger
 msc += $boring:spectral weapon stumbles backwards
-msc += $boring:Your hands glow momentarily
+msc += $boring:Your (hands|claws) glow momentarily
 msc += $boring:Weird images run through your mind
 msc += $boring:safely over a trap
 msc += $boring:avoid triggering a
@@ -1708,13 +1709,13 @@ msc += $boring:electric golem crackles and sizzles
 msc += $boring:ghost ripples
 msc += $boring:Maud (looks upset|frowns)
 msc += $boring:There is an ice choked empty arch of ancient stone here
-msc += $boring:Sparks fly from your hands
+msc += $boring:Sparks fly from your
 msc += $boring:A beastly little devil appears in a puff
 msc += $boring:crimson imp breathes smoke at you
 msc += $boring:apparition takes form in the air
 msc += $boring:Distant voices call out to you
 msc += $boring:You are showered with tiny particles of grit
-msc += $boring:The scroll reassembles itself in your hands
+msc += $boring:The scroll reassembles itself in your
 msc += $boring:You feel uncomfortably hot
 msc += $boring:Nergalle blows her nose
 msc += $boring:Nergalle looks more energetic
@@ -1789,7 +1790,6 @@ msc += $positive:You emit a cloud
 msc += $positive:(confused|looks drowsy)
 msc += $positive:is caught in a (web|net)
 msc += $positive:struggles to get unstuck from the (web|net)
-msc += $positive:You feel yourself speed up
 msc += $positive:loses its grip on you
 msc += $positive:The sentinel's mark upon you fades away
 msc ^= $positive:The terrible wounds on your body vanish
@@ -1866,7 +1866,7 @@ msc += $positive:Your attacks are magically infused
 msc += $positive:Your feet morph into talons
 msc += $positive:You grow a pair of large bovine horns
 msc += $positive:You extend your transformation
-msc += $positive:Your hands turn into razor-sharp scythe blades
+msc += $positive:Your.*turn into razor-sharp scythe blades
 msc += $positive:You conjure a globe of magical energy
 msc += $positive:You imbue your battlesphere with additional charge
 msc += $positive:Your battlesphere fires
@@ -1906,11 +1906,11 @@ msc += $verypositive:Saving game... please wait
 msc += $verypositive:You finish memorising
 msc += $verypositive:Your wand.*glows for a moment
 msc += $verypositive:You may choose your destination
+msc += $verypositive:You feel yourself speed up
 msc += $verypositive:Your skill with magical items lets you calculate the power of this device
 msc += $verypositive:You can move again
 msc += $verypositive:The fungal colony is destroyed
 msc += $verypositive:You are no longer firmly anchored in space
-msc += $verypositive:You sensed
 msc += $verypositive:Magic courses through your body
 msc += $verypositive:You have disarmed the trap
 msc += $verypositive:You are healed
@@ -1924,6 +1924,7 @@ msc += $verypositive:You feel vaguely more buoyant than before
 msc += $verypositive:You feel (much better|resistant|faster|mighty|protected|better|refreshed)
 msc += $verypositive:You feel very mighty all of a sudden
 msc += $verypositive:You feel agile all of a sudden
+msc += $verypositive:You feel aware of your surroundings
 msc += $verypositive:You feel the corruption within you wane
 msc += $verypositive:You feel perceptive
 msc += $verypositive:You feel a little better
@@ -1957,6 +1958,7 @@ msc += $verypositive:Found a magical portal
 msc += $verypositive:Found.*staircase
 msc += $verypositive:Found.*(shop|store|Emporium|Distillery|Boutique|Accessories|Antiques)
 msc += $verypositive:Your fingernails lengthen
+msc += $verypositive:You feel your.*returning
 
 #msc += $awesome:
 msc += $awesome:Your vision sharpens
@@ -1973,7 +1975,6 @@ msc += $awesome:Your.*skill increases
 msc += $awesome:You have reached level
 msc += $awesome:Your experience leads to an increase in your attributes
 msc += $awesome:You feel (agile|clever|stronger)
-msc += $awesome:You feel your.*returning
 msc += $awesome:There is a frozen archway here
 msc += $awesome:There is a dark tunnel here
 msc += $awesome:There is a portal to a secret trove of treasure here
@@ -1982,10 +1983,10 @@ msc += $awesome:The lock glows eerily
 msc += $awesome:Heavy smoke blows from the lock
 msc += $awesome:You have escaped!
 msc += $awesome:rune into the lock
-msc += $awesome:You feel aware of your surroundings
+msc += $awesome:You sensed
 
 msc += $awesome:A searing pain shoots up your arm
-msc += $awesome:Your hands tingle!
+msc += $awesome:Your.*tingle!
 msc += $awesome:You feel a dreadful hunger
 
 msc += $awesome:Your metabolism slows
@@ -2094,6 +2095,9 @@ msc += $negative:engulfs your
 msc ^= $negative:You are more confused
 msc ^= $negative:You are confused
 msc += $negative:You are blasted with magical energy
+
+#monster resists
+msc += $danger:completely resists
 msc += $warning:resists
 
 msc ^= $takesaction:points at you and mumbles some strange words
