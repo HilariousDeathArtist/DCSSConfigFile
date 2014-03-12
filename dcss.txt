@@ -940,6 +940,7 @@ $good     := lightblue
 $positive := blue
 $verypositive := green
 $awesome := lightgreen
+$interface := cyan
 $takesaction := lightmagenta
 $godaction := magenta
 
@@ -1441,6 +1442,7 @@ msc += $warning:You will not leave this place
 msc += $warning:wrenching scream
 msc += $warning:Leave now/, before it is too late
 
+msc ^= $boring:You reach to attack
 msc += $boring:Your bones ache
 msc += $boring:Thank you for shopping
 msc += $boring:Your ears itch
@@ -1941,6 +1943,7 @@ msc += $verypositive:Found.*(shop|store|Emporium|Distillery|Boutique|Accessories
 msc += $awesome:Your vision sharpens
 msc += $awesome:Your.*is now the 
 msc += $awesome:Your urge to shout disappears
+msc ^= $awesome:scales grow over part of your body
 msc ^= $awesome:Something appears at your feet
 msc ^= $awesome:Something appears before you
 msc ^= $awesome:Your urge to shout disappears
@@ -2096,18 +2099,23 @@ msc += $godaction:is slowly consumed by flames
 msc += $godaction:is consumed in a column of flame
 msc += $godaction:The toadstool can now pick up its mycelia and move
 
-# Messages
-msc += cyan:Welcome
-msc += cyan:comes into view
-msc += cyan:That item cannot be evoked
-msc += cyan:Please enjoy your stay
-msc += cyan:Showing terrain only
-msc += cyan:Returning to normal view
-msc += cyan:Done exploring
+# Interface Messages
+#msc += $interface:
+msc += $interface:Welcome
+msc += $interface:comes into view
+msc += $interface:That item cannot be evoked
+msc += $interface:Please enjoy your stay
+msc += $interface:Showing terrain only
+msc += $interface:Returning to normal view
+msc += $interface:Done exploring
 
-# Interface
+# Muted - unnecessary 
+#msc += mute:
 msc += mute:Cast which spell\? \(
-msc += mute:Confirm with . or Enter\, or press \? or \* to list all spells
+msc += mute:Confirm with
+msc += mute:Casting\:
+msc += mute:Aiming\:
+msc += mute:Aim\:
 msc += mute:You can\'t see any susceptible monsters within range
 msc += mute:Press\: \? \- help, Shift\-Dir \- straight line, f \- you
 msc += mute:for a list of commands and other information
@@ -2123,8 +2131,6 @@ msc += mute:Was it this warm in here before
 msc += mute:The flames dance
 msc += mute:Your shadow attacks
 msc += mute:Marking area around
-msc += $boring:You reach to attack
-msc += mute:You reach to attack
 msc += mute:Placed new exclusion
 msc += mute:Reduced exclusion size to a single square
 msc += mute:Removed exclusion
