@@ -266,11 +266,11 @@ automagic_fight = false
 # / = wand
 # % = food
 # } = miscellaneous
-# | = staves
 # \ = rods
-autopickup += $?!:"/%}|\
+autopickup += $?!:"/%}\
 
 # Unused
+# | = staves
 # ) = weapon
 # ( = missiles
 # [ = armour
@@ -283,12 +283,18 @@ add_autopickup_func(function(item, name)
 	if item.class(true) == "armour" then	
 		local good_slots = {cloak="Cloak", helmet="Helmet", gloves="Gloves", boots="Boots"}
 		sub_type, _ = item.subtype()
-			 
-		if (good_slots[sub_type] ~= nil) and (items.equipped_at(good_slots[sub_type]) == nil) then 
+    current_item = items.equipped_at(good_slots[sub_type])
+    
+		if (good_slots[sub_type] ~= nil) and (current_item == nil) then
 			return true 
 		end
 		
-		return false		
+    if not (current_item == nil) then
+      crawl.mpr("Wearing " .. current_item .. "in slot " .. sub_type)
+    end 
+    
+		return false
+    
 		end	
 	end)
 }
@@ -754,6 +760,7 @@ more += reflects.*of reflection
 more += You cannot afford.*fee
 more += You can move again
 more += You slip out of the net
+more += You.*and break free
 more += You feel your flesh rotting away
 more += You feel your translocation being delayed
 more += There is a sealed passage
@@ -1118,6 +1125,7 @@ msc += $item_dmg:Done waiting
 
 #msc += $warning:
 msc += $warning:You smell decay
+msc += $warning:You have difficulty breathing
 msc += $warning:The heat melts your.*(armour|shield)
 msc += $warning:You are engulfed in a cloud of spores
 msc += $warning:You feel less perceptive
@@ -1166,6 +1174,7 @@ msc += $warning:dissolves into sparkling lights
 msc += $warning:Your attempt to break free
 msc += $warning:[^un]wields
 msc += $warning:There is a portal leading out of here
+msc += $warning:Natasha's spirit plunges in to the ground
 msc += $warning:The.*wears
 msc += $warning:You are.*contaminated
 msc += $warning:blinks
@@ -1308,6 +1317,7 @@ msc += $warning:You open the lid...
 msc += $warning:puts on a burst of speed
 msc += $warning:The.*decay slows
 msc += $warning:This wand has
+msc += $warning:Your.*is caught in the
 msc += $warning:Thorny briars emerge from the ground!
 msc += $warning:No target in view
 msc += $warning:You flicker for a moment
@@ -1441,6 +1451,7 @@ msc += $warning:You feel a terrible foreboding
 msc += $warning:You will not leave this place
 msc += $warning:wrenching scream
 msc += $warning:Leave now/, before it is too late
+msc += $warning:picks up a throwing net
 
 msc ^= $boring:You reach to attack
 msc += $boring:Your bones ache
@@ -1482,6 +1493,8 @@ msc += $boring:really hit the spot
 msc += $boring:Mmmm... Yummy
 msc += $boring:looks to the heavens
 msc += $boring:beckons to you
+msc += $boring:Your.*struggles to escape the
+msc += $boring:Your.*struggles against the
 msc += $boring:fades away
 msc += $boring:You feel electric
 msc += $boring:sharp shower of sparks
@@ -1530,6 +1543,7 @@ msc += $boring:You feel momentarily lethargic
 msc += $boring:It was a (potion|scroll)
 msc += $boring:...but nothing happens
 msc += $boring:Wisps of smoke drift from your hands
+msc += $boring:You smell salt
 msc += $boring:tries to hide in the shadows
 msc += $boring:stops crackling
 msc += $boring:You momentarily stiffen
@@ -1713,7 +1727,7 @@ msc += $boring:glows dull silver for a moment
 msc += $boring:Your.*stumbles backwards
 msc += $boring:ghost takes a fighting stance
 msc += $boring:You shiver with fear
-
+msc += $boring:Your.*falls like a stone
 
 # Enemies taking damage
 msc += $good:You (hit|bite|slice|spit|open|slash|puncture|carve|perforate|stick|cut|chop|strike|skewer|impale|dice|headbutt|fracture|peck|touch|kick|freeze) 
@@ -1758,7 +1772,7 @@ msc += $positive:The web tears apart
 msc += $positive:Your.*is no longer paralysed.
 msc += $positive:Your.*seems less confused
 msc += $positive:Your magical contamination has.*faded
-msc += $positive:more experienced
+msc += $positive:Your white imp breaks free
 msc += $positive:That potion was really gluggy
 msc += $positive:You resist
 msc += $positive:You (partially|easily) resist
@@ -1820,7 +1834,6 @@ msc += $positive:Your life force is being protected
 msc += $positive:You become transparent for a moment
 msc += $positive:is charmed
 msc += $positive:You start singing a song of slaying
-msc += $positive:You shred the net and break free
 msc += $positive:The disc erupts in an explosion of electricity!
 msc += $positive:Your skin feels harder
 msc += $positive:and something leaps out
@@ -1878,12 +1891,16 @@ msc += $positive:The disc of vapour around you crackles
 msc ^= $positive:grand avatar fades into the ether
 msc += $positive:turns into a zombie
 msc += $positive:magic leaks into the air
+msc += $positive:You focus on the pain
+msc += $positive:Your.*darts out from under the net
 
 msc += $verypositive:Your magma supply has returned
 msc += $verypositive:(HP|Magic) restored
 msc += $verypositive:You (kill|destroy|blow up)
 msc += $verypositive:The.*dies
+msc += $verypositive:more experienced
 msc ^= $verypositive:Your.*glows (red|green|.*yellow|purple)
+msc ^= $verypositive:You.*and break free
 msc += $verypositive:You disentangle yourself
 msc += $verypositive:Saving game... please wait
 msc += $verypositive:You finish memorising
@@ -1905,6 +1922,7 @@ msc += $verypositive:It is a scroll of recharging
 msc += $verypositive:That put a bit of spring back into your step
 msc += $verypositive:You feel vaguely more buoyant than before
 msc += $verypositive:You feel (much better|resistant|faster|mighty|protected|better|refreshed)
+msc += $verypositive:You feel very mighty all of a sudden
 msc += $verypositive:You feel agile all of a sudden
 msc += $verypositive:You feel the corruption within you wane
 msc += $verypositive:You feel perceptive
@@ -1938,6 +1956,7 @@ msc += $verypositive:Found a portal to a secret trove of treasure
 msc += $verypositive:Found a magical portal
 msc += $verypositive:Found.*staircase
 msc += $verypositive:Found.*(shop|store|Emporium|Distillery|Boutique|Accessories|Antiques)
+msc += $verypositive:Your fingernails lengthen
 
 #msc += $awesome:
 msc += $awesome:Your vision sharpens
@@ -1985,8 +2004,8 @@ msc += $negative:You are outlined in light
 msc += $negative:briefly gains? a (red|green) sheen
 msc += $negative:very briefly gains a yellow sheen
 msc += $negative:You feel.*more hungry
-msc += $negative:(The|Something|ghost|).*resists
 msc += $negative:struggles to resist
+msc += $negative:The throwing net hits your
 msc += $negative:(bites|hits|shocks|tentacle-slaps|claws|smites|stings|freezes|slaps|pecks|gores) your?
 msc += $negative:(tail-slaps|tramples|burns|poisons|gores|pecks|touches|kicks|trunk-slaps|skewers|drowns) your?
 # Thanks killer klowns
@@ -2075,6 +2094,7 @@ msc += $negative:engulfs your
 msc ^= $negative:You are more confused
 msc ^= $negative:You are confused
 msc += $negative:You are blasted with magical energy
+msc += $warning:resists
 
 msc ^= $takesaction:points at you and mumbles some strange words
 msc += $takesaction:(shoots|throws|fires) [^n]
@@ -2210,7 +2230,7 @@ menu += $supergood:brand weapon
 # Potions
 menu += $supergood:magic mapping
 menu += yellow:potions? of (curing|heal wounds|magic)
-menu += $haste:potions? of speed
+menu += $haste:potions? of (speed|haste)
 menu += $buff:potions? of (might|agility|brilliance|resistance)
 menu += lightred:potions? of berserk
 menu += $supergood:potions? of (experience|cure mutation|gain|beneficial)
