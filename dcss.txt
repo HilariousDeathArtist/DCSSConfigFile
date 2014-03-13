@@ -12,7 +12,7 @@
 
 : function SpoilerAlert()
 :   local x,y
-:   local color = "cyan"
+:   local color = "yellow"
 :   local alerts = ""
 :   for x = -8,8 do
 :     for y = -8,8 do
@@ -24,9 +24,8 @@
 :         or string.find(desc, "great orb of eyes")
 :         or string.find(desc, "vampire knight")
 :         or string.find(desc, "orc sorcerer")
-:         or string.find(desc, "red wasp") then 
-:           warning =  " The " .. desc .. " can paralyse you!" 
-:           alerts = addToAlerts(alerts, warning)
+:         or string.find(desc, "red wasp") 
+:           then alerts = alerts ..  " The " .. desc .. " can paralyse you!" 
 :         end
 :         if string.find(desc, "yellow wasp") and not string.find(desc, "zombie")
 :           then alerts = alerts ..  " The " .. desc .. " can paralyse and slow you!"
@@ -207,9 +206,8 @@
 :           then alerts = alerts ..  " " .. desc .. " can send line-of-sight hellfire at you, cast Iron Shot, and summon Greater Demons!"
 :         end
 :         if string.find(desc, "ghost moth") and not string.find(desc, "zombie")
-:         or string.find(desc, "eye of draining") then
-:           warning =  " The " .. desc .. " will drain your Magic!"
-:           alerts = addToAlerts(alerts, desc)
+:         or string.find(desc, "eye of draining")
+:           then alerts = alerts ..  " The " .. desc .. " will drain your Magic!"
 :         end
 :       end
 :     end
@@ -217,22 +215,6 @@
 :   if not (alerts == "") then
 :       crawl.mpr("<" .. color .. ">Spoiler Alert:" .. alerts .. "</" .. color .. ">")
 :   end
-: end
-
-: function addToAlerts(alerts, warning)
-:   crawl.mpr("Called addToAlerts with alerts: " .. alerts .. " and warning: " .. escape(warning))
-:   if string.find(alerts, warning) then
-:     crawl.mpr("Found more than one")
-:     count = string.gmatch(alerts, escape(warning) .. "(%dx)") 
-:     crawl.mpr("Found ".. count .." of a kind")
-:     warning = warning .. "(" .. count + 1 .. "x)" 
-:   end
-:   alerts = alerts ..  warning
-:   return alerts
-: end
-
-: function escape(s)
-:   return (s:gsub('[%-%.%+%[%]%(%)%$%^%%%?%*]','%%%1'):gsub('%z','%%z'))
 : end
 
 ###############
@@ -260,7 +242,7 @@
 :     if current_hp > previous_hp then
 :       --Removes the negative sign
 :       local health_inturn = (0 - hp_difference)
-:       crawl.mpr("<lightgreen>You regain " .. health_inturn .. " health.</lightgreen>")
+:       crawl.mpr("<green>You regain " .. health_inturn .. " health.</green>")
 :     end
 :
 :     --On losing magic
@@ -272,7 +254,7 @@
 :     if current_mp > previous_mp then
 :       --Removes the negative sign
 :       local magic_inturn = (0 - mp_difference)
-:       crawl.mpr("<lightcyan>You regain " .. magic_inturn .. " magic.</lightcyan>")
+:       crawl.mpr("<cyan>You regain " .. magic_inturn .. " magic.</cyan>")
 :     end
 :
 #:    local maximum_mp =you.maxmp()
@@ -679,6 +661,7 @@ more += (The|Your).*falls away!
 # Translocations
 more += You.*([^/+]blink|teleport) [^f]
 more += Your surroundings suddenly seem different
+more += You feel strangely stable
 
 # Wands/Potions used by monsters
 more += zaps a wand
@@ -787,6 +770,7 @@ more += (You are|You're) confused
 more += (You are|You're) more confused
 more += (You are|You're) too confused
 more += (starving|devoid of blood)
+more += You need to eat something NOW
 more += wrath finds you
 more += lose consciousness
 more += You are too injured to fight blindly
@@ -877,6 +861,7 @@ more += is no longer charmed
 more += shroud falls apart
 more += Your extra speed is starting to run out
 more += Your skin stops crawling
+more += You are firmly grounded in the material plane once more
 
 # Uniques
 more += 27-headed.*comes? into view.
@@ -1026,7 +1011,7 @@ $good     := lightblue
 $positive := blue
 $verypositive := green
 $awesome := lightgreen
-$interface := cyan
+$interface := lightcyan
 $takesaction := lightmagenta
 $godaction := magenta
 
@@ -1042,6 +1027,7 @@ msc += white:You feel blessed for a moment
 #msc += $danger:
 msc += $danger:Your.*(shield|armour) melts away
 msc += $danger:drains you
+msc += $danger:You need to eat something NOW
 msc += $danger:feel drained
 msc += $danger:strangely unstable
 msc += $danger:curare-tipped.*hits you
@@ -1133,6 +1119,7 @@ msc += $danger:the glow from your corona prevents you from becoming completely i
 msc += $danger:A red film seems to cover your vision as you go berserk
 msc += $danger:Your limbs are stiffening
 msc += $danger:You have turned to stone
+msc += $danger:Draining that being is not a good idea
 msc += $danger:You feel.*ill
 msc += $danger:You can't gag anything down
 msc += $danger:Something feeds on your intellect
@@ -1193,6 +1180,9 @@ msc += $danger:Your skin stops crawling
 msc += $danger:Your resistance to elements expires
 msc += $danger:You are blasted by holy energy
 msc += $danger:You feel uncertain
+msc += $danger:You are firmly grounded in the material plane once more
+msc += $danger:The writing blurs in front of your eyes
+msc += $danger:Your thinking seems confused
 
 #msc += $item_dmg:
 msc += $item_dmg:acid corrodes
@@ -1210,6 +1200,8 @@ msc += $item_dmg:Done waiting
 msc += $item_dmg:That really hurt
 
 #msc += $warning:
+msc += $warning:A slime creature suddenly
+msc += $warning:You feel closer to the material plane
 msc += $warning:leaps out from its hiding place
 msc += $warning:The cursed.*is stuck to your body
 msc += $warning:You stop removing your armour
@@ -1250,6 +1242,7 @@ msc += $warning:The spell fizzles
 msc += $warning:Your body armour is too heavy
 msc += $warning:The crackling of melting ice is subsiding rapidly
 msc += $warning:seems to gain new vigour
+msc += $warning:You feel strangely stable
 msc += $warning:(recites|explains|preaches|embarks|launches|threatens|murmurs|breathes)
 msc += $warning:(shout|hisses|gurgles|screeches|barks|cheers|buzzes|grunts|makes a sound|complains)
 msc += $warning:(shriek|roars|says|moans|keens|mumbles|wails|croak|screams|chants|Floosh|trumpets)
@@ -1496,6 +1489,7 @@ msc += $warning:You feel the effects of Trog's Hand fading
 msc += $warning:You slam the door shut with a bang
 msc += $warning:This armour is.*for you
 msc += $warning:magical effects unravel
+msc += $warning:You awkwardly throw
 msc += $warning:You erupt
 msc += $warning:Nergalle is no longer invulnerable
 msc += $warning:The flames covering.*go out
@@ -1508,6 +1502,7 @@ msc += $warning:furiously retaliates
 msc += $warning:The blast of chaos engulfs your?
 msc += $warning:You are engulfed in seething chaos
 msc += $warning:Your song has ended
+msc += $warning:Your song is almost over
 msc += $warning:is in the way
 msc += $warning:You are too berserk
 msc += $warning:The tentacle pulls you backwards
@@ -1539,6 +1534,8 @@ msc += $warning:begin to drag.*along the ground
 msc += $warning:merge to form a (macabre mass|small abomination|large abomination)
 msc += $warning:Two macabre masses merge
 msc += $warning:falls through the shaft
+msc += $warning:There is a crawl-hole back to the Lair here
+msc += $warning:There is a hole to the Spider Nest here
 
 #msc += $boring:
 msc += $boring:Your.*falls into the water
@@ -1926,7 +1923,7 @@ msc += $positive:Your skin hardens
 msc += $positive:Eating
 msc += $positive:the sound returns
 msc += $positive:Your amulet of stasis gives you a mild electric shock
-msc += $positive:You finish putting on
+msc ^= $positive:You finish putting on
 msc += $positive:You finish eating
 msc += $positive:Your icy armour thickens
 msc += $positive:Your.*pulls away from the web
@@ -1948,6 +1945,7 @@ msc += $positive:is no longer unusually agile
 msc += $positive:the former slaves? thank you
 msc += $positive:[^y].*rots
 msc += $positive:the hog turns into a human
+msc += $positive:the hogs revert to their human forms
 msc += $positive:Your new body merges with your icy armour
 msc += $positive:You feel the strange sensation of being on two planes at once
 msc += $positive:You momentarily phase out as.*passes through you
@@ -1963,7 +1961,7 @@ msc += $positive:begins to bleed from.*wounds
 msc += $positive:Your.*draws strength from
 msc += $positive:You feel yourself moving faster
 msc += $positive:looks sick
-msc += $positive:Your attacks are magically infused
+msc ^= $positive:Your attacks are magically infused
 msc += $positive:Your feet morph into talons
 msc += $positive:You grow a pair of large bovine horns
 msc += $positive:You extend your transformation
@@ -1998,6 +1996,7 @@ msc += $positive:You focus on the pain
 msc += $positive:Your.*darts out from under the net
 msc += $positive:submits to your will
 msc += $positive:You channel some magical energy
+msc += $positive:Your.*shudders
 
 #msc += $verypositive:
 msc += $verypositive:You turn to flesh and can move again
@@ -2067,6 +2066,7 @@ msc += $verypositive:You feel your magical essence form a protective shroud arou
 msc += $verypositive:You feel your.*returning
 
 #msc += $awesome:
+msc += $awesome:Your thoughts seem clearer
 msc += $awesome:Sharp spines emerge from
 msc += $awesome:Your vision sharpens
 msc += $awesome:Your urge to shout disappears
@@ -2084,6 +2084,9 @@ msc ^= $awesome:The antennae on your head grow some more
 msc ^= $awesome:You feel energised by your suffering
 msc ^= $awesome:There is a nasty taste in your mouth for a moment
 msc ^= $awesome:You feel stable
+msc += $awesome:Large bone plates grow
+msc += $awesome:Your throat feels hot
+msc += $awesome:Your throat feels hot
 
 msc += $awesome:Your.*is now the 
 msc ^= $awesome:This is a scroll of acquirement
@@ -2102,6 +2105,7 @@ msc += $awesome:The lock glows eerily
 msc += $awesome:Heavy smoke blows from the lock
 msc += $awesome:You have escaped!
 msc += $awesome:rune into the lock
+msc += $awesome:With a loud hiss the gate opens wide
 msc += $awesome:You sensed
 
 msc += $awesome:A searing pain shoots up your arm
@@ -2109,13 +2113,13 @@ msc += $awesome:Your.*tingle!
 msc += $awesome:You feel a dreadful hunger
 msc ^= $awesome:Your.*glows (red|green|.*yellow|purple)
 
-
 # You or an ally takes damage
 msc += $negative:The ghost moth stares at you
 msc += $negative:Your ice beast melts
 msc += $negative:draws from the surrounding life force
 msc += $negative:The boulder beetle smashes into you
 msc += $negative:You feel very cold
+msc ^= $negative:The.*pierces through (you|your)
 msc += $negative:You are outlined in light
 msc += $negative:briefly gains? a (red|green) sheen
 msc += $negative:very briefly gains a yellow sheen
@@ -2208,6 +2212,7 @@ msc += $negative:The blink frog basks in the distortional energy
 msc += $negative:[^r]pulls free of the water
 msc += $negative:engulfs your
 msc += $negative:You are blasted with magical energy
+msc += $negative:The large rock crashes through you
 
 #monster resists
 msc += $danger:completely resists
@@ -2244,9 +2249,10 @@ msc += $godaction:is consumed in a column of flame
 msc += $godaction:The toadstool can now pick up its mycelia and move
 
 # Interface Messages
-msc += lightcyan:comes? into view
-
 #msc += $interface:
+msc += $interface:No previous command
+msc += $interface:comes? into view
+msc += $interface:You sense a monster
 msc += $interface:Welcome
 msc += $interface:That item cannot be evoked
 msc += $interface:Please enjoy your stay
@@ -2265,10 +2271,12 @@ msc += mute:Use which ability
 msc += mute:Evoke which item
 msc += mute:Confirm with
 msc += mute:(Casting|Aiming|Aim|Zapping)\:
+msc += mute:Throwing.*\:
 msc += mute:You can\'t see any susceptible monsters within range
 msc += mute:Press\: \? \- help, Shift\-Dir \- straight line, f \- you
 msc += mute:for a list of commands and other information
 msc += mute:Firing \(i \- inventory\. \(\,\) \- cycle\)\:
+msc += mute:Fire\/throw which item\?
 msc += mute:Okay\, then
 msc += mute:You swap places
 
