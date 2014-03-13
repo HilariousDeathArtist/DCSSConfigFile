@@ -1,7 +1,7 @@
 <
   function ready()
-    DmgTrack()
-    MobAlert()
+    AnnounceDamage()
+    SpoilerAlert()
   end
 >
 
@@ -10,7 +10,7 @@
 # (c) ScarletJ #
 ################
 
-: function MobAlert()
+: function SpoilerAlert()
 :   local x,y
 :   for x = -8,8 do
 :     for y = -8,8 do
@@ -215,20 +215,54 @@
 ###############
 # Damage Calc #
 ###############
-: local dmg_old_hp = 0 
+: local previous_hp = 0
+#: local mp_warning = 10
+#: local hp_warning_percent = 25
   
-: function DmgTrack()
-:   local bot_hp = you.hp()
-:   local dmg_inturn = 0
-:   if dmg_old_hp > 0 then
-:     dmg_inturn = dmg_old_hp - bot_hp
-:     if bot_hp < dmg_old_hp then
-:           crawl.mpr("<red>You take " .. dmg_inturn .. " damage.</red>")
+: function AnnounceDamage()
+:   local current_hp = you.hp()
+:   local current_mp = you.mp()
+:   --Skips message on initializing game
+:   if previous_hp > 0 then
+:     local hp_difference = previous_hp - current_hp
+:   
+:     --On losing health
+:     if current_hp < previous_hp then
+:       crawl.mpr("<red>You take " .. hp_difference .. " damage.</red>")       
 :     end
+
+:     --On gaining health
+:     if current_hp > previous_hp then
+:       --Removes the negative sign
+:       local health_inturn = (0 - hp_difference)
+:       crawl.mpr("<green>You regain " .. health_inturn .. " health.</green>")
+:     end
+:
+#:    local maximum_mp =you.maxmp()
+#:    if (current_mp < mp_warning) and (maximum_mp > (mp_warning * 2)) then
+#:      crawl.mpr("<yellow>* * *</yellow><red> LOW MAGIC WARING </red><yellow>You have " .. current_mp .. " magic * * *</yellow>")
+#:    end
+#:
+#:    if (current_hp < (maximum_hp * (hpwarning_percent/100))) then
+#:      crawl.mpr("<yellow>* * *</yellow><red> LOW HEALTH WARING </red><yellow>You have " .. current_hp .. " health * * *</yellow>")
+#:    end
 :   end
-:   dmg_old_hp = bot_hp
+:   --Set previous_hp at end of turn
+:   previous_hp = current_hp
 : end
 
+
+#: function DmgTrack()
+#:   local bot_hp = you.hp()
+#:   local dmg_inturn = 0
+#:   if dmg_old_hp > 0 then
+#:     dmg_inturn = dmg_old_hp - bot_hp
+#:     if bot_hp < dmg_old_hp then
+#:           crawl.mpr("<red>You take " .. dmg_inturn .. " damage.</red>")
+#:     end
+#:   end
+#:   dmg_old_hp = bot_hp
+#: end
 #############
 # Autofight #
 #############
@@ -460,7 +494,7 @@ auto_exclude += Menkaure, Duvessa, Dowan, Blork, Jospeh, jelly, Gastronok
 auto_exclude += Urug, Harold, Aizul, Erica, Jorgrun, ancienct lich, orb of fire
 auto_exclude += Saint Roka, Boris, Mennas, Nessos, Sonja, Agnes, Wiglaf, Fannar, Louise
 auto_exclude += Mara, Arachne, Xtahua, Frances, Frederick, ice statue
-auto_exclude += Death drake, Kirke, Hog, Jorgrun, Sojobo, Nergalle
+auto_exclude += Death drake, Kirke, Hog, Jorgrun, Sojobo, Nergalle, Maud
 
 ###############
 # Auto Travel #
@@ -602,6 +636,7 @@ more += Found a frozen archway
 : end
 
 more += Done waiting
+more += (The|Your).*falls away!
 
 # Translocations
 more += You.*([^/+]blink|teleport) [^f]
@@ -911,8 +946,8 @@ auto_drop_chunks = yes
 easy_eat_contaminated = true
 equip_unequip = true
 
-hp_warning = 25
-mp_warning = 25
+#hp_warning = 25
+#mp_warning = 25
 hp_colour = 100:green, 99:lightgray, 75:yellow, 50:lightred, 25:red
 mp_colour = 100:green, 99:lightgray, 75:yellow, 50:lightred, 25:red
 stat_colour = 3:red, 7:lightred
@@ -1007,6 +1042,7 @@ msc += $danger:You are caught in a web
 msc += $danger:You are knocked back by the lance of force
 msc += $danger:You are knocked back by the blast of cold
 msc += $danger:You feel very sick
+msc += $danger:Your.*falls away
 msc += $danger:splits in two
 msc += $danger:The lost soul (assumes the form|sacrifices itself)
 msc += $danger:Necromantic energies
@@ -1115,6 +1151,7 @@ msc += $danger:This potion can/'t work under stasis
 msc += $danger:Your icy (shield|armour) evaporates
 msc += $danger:You are more confused
 msc += $danger:You are confused
+msc += $danger:You're too confused to cast spells
 msc += $danger:Your skin stops crawling
 msc += $danger:Your resistance to elements expires
 msc += $danger:You are blasted by holy energy
@@ -1136,6 +1173,7 @@ msc += $item_dmg:Done waiting
 msc += $item_dmg:That really hurt
 
 #msc += $warning:
+msc += $warning:leaps out from its hiding place
 msc += $warning:The cursed.*is stuck to your body
 msc += $warning:You stop removing your armour
 msc += $warning:You smell decay
@@ -1472,6 +1510,9 @@ msc += $warning:merge to form a (macabre mass|small abomination|large abominatio
 msc += $warning:Two macabre masses merge
 msc += $warning:falls through the shaft
 
+#msc += $boring:
+msc += $boring:A large abomination twists grotesquely
+msc += $boring:collapse into pulpy 
 msc ^= $boring:You reach to attack
 msc += $boring:avoids the shaft
 msc += $boring:Your bones ache
@@ -1682,7 +1723,7 @@ msc += $boring:The floor vibrates
 msc += $boring:Sand pours from your
 msc += $boring:Strange energies run through your body
 msc += $boring:You smell something strange
-msc += $boring:The.*evades a web
+msc += $boring:evades a web
 msc += $boring:Your.*warbles
 msc += $boring:The.*goes (up|down) the stairs.
 msc += $boring:Found.*gold
@@ -1785,6 +1826,7 @@ msc ^= $good:The.*pierces through the
 msc += $good:Space (warps horribly|bends) around 
 msc += $good:(convulses|writhes in agony)
 msc += $good:is splashed with acid
+msc += $good:You feel life coursing into your body
 
 # Non-damage combat messages
 msc ^= $positive:You feel as if something is helping you
@@ -1854,6 +1896,7 @@ msc += $positive:Your amulet of stasis gives you a mild electric shock
 msc += $positive:You finish putting on
 msc += $positive:You finish eating
 msc += $positive:Your icy armour thickens
+msc += $positive:Your.*pulls away from the web
 msc += $positive:A chill wind blows around you
 msc += $positive:You become transparent for a moment
 msc += $positive:is charmed
@@ -1895,6 +1938,7 @@ msc += $positive:Your.*turn into razor-sharp scythe blades
 msc += $positive:You conjure a globe of magical energy
 msc += $positive:You imbue your battlesphere with additional charge
 msc += $positive:Your battlesphere fires
+msc += $positive:You are no longer poisoned
 msc += $positive:You finish butchering
 msc += $positive:looks frightened
 msc += $positive:The.*is outlined in light
@@ -1965,7 +2009,6 @@ msc += $verypositive:You feel telepathic
 msc += $verypositive:You feel your magic capacity increase
 msc += $verypositive:You feel the abyssal rune guiding you out of this place
 msc += $verypositive:You feel fantastic
-msc += $verypositive:You feel life coursing into your body
 msc += $verypositive:Found.*altar
 msc += $verypositive:Found a glowing drain
 msc += $verypositive:Found a gate leading back out of here
@@ -1980,6 +2023,7 @@ msc += $verypositive:Found a gateway leading out of the Abyss
 msc += $verypositive:Found a gateway leading deeper into the Abyss
 msc += $verypositive:Found a gate leading out of Pandemonium
 msc += $verypositive:Found a gate leading to another region
+msc += $verypositive:Found a gate to the Vaults
 msc += $verypositive:Found a gateway
 msc += $verypositive:Found a rocky tunnel leading out of this place
 msc += $verypositive:Found a portal to a secret trove of treasure
@@ -1988,7 +2032,6 @@ msc += $verypositive:Found.*staircase
 msc += $verypositive:Found.*(shop|store|Emporium|Distillery|Boutique|Accessories|Antiques)
 msc += $verypositive:You feel your magical essence form a protective shroud around your flesh
 msc += $verypositive:You feel your.*returning
-msc += $verypositive:You are no longer poisoned
 
 #msc += $awesome:
 msc += $awesome:Sharp spines emerge from
@@ -2180,9 +2223,7 @@ msc += mute:Cast which spell
 msc += mute:Use which ability
 msc += mute:Evoke which item
 msc += mute:Confirm with
-msc += mute:Casting\:
-msc += mute:Aiming\:
-msc += mute:Aim\:
+msc += mute:(Casting|Aiming|Aim|Zapping)\:
 msc += mute:You can\'t see any susceptible monsters within range
 msc += mute:Press\: \? \- help, Shift\-Dir \- straight line, f \- you
 msc += mute:for a list of commands and other information
