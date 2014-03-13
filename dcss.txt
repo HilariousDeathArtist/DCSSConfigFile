@@ -12,14 +12,12 @@
 
 : function SpoilerAlert()
 :   local x,y
-:   local previous_message
 :   local color = "cyan"
 :   for x = -8,8 do
 :     for y = -8,8 do
 :       m = monster.get_monster_at(x, y)
 :       if m and (m:attitude() == 0) then
 :         desc = m:desc()
-:         warning_message
 :         if string.find(desc, "wizard") and not string.find(desc, "orc wizard")
 :         or string.find(desc, "giant eyeball")
 :         or string.find(desc, "great orb of eyes")
@@ -209,10 +207,6 @@
 :         if string.find(desc, "ghost moth") and not string.find(desc, "zombie")
 :         or string.find(desc, "eye of draining")
 :           then crawl.mpr("<" .. color .. ">Spoiler Alert: The " .. m:desc() .. " will drain your Magic!</" .. color .. ">")
-:         end
-:         if not (warning_message == previous_message) then
-:           crawl.mpr("<" .. color .. ">Spoiler Alert:" .. warning_message .. </" .. color .. ">")
-:           previous_message = warning_message
 :         end
 :       end
 :     end
