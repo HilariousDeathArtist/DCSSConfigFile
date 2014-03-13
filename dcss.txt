@@ -19,8 +19,7 @@
 :       m = monster.get_monster_at(x, y)
 :       if m and (m:attitude() == 0) then
 :         desc = m:desc()
-:         if string.find(desc, "wizard") and not string.find(desc, "orc wizard")
-:         or string.find(desc, "giant eyeball")
+:         if string.find(desc, "giant eyeball")
 :         or string.find(desc, "great orb of eyes")
 :         or string.find(desc, "vampire knight")
 :         or string.find(desc, "orc sorcerer")
@@ -37,6 +36,7 @@
 :			    if string.find(desc, "air mage") 
 :         or string.find(desc, "titan") and not string.find(desc, "zombie") and not string.find(desc, "skeleton") and not string.find(desc, "slime")
 :         or string.find(desc, "blizzard demon")
+:         or string.find(desc, "wind drake")
 :           then alerts = alerts ..  " The " .. desc .. " can airstrike you!"
 :         end
 :         if string.find(desc, "Gastronok")
@@ -163,7 +163,7 @@
 :           then alerts = alerts ..  " The " .. desc .. " can petrify you!"
 :         end
 :         if string.find(desc, "Jorgrun")
-:           then alerts = alerts ..  " " .. desc .. " can petrify you!"
+:           then alerts = alerts ..  " " .. desc .. " can petrify you and shatter you!"
 :         end
 :         if string.find(desc, "brain worm") and not string.find(desc, "zombie")
 :         or string.find(desc, "orange crystal statue")
@@ -184,13 +184,13 @@
 :           then alerts = alerts ..  " The " .. desc .. " can cast Fire Storm or Iron Shot, and summon Greater Demons!"
 :         end
 :         if string.find(desc, "Mennas")
-:           then alerts = alerts ..  " " .. desc .. " can cast silence or confuse!"
+:           then alerts = alerts ..  " " .. desc .. " can cast silence and confuse!"
 :         end
 :         if string.find(desc, "Ignacio")
 :           then alerts = alerts ..  " " .. desc .. " can cast Agony!"
 :         end
 :         if string.find(desc, "giant orange brain")
-:           then alerts = alerts ..  " The " .. desc .. " can summon Shadow Creatures or drain your INT!"
+:           then alerts = alerts ..  " The " .. desc .. " can summon Shadow Creatures or drain your Int!"
 :         end
 :         if string.find(desc, "boggart")
 :         or string.find(desc, "shadow demon")
@@ -693,6 +693,7 @@ more += You have disarmed
 more += You can't gag anything down
 more += You don't have any such object
 more += do not work when you're silenced
+more += The barbed spikes dig painfully into your body as you move
 more += You can't unwield
 more += You don't have enough magic
 more += You haven't enough magic at the moment
@@ -741,6 +742,8 @@ more += This potion can/'t work under stasis
 more += splits in two
 more += Kikubaaqudgha will now enhance your necromancy
 more += The Shining One will now bless
+more += You cannot cast spells while unable to breathe
+more += Your fit of retching subsides
 
 # Interrupts for Bad things
 more += Your surroundings flicker
@@ -782,6 +785,7 @@ more += shoots a curare
 more += You are blown backwards by the freezing wind
 more += You are knocked back by the lance of force
 more += You are knocked back by the blast of cold
+more += You are knocked back by the great wave of water
 more += You stumble backwards
 more += You are trampled
 more += Okawaru sends forces against you
@@ -826,6 +830,7 @@ more += You feel your flesh rotting away
 more += You feel your translocation being delayed
 more += There is a sealed passage
 more += Something appears in a flash of light
+more += You feel your rage building
 
 # Interrupts for Hell effects
 more += You will not leave this place
@@ -1064,6 +1069,7 @@ msc += $danger:Your.*glows black for a moment
 msc += $danger:You are caught in a web
 msc += $danger:You are knocked back by the lance of force
 msc += $danger:You are knocked back by the blast of cold
+msc += $danger:You are knocked back by the great wave of water
 msc += $danger:You feel very sick
 msc += $danger:Your.*falls away
 msc += $danger:splits in two
@@ -1150,6 +1156,7 @@ msc += $danger:You feel extremely strange
 msc += $danger:You feel the urge to shout
 msc += $danger:This meat tastes really weird
 msc += $danger:Your vision blurs
+msc += $danger:You finish putting on your cursed
 msc += $danger:It was a potion of paralysis
 msc += $danger:You feel frail
 msc += $danger:You feel rather ponderous
@@ -1183,6 +1190,8 @@ msc += $danger:You feel uncertain
 msc += $danger:You are firmly grounded in the material plane once more
 msc += $danger:The writing blurs in front of your eyes
 msc += $danger:Your thinking seems confused
+msc += $danger:You cannot cast spells while unable to breathe
+msc += $danger:You feel your rage building
 
 #msc += $item_dmg:
 msc += $item_dmg:acid corrodes
@@ -1200,6 +1209,7 @@ msc += $item_dmg:Done waiting
 msc += $item_dmg:That really hurt
 
 #msc += $warning:
+msc += $warning:You can't close doors while held in a net
 msc += $warning:A slime creature suddenly
 msc += $warning:You feel closer to the material plane
 msc += $warning:leaps out from its hiding place
@@ -1212,7 +1222,7 @@ msc += $warning:The heat melts your.*(armour|shield)
 msc += $warning:You are engulfed in a cloud of spores
 msc += $warning:You feel less perceptive
 msc += $warning:A profound silence engulfs you
-msc += $warning:Hurry and find it before the entrance collapses
+msc ^= $warning:Hurry and find it before the entrance collapses
 msc += $warning:Your memory of.*unravels
 msc += $warning:You speak a Word of immense power
 msc += $warning:seems to move somewhat quicker
@@ -1238,6 +1248,7 @@ msc += $warning:fails to return
 msc += $warning:Something appears in a flash of light
 msc += $warning:you turn into a fiery being
 msc += $warning:no longer ripe
+msc += $warning:The wave splashes down
 msc += $warning:The spell fizzles
 msc += $warning:Your body armour is too heavy
 msc += $warning:The crackling of melting ice is subsiding rapidly
@@ -1309,27 +1320,19 @@ msc += $warning:You step into.*shadow
 msc += $warning:Grasping roots rise from the ground around the
 msc += $warning:The winds start to flow at the.*will
 msc += $warning:The .*(are|is) blown away
-msc += $warning:The.*answers the.*call
 msc += $warning:goes into a frenzy at the smell of blood
-msc += $warning:Agitated ravens fly out from beneath the
-msc += $warning:You're too full
-msc += $warning:Your memorisation is interrupted
-msc += $warning:The winds coalesce and take form
+msc += $warning:Something picks up
 msc += $warning:You slice into (a|the) (net|web)
 msc += $warning:You smell burning wood
 msc += $warning:The.*stumbles backwards
 msc += $warning:looks slightly unstable
-msc += $warning:The dead are
-msc += $warning:surroundings become eerily quiet
 msc += $warning:slips into darkness
 msc += $warning:The air around.*erupts in flames
 msc += $warning:hops backward while attacking
 msc += $warning:violent explosion of flames
 msc += $warning:turns its malign attention towards you
 msc += $warning:Splash!
-msc += $warning:You fall into the shallow water
-msc += $warning:The water rises up and takes form
-msc += $warning:You stop dropping stuff
+msc += $warning:Harold gasps with his last breath
 msc += $warning:You enter the shallow water
 msc += $warning:You see a puff of smoke
 msc += $warning:pour from your
@@ -1346,46 +1349,29 @@ msc += $warning:Your surroundings seem slightly different
 msc += $warning:You are under the weather
 msc += $warning:You are standing in the rain
 msc += $warning:The rain has left you waist-deep in water
-msc += $warning:an escape hatch
 msc += $warning:We do not forgive those who trespass against us
-msc += $warning:There is a.*(staircase|entrance).*here
-msc += $warning:Clearing level map
 msc += $warning:A.*appears from out of thin air
 msc += $warning:looks more healthy
 msc += $warning:A mysterious force pulls you upwards
-msc += $warning:There's nothing close enough
-msc += $warning:Hurry and find it before the portal
-msc += $warning:You slide downwards
 msc += $warning:punctures the fabric of the universe
 msc += $warning:degenerates into a cloud
 msc += $warning:wounds heal themselves
-msc += $warning:You are now empty
 msc += $warning:is no longer moving slowly 
 msc += $warning:is completely healed
 msc += $warning:You heal
 msc += $warning:It is briefly surrounded by a scintillating aura of random colours
 msc += $warning:Partly explored
-msc += $warning:There is a (shaft|glowing drain) here
-msc += $warning:Autopickup is now
+msc += $warning:There is a shaft here
 msc += $warning:Dowan seems overcome with grief, but rights himself reflexively soon after
 msc += $warning:You feel that this wand is rather unreliable
 msc += $warning:You feel less protected
-msc += $warning:You finish taking off
 msc += $warning:You hear a crashing sound
-msc += $warning:The weapon returns to the
-msc += $warning:You finish putting on your cursed
-msc += $warning:Can't find anything matching that
-msc += $warning:you feel a great hunger. Being not satiated
 msc += $warning:shatters
 msc += $warning:apparitions take form around you
 msc += $warning:You feel your magic capacity is already quite full
-msc += $warning:melds into your body
-msc += $warning:You can't wear that
 msc += $warning:You feel vulnerable
-msc += $warning:You are too injured to fight recklessly
 msc += $warning:pulls away from the web
 msc += $warning:withdraws into its
-msc += $warning:The manticore flicks its tail
 msc += $warning:is no longer petrified
 msc += $warning:You remove your
 msc += $warning:Your.*dissolves into shadows
@@ -1397,10 +1383,8 @@ msc += $warning:The.*decay slows
 msc += $warning:This wand has
 msc += $warning:Your.*is caught in
 msc += $warning:Thorny briars emerge from the ground!
-msc += $warning:No target in view
 msc += $warning:You flicker for a moment
 msc += $warning:You flicker back
-msc += $warning:appears from thin air
 msc += $warning:You now have enough gold to buy
 msc += $warning:There is a.*altar.*here
 msc += $warning:You kneel at the altar
@@ -1414,11 +1398,8 @@ msc += $warning:disappears!
 msc += $warning:Your.*is no longer moving quickly
 msc += $warning:You feel your magic capacity decrease
 msc += $warning:drains the heat from the surrounding environment
-msc += $warning:You feel more attuned to
-msc += $warning:(Wait here!|Stop fighting!|Fall back!|Follow me!|Attack!)
 msc += $warning:pounces on you
 msc += $warning:A tentacle rises from the water
-msc += $warning:You have finished your manual
 msc += $warning:comes up the stairs
 msc += $warning:You catch a bit of a chill
 msc += $warning:A ballistomycete grows in the wake of the spore
@@ -1449,7 +1430,6 @@ msc += $warning:A raging storm of fire appears
 msc += $warning:Your transformation is almost over
 msc += $warning:You feel magic leave you
 msc += $warning:You feel magic returning to you
-msc += $warning:Expect minor deviation
 msc += $warning:Your (horns|talons) disappear
 msc += $warning:Tentacles burst from the starspawn
 msc += $warning:you must find a gate leading back
@@ -1459,7 +1439,6 @@ msc += $warning:A starcursed mass splits
 msc += $warning:You draw the Sage
 msc += $warning:You feel a wave of frost pass over you
 msc += $warning:too hungry to go berserk
-msc += $warning:You have no appropriate body parts free
 msc += $warning:The creatures around you are filled with an inner flame
 msc += $warning:Your battlesphere expends the last of its energy and dissipates
 msc += $warning:You feel less healthy
@@ -1467,10 +1446,6 @@ msc += $warning:summons a great blast of wind
 msc += $warning:Your battlesphere wavers and loses cohesion
 msc += $warning:You feel your bond with your battlesphere wane
 msc += $warning:You feel less resistant to hostile enchantments
-msc += $warning:Your cloak prevents you from wearing the armour
-msc += $warning:You feel the dreadful sensation subside
-msc += $warning:You feel an oppressive heat about you
-msc += $warning:Something picks up
 msc += $warning:Your attack snaps.*out of its fear
 msc += $warning:You feel blessed for a momento
 msc += $warning:You draw a card
@@ -1509,6 +1484,7 @@ msc += $warning:The tentacle pulls you backwards
 msc += $warning:starcursed mass shudders and
 msc += $warning:The kraken squirts a massive cloud of ink
 msc += $warning:Wisps of shadow whirl around you
+msc += $warning:You are too injured to fight recklessly
 msc += $warning:You are blown backwards
 msc += $warning:shakes off its lethargy
 msc += $warning:I don't know how to get there
@@ -1536,8 +1512,22 @@ msc += $warning:Two macabre masses merge
 msc += $warning:falls through the shaft
 msc += $warning:There is a crawl-hole back to the Lair here
 msc += $warning:There is a hole to the Spider Nest here
+msc += $warning:You create a pond
+msc += $warning:Mennas becomes audible again
+msc += $warning:That was extremely unsatisfying
 
 #msc += $boring:
+msc += $boring:You are wearing that object
+msc += $boring:You can't wield jewellery
+msc += $boring:There is an abandoned shop here
+msc += $boring:You don't have any such object
+msc += $boring:Mennas is caught in a moment of prayer
+msc += $boring:You spin around
+msc += $boring:Aizul coils and then uncoils
+msc += $boring:The tide is released from Ilsuiw's call
+msc += $boring:Polyphemus seems to be sizing you up for his next meal
+msc += $boring:You can't read that
+msc += $boring:You can't drink that
 msc += $boring:Your.*falls into the water
 msc += $boring:A large abomination twists grotesquely
 msc += $boring:collapse into pulpy 
@@ -1574,6 +1564,7 @@ msc += $boring:Your.*feel numb with cold
 msc += $boring:That.*was very bland
 msc += $boring:That lemon was rather sour
 msc += $boring:You call on the dead to rise
+msc += $boring:You can't wear that
 msc += $boring:vibrates crazily for a second
 msc += $boring:The crimson imp breathes (steam|mist) at you
 msc += $boring:showing sharp teeth
@@ -1764,6 +1755,7 @@ msc += $boring:You feel momentarily confused
 msc += $boring:holds its.*at the ready
 msc += $boring:There is a.*fountain.*here
 msc += $boring:Little bolts of electricity crackle over the disc
+msc += $boring:There is a.*(staircase|entrance).*here
 msc += $boring:tries to grin evilly
 msc += $boring:The corpses? collapses? into a pulpy mess
 msc += $boring:There is an empty arch of ancient stone
@@ -1826,7 +1818,7 @@ msc += $boring:Your.*falls like a stone
 
 # Enemies taking damage
 msc += $good:You (hit|bite|slice|spit|open|slash|puncture|carve|perforate|stick|cut|chop|strike|skewer|impale|dice|headbutt|fracture|peck|touch|kick|freeze) 
-msc += $good:You (sock|thump|flatten|tail-slap|burn|claw|mangle|punch|drain|bludgeon|whack|shatter|hammer|sears) 
+msc += $good:You (sock|thump|flatten|tail-slap|burn|claw|mangle|punch|drain|bludgeon|whack|shatter|hammer|sears|beat|pound|crush) 
 msc += $good:(hits|bites|slices|spits|opens|slashes|punctures|carves|perforates|sticks|freezes|poisons|engulfs|draws|tail-slaps) [^y]
 msc += $good:(cuts|chops|strikes|skewers|attacks|hits|constricts|grabs|claws|burns|shocks|drains|sears|pecks|gores) [^y]
 msc += $good:burns(.|!| [^you])
@@ -1858,6 +1850,8 @@ msc += $good:You feel life coursing into your body
 
 # Non-damage combat messages
 msc += $positive:
+msc += $positive:You dart out from under the net
+msc += $positive:The manticore spikes snap loose
 msc += $positive:Your jumping spider.*pounces on the
 msc ^= $positive:You feel as if something is helping you
 msc += $positive:You are unaffected
@@ -1881,6 +1875,7 @@ msc += $positive:fails to defend (itself|herself|himself)
 msc += $positive:falters for a moment
 msc += $positive:You feel invigorated
 msc += $positive:You feel healthy
+msc += $positive:flops around on dry land
 msc += $positive:You escape
 msc += $positive:glows a violent red
 msc += $positive:You emit a cloud
@@ -1923,7 +1918,6 @@ msc += $positive:Your skin hardens
 msc += $positive:Eating
 msc += $positive:the sound returns
 msc += $positive:Your amulet of stasis gives you a mild electric shock
-msc ^= $positive:You finish putting on
 msc += $positive:You finish eating
 msc += $positive:Your icy armour thickens
 msc += $positive:Your.*pulls away from the web
@@ -1997,6 +1991,9 @@ msc += $positive:Your.*darts out from under the net
 msc += $positive:submits to your will
 msc += $positive:You channel some magical energy
 msc += $positive:Your.*shudders
+msc += $positive:is caught in the net 
+msc += $positive:struggles (to escape|against) the net
+msc += $positive:Your fit of retching subsides
 
 #msc += $verypositive:
 msc += $verypositive:You turn to flesh and can move again
@@ -2064,6 +2061,7 @@ msc += $verypositive:Found.*staircase
 msc += $verypositive:Found.*(shop|store|Emporium|Distillery|Boutique|Accessories|Antiques)
 msc += $verypositive:You feel your magical essence form a protective shroud around your flesh
 msc += $verypositive:You feel your.*returning
+msc += $verypositive:It is a scroll of brand weapon
 
 #msc += $awesome:
 msc += $awesome:Your thoughts seem clearer
@@ -2080,15 +2078,16 @@ msc += $awesome:You feel (more robust|robust|very robust)
 msc += $awesome:You feel more energetic
 msc += $awesome:You feel insulated
 msc += $awesome:Your fingernails (lengthen||sharpen)
+msc += $awesome:Your feet thicken and deform
 msc ^= $awesome:The antennae on your head grow some more
 msc ^= $awesome:You feel energised by your suffering
 msc ^= $awesome:There is a nasty taste in your mouth for a moment
 msc ^= $awesome:You feel stable
 msc += $awesome:Large bone plates grow
 msc += $awesome:Your throat feels hot
-msc += $awesome:Your throat feels hot
-
 msc += $awesome:Your.*is now the 
+msc += $awesome:There is a glowing drain
+msc += $awesome:Your.*crackles with electricity
 msc ^= $awesome:This is a scroll of acquirement
 msc += $awesome:You pick up the.*rune
 msc += $awesome:You now have.*rune
@@ -2114,6 +2113,10 @@ msc += $awesome:You feel a dreadful hunger
 msc ^= $awesome:Your.*glows (red|green|.*yellow|purple)
 
 # You or an ally takes damage
+#msc += $negative:
+msc += $negative:You feel quite a bit less full
+msc += $negative:Unholy energy fills the air
+msc += $negative:You are caught in a localised field of spatial distortion
 msc += $negative:The ghost moth stares at you
 msc += $negative:Your ice beast melts
 msc += $negative:draws from the surrounding life force
@@ -2213,6 +2216,7 @@ msc += $negative:[^r]pulls free of the water
 msc += $negative:engulfs your
 msc += $negative:You are blasted with magical energy
 msc += $negative:The large rock crashes through you
+msc += $negative:You are blasted!
 
 #monster resists
 msc += $danger:completely resists
@@ -2236,15 +2240,22 @@ msc ^= $takesaction:The.*jumps down from its now dead mount
 msc ^= $takesaction:The.*swoops through the air toward you
 msc ^= $takesaction:The jumping spider pounces on you
 msc ^= $takesaction:The jumping spider leaps
+msc += $takesaction:The weapon returns to the
+msc += $takesaction:The manticore flicks its tail
 
 msc += $godaction:(Elyvilon|Igni Ipthes|Elyvilon|Ashenzari|Cheibriados|Dithmenos|Fedhas|Okawaru)
 msc += $godaction:(Kikubaaqudgha|Makhleb|Nemelex|Sif Muna|Trog|Vehumet|Xom|Yredelemnul|Zin[^g]|The Shining One)
+msc ^= $godaction:(Elyvilon|Igni Ipthes|Elyvilon|Ashenzari|Cheibriados|Dithmenos|Fedhas|Okawaru) says
+msc ^= $godaction:(Kikubaaqudgha|Makhleb|Nemelex|Sif Muna|Trog|Vehumet|Xom|Yredelemnul|Zin[^g]|The Shining One) says
 msc ^= $godaction:shimmer and break into pieces
 msc ^= $godaction:barely shimmers and breaks into pieces
 msc ^= $godaction:Your divine halo returns
+msc ^= $godaction:You can now release gusts of air
 msc += $godaction:due to Igni's heat
 msc += $godaction:disappears without a glow
 msc += $godaction:is slowly consumed by flames
+msc += $godaction:A mighty gale blasts forth
+msc += $godaction:A fiery fortress appears around you!
 msc += $godaction:is consumed in a column of flame
 msc += $godaction:The toadstool can now pick up its mycelia and move
 
@@ -2260,9 +2271,44 @@ msc += $interface:Showing terrain only
 msc += $interface:Returning to normal view
 msc += $interface:Done exploring
 msc += $interface:You pace your travel speed to your slowest ally
+msc += $interface:The water rises up and takes form
+msc += $interface:The winds coalesce and take form
+msc += $interface:The.*answers the.*call
+msc += $interface:(Angry insects surge|Agitated ravens fly) out from beneath the
+msc += $interface:You're too full
+msc += $interface:Your memorisation is interrupted
+msc += $interface:surroundings become eerily quiet
+msc += $interface:The dead are
+msc += $interface:You fall into the shallow water
+msc += $interface:an escape hatch
+msc += $interface:You stop dropping stuff
+msc += $interface:melds into your body
+msc += $interface:Clearing level map
+msc += $interface:There's nothing close enough
+msc += $interface:Autopickup is now
+msc += $interface:Hurry and find it before the portal
+msc += $interface:You slide downwards
+msc += $interface:You are now empty
+msc += $interface:Can't find anything matching that
+msc += $interface:No item to drop
+msc += $interface:you feel a great hunger. Being not satiated
+msc += $interface:You finish taking off
+msc += $interface:appears from thin air
+msc += $interface:You feel more attuned to
+msc += $interface:(Wait here!|Stop fighting!|Fall back!|Follow me!|Attack!)
+msc += $interface:You have finished your manual
+msc += $interface:Expect minor deviation
+msc += $interface:You have no appropriate body parts free
+msc += $interface:Your cloak prevents you from wearing the armour
+msc ^= $interface:You finish putting on
+msc += $interface:You can't carry that much weight
+msc += $interface:isn't holding a weapon that can be rebranded
+msc += $interface:You feel the dreadful sensation subside
+msc += $interface:You feel an oppressive heat about you
 msc += $interface:You travel at normal speed
 msc += $interface:Your reserves of magic are already full
 msc += $interface:There are no corpses nearby
+msc += $interface:No target in view
 
 # Muted - unnecessary 
 #msc += mute:
