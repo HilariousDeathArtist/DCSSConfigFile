@@ -13,6 +13,7 @@
 : function SpoilerAlert()
 :   local x,y
 :   local color = "cyan"
+:   local alerts = ""
 :   for x = -8,8 do
 :     for y = -8,8 do
 :       m = monster.get_monster_at(x, y)
@@ -23,109 +24,110 @@
 :         or string.find(desc, "great orb of eyes")
 :         or string.find(desc, "vampire knight")
 :         or string.find(desc, "orc sorcerer")
-:         or string.find(desc, "red wasp")
-:           then crawl.mpr("<" .. color .. ">Spoiler Alert: The " .. m:desc() .. " can paralyse you!</" .. color .. ">")
+:         or string.find(desc, "red wasp") then 
+:           warning =  " The " .. desc .. " can paralyse you!" 
+:           alerts = addToAlerts(alerts, warning)
 :         end
 :         if string.find(desc, "yellow wasp") and not string.find(desc, "zombie")
-:           then crawl.mpr("<" .. color .. ">Spoiler Alert: The " .. m:desc() .. " can paralyse and slow you!</" .. color .. ">")
+:           then alerts = alerts ..  " The " .. desc .. " can paralyse and slow you!"
 :         end
 :         if string.find(desc, "Grinder")
 :         or string.find(desc, "Rupert")
-:           then crawl.mpr("<" .. color .. ">Spoiler Alert: " .. m:desc() .. " can paralyse you!</" .. color .. ">")
+:           then alerts = alerts ..  " " .. desc .. " can paralyse you!"
 :         end
 :			    if string.find(desc, "air mage") 
 :         or string.find(desc, "titan") and not string.find(desc, "zombie") and not string.find(desc, "skeleton") and not string.find(desc, "slime")
 :         or string.find(desc, "blizzard demon")
-:           then crawl.mpr("<" .. color .. ">Spoiler Alert: The " .. m:desc() .. " can airstrike you!</" .. color .. ">")
+:           then alerts = alerts ..  " The " .. desc .. " can airstrike you!"
 :         end
 :         if string.find(desc, "Gastronok")
 :         or string.find(desc, "Sojobo") 
-:           then crawl.mpr("<" .. color .. ">Spoiler Alert: " .. m:desc() .. " can airstrike you!</" .. color .. ">")
+:           then alerts = alerts ..  " " .. desc .. " can airstrike you!"
 :         end
 :         if string.find(desc, "deep elf demonologist") 
-:           then crawl.mpr("<" .. color .. ">Spoiler Alert: The " .. m:desc() .. " can banish you or summon Greater Demons!</" .. color .. ">")
+:           then alerts = alerts ..  " The " .. desc .. " can banish you or summon Greater Demons!"
 :         end
 :         if string.find(desc, "Louise")
 :         or string.find(desc, "Psyche")
 :         or string.find(desc, "Sonja")
-:           then crawl.mpr("<" .. color .. ">Spoiler Alert: " .. m:desc() .. " might banish you!</" .. color .. ">")
+:           then alerts = alerts ..  " " .. desc .. " might banish you!"
 :         end
 :         if string.find(desc, "draconian caller")
-:           then crawl.mpr("<" .. color .. ">Spoiler Alert: The " .. m:desc() .. " can summon Dragons and Death Drakes!</" .. color .. ">")
+:           then alerts = alerts ..  " The " .. desc .. " can summon Dragons and Death Drakes!"
 :         end
 :         if string.find(desc, "draconian annihilator")
 :         or string.find(desc, "deep elf annihilator")
-:           then crawl.mpr("<" .. color .. ">Spoiler Alert: The " .. m:desc() .. " can cast Lehudib's Crystal Spear or Iron Shot at you!</" .. color .. ">")
+:           then alerts = alerts ..  " The " .. desc .. " can cast Lehudib's Crystal Spear or Iron Shot at you!"
 :         end
 :         if string.find(desc, "blood saint")
-:           then crawl.mpr("<" .. color .. ">Spoiler Alert: The " .. m:desc() .. " can cast Lehudib's Crystal Spear or other Legendary Destruction at you!</" .. color .. ">")
+:           then alerts = alerts ..  " The " .. desc .. " can cast Lehudib's Crystal Spear or other Legendary Destruction at you!"
 :         end
 :         if string.find(desc, "black sun")
-:           then crawl.mpr("<" .. color .. ">Spoiler Alert: The " .. m:desc() .. " has some abilities I don't know!</" .. color .. ">")
+:           then alerts = alerts ..  " The " .. desc .. " has some abilities I don't know!"
 :         end
 :         if string.find(desc, "warmonger")
-:           then crawl.mpr("<" .. color .. ">Spoiler Alert: The " .. m:desc() .. " can sap your magic and summon a grand avatar!</" .. color .. ">")
+:           then alerts = alerts ..  " The " .. desc .. " can sap your magic and summon a grand avatar!"
 :         end
 :         if string.find(desc, "corrupter")
-:           then crawl.mpr("<" .. color .. ">Spoiler Alert: The " .. m:desc() .. " can summon strong creatures, and give temporary mutations!</" .. color .. ">")
+:           then alerts = alerts ..  " The " .. desc .. " can summon strong creatures, and give temporary mutations!"
 :         end
 :         if string.find(desc, "draconian shifter")
-:           then crawl.mpr("<" .. color .. ">Spoiler Alert: The " .. m:desc() .. " can block teleports, surround with allies, or blink you!</" .. color .. ">")
+:           then alerts = alerts ..  " The " .. desc .. " can block teleports, surround with allies, or blink you!"
 :         end
 :         if string.find(desc, "Roxanne")
-:           then crawl.mpr("<" .. color .. ">Spoiler Alert: " .. m:desc() .. " can cast Lehudib's Crystal Spear or Iron Shot at you!</" .. color .. ">")
+:           then alerts = alerts ..  " " .. desc .. " can cast Lehudib's Crystal Spear or Iron Shot at you!"
 :         end
 :         if string.find(desc, "wizard") and not string.find(desc, "orc wizard")
 :         or string.find(desc, "ogre mage")
-:           then crawl.mpr("<" .. color .. ">Spoiler Alert: The " .. m:desc() .. " might banish, paralyse, or LCS you!</" .. color .. ">")
+:           then alerts = alerts ..  " The " .. desc .. " might banish, paralyse, or LCS you!"
 :         end
 :         if string.find(desc, "lich")
-:           then crawl.mpr("<" .. color .. ">Spoiler Alert: The " .. m:desc() .. " might banish, paralyse, summon demons, Iron Shot, or LCS you!</" .. color .. ">")
+:           then alerts = alerts ..  " The " .. desc .. " might banish, paralyse, summon demons, Iron Shot, or LCS you!"
 :         end
 :         if string.find(desc, "Erolcha")
-:           then crawl.mpr("<" .. color .. ">Spoiler Alert: " .. m:desc() .. " might banish, paralyse, or LCS you!</" .. color .. ">")
+:           then alerts = alerts ..  " " .. desc .. " might banish, paralyse, or LCS you!"
 :         end
 :         if string.find(desc, "draconian scorcher")
 :         or string.find(desc, "hellion")
-:           then crawl.mpr("<" .. color .. ">Spoiler Alert: The " .. m:desc() .. " can send smite-targeted hellfire at you!</" .. color .. ">")
+:           then alerts = alerts ..  " The " .. desc .. " can send smite-targeted hellfire at you!"
 :         end
 :         if string.find(desc, "Azrael")
-:           then crawl.mpr("<" .. color .. ">Spoiler Alert: " .. m:desc() .. " can send smite-targeted hellfire at you!</" .. color .. ">")
+:           then alerts = alerts ..  " " .. desc .. " can send smite-targeted hellfire at you!"
 :         end
 :         if string.find(desc, "deep elf sorcerer")
-:           then crawl.mpr("<" .. color .. ">Spoiler Alert: The " .. m:desc() .. " can banish or send line-of-sight hellfire at you!</" .. color .. ">")
+:           then alerts = alerts ..  " The " .. desc .. " can banish or send line-of-sight hellfire at you!"
 :         end
 :         if string.find(desc, "quicksilver dragon") and not string.find(desc, "zombie")
-:           then crawl.mpr("<" .. color .. ">Spoiler Alert: The " .. m:desc() .. " can dispel your buffs!</" .. color .. ">")
+:           then alerts = alerts ..  " The " .. desc .. " can dispel your buffs!"
 :         end
 :         if string.find(desc, "Hell Sentinel")
-:           then crawl.mpr("<" .. color .. ">Spoiler Alert: The " .. m:desc() .. " can send line-of-sight hellfire and Iron Shot at you!</" .. color .. ">")
+:           then alerts = alerts ..  " The " .. desc .. " can send line-of-sight hellfire and Iron Shot at you!"
 :         end
 :         if string.find(desc, "Asmodeus")
-:           then crawl.mpr("<" .. color .. ">Spoiler Alert: " .. m:desc() .. " can send line-of-sight hellfire at you or summon Greater Demons!</" .. color .. ">")
+:           then alerts = alerts ..  " " .. desc .. " can send line-of-sight hellfire at you or summon Greater Demons!"
 :         end
 :         if string.find(desc, "flayed ghost")
-:           then crawl.mpr("<" .. color .. ">Spoiler Alert: The " .. m:desc() .. " can flay you to shreds!</" .. color .. ">")
+:           then alerts = alerts ..  " The " .. desc .. " can flay you to shreds!"
 :         end
 :         if string.find(desc, "Ice Fiend")
 :         or string.find(desc, "Shadow Fiend")
 :         or string.find(desc, "curse skull")
 :         or string.find(desc, "tormentor")
-:           then crawl.mpr("<" .. color .. ">Spoiler Alert: The " .. m:desc() .. " can torment you!</" .. color .. ">")
+:           then alerts = alerts ..  " The " .. desc .. " can torment you!"
 :         end
 :         if string.find(desc, "curse toe")
-:           then crawl.mpr("<" .. color .. ">Spoiler Alert: The " .. m:desc() .. " can torment you and summon fungus!</" .. color .. ">")
+:           then alerts = alerts ..  " The " .. desc .. " can torment you and summon fungus!"
 :         end
 :         if string.find(desc, "Menkaure")
 :         or string.find(desc, "Gloorx Vloq")
 :         or string.find(desc, "Murray")
-:           then crawl.mpr("<" .. color .. ">Spoiler Alert: " .. m:desc() .. " can torment you!</" .. color .. ">")
+:           then alerts = alerts ..  " " .. desc .. " can torment you!"
 :         end
 :         if string.find(desc, "Ereshkigal")
-:           then crawl.mpr("<" .. color .. ">Spoiler Alert: " .. m:desc() .. " can paralyse or torment you!</" .. color .. ">")
+:           then alerts = alerts ..  " " .. desc .. " can paralyse or torment you!"
 :         end
 :         if string.find(desc, "Brimstone Fiend")
-:           then crawl.mpr("<" .. color .. ">Spoiler Alert: The " .. m:desc() .. " can send line-of-sight hellfire or torment you!</" .. color .. ">")
+:           then alerts = alerts ..  " The " .. desc .. " can send line-of-sight hellfire or torment you!"
 :         end
 :         if string.find(desc, "daeva")
 :         or string.find(desc, "balrug")
@@ -134,89 +136,110 @@
 :         or string.find(desc, "orc priest")
 :         or string.find(desc, "orc high priest")
 :         or string.find(desc, "starcursed mass")
-:           then crawl.mpr("<" .. color .. ">Spoiler Alert: The " .. m:desc() .. " can smite you!</" .. color .. ">")
+:           then alerts = alerts ..  " The " .. desc .. " can smite you!"
 :         end
 :         if string.find(desc, "Frances")
 :         or string.find(desc, "Mnoleg")
 :         or string.find(desc, "Saint Roka")
-:           then crawl.mpr("<" .. color .. ">Spoiler Alert: " .. m:desc() .. " can smite you!</" .. color .. ">")
+:           then alerts = alerts ..  " " .. desc .. " can smite you!"
 :         end
 :         if string.find(desc, "deep elf high priest")
 :         or string.find(desc, "draconian zealot")
-:           then crawl.mpr("<" .. color .. ">Spoiler Alert: The " .. m:desc() .. " can send smite-targeted hellfire or smite you!</" .. color .. ">")
+:           then alerts = alerts ..  " The " .. desc .. " can send smite-targeted hellfire or smite you!"
 :         end
 :         if string.find(desc, "mummy priest")
 :         or string.find(desc, "greater mummy")
-:           then crawl.mpr("<" .. color .. ">Spoiler Alert: The " .. m:desc() .. " can torment or smite you!</" .. color .. ">")
+:           then alerts = alerts ..  " The " .. desc .. " can torment or smite you!"
 :         end
 :         if string.find(desc, "Khufu")
-:           then crawl.mpr("<" .. color .. ">Spoiler Alert: " .. m:desc() .. " can torment or smite you!</" .. color .. ">")
+:           then alerts = alerts ..  " " .. desc .. " can torment or smite you!"
 :         end
 :         if string.find(desc, "sphinx") and not string.find(desc, "sphinx zombie") and not string.find(desc, "sphinx skeleton")
-:           then crawl.mpr("<" .. color .. ">Spoiler Alert: The " .. m:desc() .. " can paralyse or smite you!</" .. color .. ">")
+:           then alerts = alerts ..  " The " .. desc .. " can paralyse or smite you!"
 :         end
 :         if string.find(desc, "Norris")
-:           then crawl.mpr("<" .. color .. ">Spoiler Alert: " .. m:desc() .. " can paralyse or smite you, and drain your Int!</" .. color .. ">")
+:           then alerts = alerts ..  " " .. desc .. " can paralyse or smite you, and drain your Int!"
 :         end
 :         if string.find(desc, "catobelpas")
-:           then crawl.mpr("<" .. color .. ">Spoiler Alert: The " .. m:desc() .. " can petrify you!</" .. color .. ">")
+:           then alerts = alerts ..  " The " .. desc .. " can petrify you!"
 :         end
 :         if string.find(desc, "Jorgrun")
-:           then crawl.mpr("<" .. color .. ">Spoiler Alert: " .. m:desc() .. " can petrify you!</" .. color .. ">")
+:           then alerts = alerts ..  " " .. desc .. " can petrify you!"
 :         end
 :         if string.find(desc, "brain worm") and not string.find(desc, "zombie")
 :         or string.find(desc, "orange crystal statue")
-:           then crawl.mpr("<" .. color .. ">Spoiler Alert: The " .. m:desc() .. " can drain your Intelligence!</" .. color .. ">")
+:           then alerts = alerts ..  " The " .. desc .. " can drain your Intelligence!"
 :         end
 :         if string.find(desc, "Jory")
-:           then crawl.mpr("<" .. color .. ">Spoiler Alert: " .. m:desc() .. " can cast Lehudib's Crystal Spear or drain your Int!</" .. color .. ">")
+:           then alerts = alerts ..  " " .. desc .. " can cast Lehudib's Crystal Spear or drain your Int!"
 :         end
 :         if string.find(desc, "neqoxec")
-:           then crawl.mpr("<" .. color .. ">Spoiler Alert: The " .. m:desc() .. " can mutate you or drain your Int!</" .. color .. ">")
+:           then alerts = alerts ..  " The " .. desc .. " can mutate you or drain your Int!"
 :         end
 :         if string.find(desc, "cacodemon")
 :         or string.find(desc, "shining eye")
 :         or string.find(desc, "orb of fire")
-:           then crawl.mpr("<" .. color .. ">Spoiler Alert: The " .. m:desc() .. " can mutate you!</" .. color .. ">")
+:           then alerts = alerts ..  " The " .. desc .. " can mutate you!"
 :         end
 :         if string.find(desc, "Cerebov")
-:           then crawl.mpr("<" .. color .. ">Spoiler Alert: The " .. m:desc() .. " can cast Fire Storm or Iron Shot, and summon Greater Demons!</" .. color .. ">")
+:           then alerts = alerts ..  " The " .. desc .. " can cast Fire Storm or Iron Shot, and summon Greater Demons!"
 :         end
 :         if string.find(desc, "Mennas")
-:           then crawl.mpr("<" .. color .. ">Spoiler Alert: " .. m:desc() .. " can cast silence or confuse!</" .. color .. ">")
+:           then alerts = alerts ..  " " .. desc .. " can cast silence or confuse!"
 :         end
 :         if string.find(desc, "Ignacio")
-:           then crawl.mpr("<" .. color .. ">Spoiler Alert: " .. m:desc() .. " can cast Agony!</" .. color .. ">")
+:           then alerts = alerts ..  " " .. desc .. " can cast Agony!"
 :         end
 :         if string.find(desc, "giant orange brain")
-:           then crawl.mpr("<" .. color .. ">Spoiler Alert: The " .. m:desc() .. " can summon Shadow Creatures or drain your INT!</" .. color .. ">")
+:           then alerts = alerts ..  " The " .. desc .. " can summon Shadow Creatures or drain your INT!"
 :         end
 :         if string.find(desc, "boggart")
 :         or string.find(desc, "shadow demon")
-:           then crawl.mpr("<" .. color .. ">Spoiler Alert: The " .. m:desc() .. " can summon Shadow Creatures!</" .. color .. ">")
+:           then alerts = alerts ..  " The " .. desc .. " can summon Shadow Creatures!"
 :         end
 :         if string.find(desc, "ynoxinul")
-:           then crawl.mpr("<" .. color .. ">Spoiler Alert: The " .. m:desc() .. " can cast Iron Shot at you!</" .. color .. ">")
+:           then alerts = alerts ..  " The " .. desc .. " can cast Iron Shot at you!"
 :         end
 :         if string.find(desc, "Frederick")
-:           then crawl.mpr("<" .. color .. ">Spoiler Alert: " .. m:desc() .. " can cast Iron Shot at you!</" .. color .. ">")
+:           then alerts = alerts ..  " " .. desc .. " can cast Iron Shot at you!"
 :         end
 :         if string.find(desc, "Dispater")
-:           then crawl.mpr("<" .. color .. ">Spoiler Alert: " .. m:desc() .. " can send line-of-sight hellfire at you, cast Iron Shot, and summon Greater Demons!</" .. color .. ">")
+:           then alerts = alerts ..  " " .. desc .. " can send line-of-sight hellfire at you, cast Iron Shot, and summon Greater Demons!"
 :         end
 :         if string.find(desc, "ghost moth") and not string.find(desc, "zombie")
-:         or string.find(desc, "eye of draining")
-:           then crawl.mpr("<" .. color .. ">Spoiler Alert: The " .. m:desc() .. " will drain your Magic!</" .. color .. ">")
+:         or string.find(desc, "eye of draining") then
+:           warning =  " The " .. desc .. " will drain your Magic!"
+:           alerts = addToAlerts(alerts, desc)
 :         end
 :       end
 :     end
 :   end
+:   if not (alerts == "") then
+:       crawl.mpr("<" .. color .. ">Spoiler Alert:" .. alerts .. "</" .. color .. ">")
+:   end
+: end
+
+: function addToAlerts(alerts, warning)
+:   crawl.mpr("Called addToAlerts with alerts: " .. alerts .. " and warning: " .. escape(warning))
+:   if string.find(alerts, warning) then
+:     crawl.mpr("Found more than one")
+:     count = string.gmatch(alerts, escape(warning) .. "(%dx)") 
+:     crawl.mpr("Found ".. count .." of a kind")
+:     warning = warning .. "(" .. count + 1 .. "x)" 
+:   end
+:   alerts = alerts ..  warning
+:   return alerts
+: end
+
+: function escape(s)
+:   return (s:gsub('[%-%.%+%[%]%(%)%$%^%%%?%*]','%%%1'):gsub('%z','%%z'))
 : end
 
 ###############
 # Damage Calc #
 ###############
 : local previous_hp = 0
+: local previous_mp = 0
 #: local mp_warning = 10
 #: local hp_warning_percent = 25
   
@@ -226,17 +249,30 @@
 :   --Skips message on initializing game
 :   if previous_hp > 0 then
 :     local hp_difference = previous_hp - current_hp
+:     local mp_difference = previous_mp - current_mp
 :   
 :     --On losing health
 :     if current_hp < previous_hp then
 :       crawl.mpr("<red>You take " .. hp_difference .. " damage.</red>")       
 :     end
-
+:
 :     --On gaining health
 :     if current_hp > previous_hp then
 :       --Removes the negative sign
 :       local health_inturn = (0 - hp_difference)
-:       crawl.mpr("<green>You regain " .. health_inturn .. " health.</green>")
+:       crawl.mpr("<lightgreen>You regain " .. health_inturn .. " health.</lightgreen>")
+:     end
+:
+:     --On losing magic
+:     if current_mp < previous_mp then
+:       crawl.mpr("<red>You lose " .. mp_difference .. " magic.</red>")       
+:     end
+
+:     --On gaining magic
+:     if current_mp > previous_mp then
+:       --Removes the negative sign
+:       local magic_inturn = (0 - mp_difference)
+:       crawl.mpr("<lightcyan>You regain " .. magic_inturn .. " magic.</lightcyan>")
 :     end
 :
 #:    local maximum_mp =you.maxmp()
@@ -248,8 +284,9 @@
 #:      crawl.mpr("<yellow>* * *</yellow><red> LOW HEALTH WARING </red><yellow>You have " .. current_hp .. " health * * *</yellow>")
 #:    end
 :   end
-:   --Set previous_hp at end of turn
+:   --Set previous hp and mp at end of turn
 :   previous_hp = current_hp
+:   previous_mp = current_mp
 : end
 
 
@@ -1504,6 +1541,7 @@ msc += $warning:Two macabre masses merge
 msc += $warning:falls through the shaft
 
 #msc += $boring:
+msc += $boring:Your.*falls into the water
 msc += $boring:A large abomination twists grotesquely
 msc += $boring:collapse into pulpy 
 msc ^= $boring:You reach to attack
@@ -1822,6 +1860,8 @@ msc += $good:is splashed with acid
 msc += $good:You feel life coursing into your body
 
 # Non-damage combat messages
+msc += $positive:
+msc += $positive:Your jumping spider.*pounces on the
 msc ^= $positive:You feel as if something is helping you
 msc += $positive:You are unaffected
 msc += $positive:no longer looks unusually strong
@@ -1957,9 +1997,9 @@ msc += $positive:magic leaks into the air
 msc += $positive:You focus on the pain
 msc += $positive:Your.*darts out from under the net
 msc += $positive:submits to your will
+msc += $positive:You channel some magical energy
 
 #msc += $verypositive:
-msc += $verypositive:You channel some magical energy
 msc += $verypositive:You turn to flesh and can move again
 msc += $verypositive:Your magma supply has returned
 msc += $verypositive:(HP|Magic) restored
@@ -2204,9 +2244,10 @@ msc += $godaction:is consumed in a column of flame
 msc += $godaction:The toadstool can now pick up its mycelia and move
 
 # Interface Messages
+msc += lightcyan:comes? into view
+
 #msc += $interface:
 msc += $interface:Welcome
-msc += $interface:comes into view
 msc += $interface:That item cannot be evoked
 msc += $interface:Please enjoy your stay
 msc += $interface:Showing terrain only
