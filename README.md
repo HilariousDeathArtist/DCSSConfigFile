@@ -6,7 +6,7 @@ This is the Dungeon Crawl Stone Soup config file used by HilariousDeathArtist.
 It's still being updated regularly, and since it's started getting spread around I thought it would be good to put up on Github.
 
 There are a few ways to use this in your own game, the simplest being to add the following line to your config:
-  include = HilariousDeathArtist.rc
+    include = HilariousDeathArtist.rc
 
 This will ensure you get updates regularly without having to check back.
 
