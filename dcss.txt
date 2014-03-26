@@ -1,3 +1,7 @@
+#Got suggestions/improvements?
+#https://github.com/HilariousDeathArtist/DCSSConfigFile
+# or find me on crawl.s-z.org
+
 <
   function ready()
     AnnounceDamage()
@@ -559,7 +563,7 @@ travel_delay = -1
 
 explore_stop = glowing_items,artefacts,greedy_pickup_smart
 explore_stop += stairs,shops,altars,portals,branches,runed_doors
-explore_stop += greedy_sacrificeable,
+explore_stop += greedy_sacrificeable
 
 # Adjusts how much autoexplore favours attempting to discover room perimeters and corners. 
 # At values higer than 0, autoexplore will more heavily favour visiting squares that are next to walls
