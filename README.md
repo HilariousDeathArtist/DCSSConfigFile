@@ -60,18 +60,18 @@ Changes include easy butchering, hp/mp text coloring, smaller force-more message
 A huge overhaul of message text colors based on message contents
 
 #### Standard colors that I've attempted to be used for various situations:
-    $danger        = lightred  - For messages you should most likely pay attention to
-    $item_dmg      = red       - For messages about health or item desctuction, or other very bad things
-    $warning       = yellow    - For messages you should probably pay attention to, includes when stuff makes noise
-    $boring        = darkgrey  - For messages you probably don't need to pay attention to
-    $negative      = brown     - For messages that describe damage to you or an ally   
-    $good          = lightblue - For messages that describe you or an ally doing damage to an enemy
-    $positive      = blue      - For messages that describe a benefecial effect that doesn't do damage
-    $verypositive  = green     - For messages that describe when something dies or something good occurs
-    $awesome       = lightgreen -For messages that describe gaining good mutations
-    $interface     = cyan      - For messages that describe something to the player
-    $takesaction   = lightmagenta  - For messages that describe when either you or an enemy
-    $godaction     = magenta   - For messages relating to Gods
+    $danger        = lightred       - For messages you should most likely pay attention to
+    $item_dmg      = red            - For messages about health or item desctuction, or other very bad things
+    $warning       = yellow         - For messages you should probably pay attention to, includes when stuff makes noise
+    $boring        = darkgrey       - For messages you probably don't need to pay attention to
+    $negative      = brown          - For messages that describe damage to you or an ally   
+    $good          = lightblue      - For messages that describe you or an ally doing damage to an enemy
+    $positive      = blue           - For messages that describe a benefecial effect that doesn't do damage
+    $verypositive  = green          - For messages that describe when something dies or something good occurs
+    $awesome       = lightgreen     - For messages that describe gaining good mutations
+    $interface     = cyan           - For messages that describe something to the player
+    $takesaction   = lightmagenta   - For messages that describe when either you or an enemy attacks/casts
+    $godaction     = magenta        - For messages relating to Gods
     MUTED  - Default HP/MP restored messages replaced with function, monster health notifications, and a few minor messages.
 
 ## Item coloring 
