@@ -1,7 +1,7 @@
 DCSSConfigFile
 ==============
 
-This is the Dungeon Crawl Stone Soup config file used by HilariousDeathArtist. I usually plan on http://crawl.s-z.org/
+This is the Dungeon Crawl Stone Soup config file used by HilariousDeathArtist. I usually play on http://crawl.s-z.org/
 
 It's still being updated regularly, and since it's started getting spread around I thought it would be good to put up on Github.
 
