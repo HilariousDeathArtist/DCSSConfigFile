@@ -17,140 +17,135 @@
 < 
   function SpoilerAlert()
     local mobwarnings = {}
-    --Add dangerous monsters to this table by using their name as the key (as a lua pattern)
-    --The value is an array with two elements, 
-    -- The first is the warning string you want to display
-    -- The second is the last xp level which you would like to see this message
-    -- The warnign message will formatted as follows:
+    --Add dangerous monsters to this table by using their name as the key, (as a lua pattern)
+    --Set the value to the warning string you want to display, where it will formatted like:
     --"[The] Monster_Name Warning_Message"
-    ----If Monster_Name doesn't include a capital letter, the message will be prepended with [The]
-    ----ex. "The giant eyeball can paralyse you!"
-    ----ex. "Grinder can paralyse you!"
-    table.insert(mobwarnings, {"giant eyeball", "can paralyse you!", 27})  
-    table.insert(mobwarnings, {"great orb of eyes", "can cast paralyse, disintegrate, slow, confuse, and teleport you!", 27})  
-    table.insert(mobwarnings, {"vampire knight", "can cast paralyse!", 27})  
-    table.insert(mobwarnings, {"vampire mage", "can Summon Undead and Animate Dead!", 27})  
-    table.insert(mobwarnings, {"orc sorcerer", "can cast paralyse!", 27})  
-    table.insert(mobwarnings, {"fire giant", "can cast fireball and bolt of fire!", 27})  
-    table.insert(mobwarnings, {"ice giant", "can cast bolt of ice!", 27})  
-    table.insert(mobwarnings, {"orc wizard", "might cast slow or confuse!", 9})  
-    table.insert(mobwarnings, {"wraith", "can slow you in melee!", 27})  
-    table.insert(mobwarnings, {"stone giant", "can throw large rocks and is a brute in melee!", 27})  
-    table.insert(mobwarnings, {"ettin", "is a beast in melee!", 27})  
-    table.insert(mobwarnings, {"fire dragon", "has a nasty fire breath attack!", 27})  
-    table.insert(mobwarnings, {"ice dragon", "has a nasty cold breath attack!", 27})  
-    table.insert(mobwarnings, {"shadow dragon", "has a nasty draining breath attack!", 27})  
-    table.insert(mobwarnings, {"golden dragon", "has multiple nasty breath attacks!", 27})  
-    table.insert(mobwarnings, {"tentacled monstrosity", "is a beast in melee!", 27})  
-    table.insert(mobwarnings, {"cyclops", "can throw large rocks!", 27})  
-    table.insert(mobwarnings, {"red wasp", "can paralyse, slow, and poison in melee!", 27})  
-    table.insert(mobwarnings, {"yellow wasp", "can paralyse and poison in melee!", 27})  
-    table.insert(mobwarnings, {"Grinder", "can cast paralyse!", 27})  
-    table.insert(mobwarnings, {"Rupert", "can paralyse you in fear!", 27})  
-    table.insert(mobwarnings, {"air mage", "can cast airstrike!", 27})  
-    table.insert(mobwarnings, {"titan", "can cast airstrike!", 27})  
-    table.insert(mobwarnings, {"jumping spider", "can ensnare you in its web!", 27})  
-    table.insert(mobwarnings, {"Arachne", "can ensnare you in her webs!", 27})  
-    table.insert(mobwarnings, {"Harold", "can throw nets and cast bolt of fire!", 27})  
-    table.insert(mobwarnings, {"blizzard demon", "can cast airstrike!", 27})  
-    table.insert(mobwarnings, {"wind drake", "can cast airstrike!", 27})  
-    table.insert(mobwarnings, {"Gastronok", "can cast airstrike!", 27})  
-    table.insert(mobwarnings, {"Enchantress", "can cast Dimension Anchor, Slow, Haste, Mass Confusion, and Strip Resistance!", 27})  
-    table.insert(mobwarnings, {"Sojobo", "can cast airstrike!", 27})  
-    table.insert(mobwarnings, {"Maurice", "can steal items, go invisible, and teleport away!", 27})  
-    table.insert(mobwarnings, {"deep elf demonologist", "can cast banishment or summon Greater Demons!", 27})  
-    table.insert(mobwarnings, {"Louise", "can cast banishment!", 27})  
-    table.insert(mobwarnings, {"Psyche", "might banish you in melee!", 27})  
-    table.insert(mobwarnings, {"Sonja", "will probably banish you in melee!", 27})  
-    table.insert(mobwarnings, {"draconian caller", "can summon Dragons and Death Drakes!", 27})  
-    table.insert(mobwarnings, {"draconian annihilator", "can cast Lehudib's Crystal Spear or Iron Shot!", 27})  
-    table.insert(mobwarnings, {"deep elf annihilator", "can cast Lehudib's Crystal Spear or Iron Shot!", 27})  
-    table.insert(mobwarnings, {"blood saint", "can cast LCS and other Legendary Destruction!", 27})  
-    table.insert(mobwarnings, {"black sun", "has some abilities I don't know!", 27})  
-    table.insert(mobwarnings, {"corrupter", "can summon allies from various branches!", 27})  
-    table.insert(mobwarnings, {"moth of wrath", "can enrage both enemies and you!", 27})  
-    table.insert(mobwarnings, {"orb spider", "can cast Orb of Destruction!", 27})  
-    table.insert(mobwarnings, {"tarantella", "can cause confusion in melee!", 27})  
-    table.insert(mobwarnings, {"brown ugly thing", "can cause corrosion in melee!", 27})  
-    table.insert(mobwarnings, {"brown very ugly thing", "can cause corrosion in melee!", 27})  
-    table.insert(mobwarnings, {"red ugly thing", "can burn your scrolls in melee!", 27})  
-    table.insert(mobwarnings, {"red very ugly thing", "can cause sticky flames in melee!", 27})  
-    table.insert(mobwarnings, {"purple ugly thing", "can cause sickness in melee!", 27})  
-    table.insert(mobwarnings, {"purple very ugly thing", "can cause rotting in melee!", 27})  
-    table.insert(mobwarnings, {"komodo dragon", "can cause sickness in melee!", 27})  
-    table.insert(mobwarnings, {"deep troll earth mage", "can cast LRD and dig!", 27})  
-    table.insert(mobwarnings, {"deep troll shaman", "can cast haste and might on allies!", 27})  
-    table.insert(mobwarnings, {"warmonger", "can sap your magic and summon a grand avatar!", 27})  
-    table.insert(mobwarnings, {"chaos champion", "can dispel or entrap you, or other chaos effects!", 27})  
-    table.insert(mobwarnings, {"draconian shifter", "can block teleports, shift allies encircling you, or shift your position!", 27})  
-    table.insert(mobwarnings, {"Roxanne", "can cast LCS and Iron Shot at you, or shift your position!", 27})  
+    --If the Monster_Name includes a capital letter, the message will be prepended with [The] 
+    mobwarnings["giant eyeball"] = "can paralyse you!"
+    mobwarnings["great orb of eyes"] = "can cast paralyse, disintegrate, slow, confuse, and teleport you!"
+    mobwarnings["vampire knight"] = "can cast paralyse!"
+    mobwarnings["vampire mage"] = "can Summon Undead and Animate Dead!"
+    mobwarnings["orc sorcerer"] = "can cast paralyse!"
+    mobwarnings["fire giant"] = "can cast fireball and bolt of fire!"
+    mobwarnings["ice giant"] = "can cast bolt of ice!"
+    mobwarnings["orc wizard"] = "might cast slow or confuse!"
+    mobwarnings["wraith"] = "can slow you in melee!"
+    mobwarnings["stone giant"] = "can throw large rocks and is a brute in melee!"
+    mobwarnings["ettin"] = "is a beast in melee!"
+    mobwarnings["fire dragon"] = "has a nasty fire breath attack!"
+    mobwarnings["ice dragon"] = "has a nasty cold breath attack!"
+    mobwarnings["shadow dragon"] = "has a nasty draining breath attack!"
+    mobwarnings["golden dragon"] = "has multiple nasty breath attacks!"
+    mobwarnings["tentacled monstrosity"] = "is a beast in melee!"
+    mobwarnings["cyclops"] = "can throw large rocks!"
+    mobwarnings["red wasp"] = "can paralyse, slow, and poison in melee!"
+    mobwarnings["yellow wasp"] = "can paralyse and poison in melee!"
+    mobwarnings["Grinder"] = "can cast paralyse!"
+    mobwarnings["Rupert"] = "can paralyse you in fear!"
+    mobwarnings["air mage"] = "can cast airstrike!"
+    mobwarnings["titan"] = "can cast airstrike!"
+    mobwarnings["jumping spider"] = "can ensnare you in its web!"
+    mobwarnings["Arachne"] = "can ensnare you in her webs!"
+    mobwarnings["Harold"] = "can throw nets and cast bolt of fire"
+    mobwarnings["blizzard demon"] = "can cast airstrike!"
+    mobwarnings["wind drake"] = "can cast airstrike!"
+    mobwarnings["Gastronok"] = "can cast airstrike!"
+    mobwarnings["Enchantress"] = "can cast Dimension Anchor, Slow, Haste, Mass Confusion, and Strip Resistance!"
+    mobwarnings["Sojobo"] = "can cast airstrike!"
+    mobwarnings["Maurice"] = "can steal your items, go invisible, and teleport away!"
+    mobwarnings["deep elf demonologist"] = "can cast banishment or summon Greater Demons!"
+    mobwarnings["Louise"] = "can cast banishment!"
+    mobwarnings["Psyche"] = "might banish you in melee!"
+    mobwarnings["Sonja"] = "will probably banish you in melee!"
+    mobwarnings["draconian caller"] = "can summon Dragons and Death Drakes!"
+    mobwarnings["draconian annihilator"] = "can cast Lehudib's Crystal Spear or Iron Shot!"
+    mobwarnings["deep elf annihilator"] = "can cast Lehudib's Crystal Spear or Iron Shot!"
+    mobwarnings["blood saint"] = "can cast LCS and other Legendary Destruction!"
+    mobwarnings["black sun"] = "has some abilities I don't know!"
+    mobwarnings["corrupter"] = "can summon allies from various branches!"
+    mobwarnings["moth of wrath"] = "can enrage both enemies and you!"
+    mobwarnings["orb spider"] = "can cast Orb of Destruction!"
+    mobwarnings["tarantella"] = "can cause confusion in melee!"
+    mobwarnings["brown ugly thing"] = "can cause corrosion in melee!"
+    mobwarnings["brown very ugly thing"] = "can cause corrosion in melee!"
+    mobwarnings["red ugly thing"] = "can burn your scrolls in melee!"
+    mobwarnings["red very ugly thing"] = "can cause sticky flames in melee!"
+    mobwarnings["purple ugly thing"] = "can cause sickness in melee!"
+    mobwarnings["purple very ugly thing"] = "can cause rotting in melee!"
+    mobwarnings["komodo dragon"] = "can cause sickness in melee!"
+    mobwarnings["deep troll earth mage"] = "can cast LRD and dig!"
+    mobwarnings["deep troll shaman"] = "can cast haste and might on allies!"
+    mobwarnings["warmonger"] = "can sap your magic and summon a grand avatar!"
+    mobwarnings["chaos champion"] = "can dispel or entrap you, or other chaos effects!"
+    mobwarnings["draconian shifter"] = "can block teleports, shift allies encircling you, or shift your position!"
+    mobwarnings["Roxanne"] = "can cast LCS and Iron Shot at you, or shift your position!"
     -- This (^c) excludes orc wizards from being identified from this line
-    table.insert(mobwarnings, {"(^c) wizard", "might cast banishment, paralyse, or LCS!", 27})  
-    table.insert(mobwarnings, {"ogre mage", "might cast banishment, paralyse, or LCS!", 27})  
-    table.insert(mobwarnings, {"lich", "might cast banishment, paralyse, summon demon, or LCS!", 27})  
-    table.insert(mobwarnings, {"Erolcha", "might cast banishment, paralyse, or LCS!", 27})  
-    table.insert(mobwarnings, {"draconian scorcher", "can cast smite-targeted Hellfire!", 27})  
-    table.insert(mobwarnings, {"hellion", "can cast smite-targeted Hellfire!", 27})  
-    table.insert(mobwarnings, {"Azrael", "can cast smite-targeted Hellfire!", 27})  
-    table.insert(mobwarnings, {"deep elf sorcerer", "can cast banishment or line-of-sight Hellfire!", 27})  
-    table.insert(mobwarnings, {"deep elf mage", "can cast fireball and slow!", 27})  
-    table.insert(mobwarnings, {"quicksilver dragon", "can dispel your buffs!", 27})  
-    table.insert(mobwarnings, {"purple draconian", "can dispel your buffs!", 27})  
-    table.insert(mobwarnings, {"yellow draconian", "can corrode your equipment at range!", 27})  
-    table.insert(mobwarnings, {"mottled draconian", "can spit sticky flames at range!", 27})  
-    table.insert(mobwarnings, {"vault sentinel", "can mark you and blow a signal horn!", 27})  
-    table.insert(mobwarnings, {"vault warden", "can lockdown doors and staircases!", 27})  
-    table.insert(mobwarnings, {"ironbrand convoker", "can recall allies and cast might on them!", 27})  
-    table.insert(mobwarnings, {"ironheart preserver", "can absord the damage of its allies and heal itself!", 27})  
-    table.insert(mobwarnings, {"Hell Sentinel", "can cast line-of-sight Hellfire and Iron Shot!", 27})  
-    table.insert(mobwarnings, {"Asmodeus", "can cast line-of-sight Hellfire and Summon Greater Demons!", 27})  
-    table.insert(mobwarnings, {"flayed ghost", "can Flay you to shreds!", 27})  
-    table.insert(mobwarnings, {"Ice Fiend", "can cast Torment!", 27})  
-    table.insert(mobwarnings, {"Shadow Fiend", "can cast Torment and Dispel Undead!", 27})  
-    table.insert(mobwarnings, {"curse skull", "can cast Torment and Summon Undead!", 27})  
-    table.insert(mobwarnings, {"tormentor", "can cast Torment!", 27})  
-    table.insert(mobwarnings, {"curse toe", "can cast Torment and Summon Fungus!", 27})  
-    table.insert(mobwarnings, {"Menkaure", "can cast torment!", 27})  
-    table.insert(mobwarnings, {"Gloorx Vloq", "can cast Torment!", 27})  
-    table.insert(mobwarnings, {"Ereshkigal", "can cast Torment and paralyse!", 27})  
-    table.insert(mobwarnings, {"Brimstone Fiend", "can cast torment and line-of-sight Hellfire!", 27})  
-    table.insert(mobwarnings, {"daeva", "can smite you!", 27})  
-    table.insert(mobwarnings, {"balrug", "can smite you, and cast fireball!", 27})  
-    table.insert(mobwarnings, {"smoke demon", "can smite you, and cast ranged sticky flame!", 27})  
-    table.insert(mobwarnings, {"deep elf priest", "can smite you!", 27})  
-    table.insert(mobwarnings, {"orc priest", "can smite you!", 27})  
-    table.insert(mobwarnings, {"orc high priest", "can smite you!", 27})  
-    table.insert(mobwarnings, {"starcursed mass", "can smite you!", 27})  
-    table.insert(mobwarnings, {"Frances", "can smite you!", 27})  
-    table.insert(mobwarnings, {"Mnoleg", "cast Summon Eyes and smite you!", 27})  
-    table.insert(mobwarnings, {"deep elf high priest", "can cast smite-targeted Hellfire or smite you!", 27})  
-    table.insert(mobwarnings, {"draconian zealot", "can cast smite-targeted Hellfire or smite you!", 27})  
-    table.insert(mobwarnings, {"mummy priest", "can cast torment and smite you!", 27})  
-    table.insert(mobwarnings, {"greater mummy", "can cast torment and smite you!", 27})  
-    table.insert(mobwarnings, {"Khufu", "can cast torment and smite you!", 27})  
-    table.insert(mobwarnings, {"sphinx", "can cast paralyse, slow, confuse, and smite you!", 27})  
-    table.insert(mobwarnings, {"Norris", "can cast paralyse and smite you, or drain your Int!", 27})  
-    table.insert(mobwarnings, {"catoblepas", "can petrify you with its breath!", 27})  
-    table.insert(mobwarnings, {"Jorgrun", "can cast petrify and shatter!", 27})  
-    table.insert(mobwarnings, {"brain worm", "can drain your Int!", 27})  
-    table.insert(mobwarnings, {"orange crystal statue", "can cast confuse and Shadow Creatures, or drain your Int!", 27})  
-    table.insert(mobwarnings, {"Jory", "can cast Lehudib's Crystal Spear or drain your Int!", 27})  
-    table.insert(mobwarnings, {"neqoxec", "can mutate you or drain your Int!", 27})  
-    table.insert(mobwarnings, {"cacodemon", "can mutate you!", 27})  
-    table.insert(mobwarnings, {"shining eye", "can mutate you!", 27})  
-    table.insert(mobwarnings, {"orb of fire", "can mutate you!", 27})  
-    table.insert(mobwarnings, {"pulsating lump", "can mutate you in melee!", 27})  
-    table.insert(mobwarnings, {"Cerebov", "can cast Fire Storm, Iron Shot, and Summon Greater Demons!", 27})  
-    table.insert(mobwarnings, {"Mennas", "can cast silence and confuse!", 27})  
-    table.insert(mobwarnings, {"Ignacio", "can cast Agony!", 27})  
-    table.insert(mobwarnings, {"giant orange brain", "can cast Shadow Creatures, or drain your Int!", 27})  
-    table.insert(mobwarnings, {"boggart", "can cast Shadow Creatures!", 27})  
-    table.insert(mobwarnings, {"shadow demon", "can cast Shadow Creatures!", 27})  
-    table.insert(mobwarnings, {"ynoxinul", "can cast Iron Shot!", 27})  
-    table.insert(mobwarnings, {"Frederick", "can cast Iron Shot!", 27})  
-    table.insert(mobwarnings, {"Dispater", "can cast line-of-sight Hellfire, Iron Shot, and summon Greater Demons!", 27})  
-    table.insert(mobwarnings, {"ghost moth", "will drain your Magic!", 27})  
-    table.insert(mobwarnings, {"eye of draining", "will drain your Magic!", 27})  
+    mobwarnings["(^c) wizard"] = "might cast banishment, paralyse, or LCS!"
+    mobwarnings["ogre mage"] = "might cast banishment, paralyse, or LCS!"
+    mobwarnings["lich"] = "might cast banishment, paralyse, summon demon, or LCS!"
+    mobwarnings["Erolcha"] = "might cast banishment, paralyse, or LCS!"
+    mobwarnings["draconian scorcher"] = "can cast smite-targeted Hellfire!"
+    mobwarnings["hellion"] = "can cast smite-targeted Hellfire!"
+    mobwarnings["Azrael"] = "can cast smite-targeted Hellfire!"
+    mobwarnings["deep elf sorcerer"] = "can cast banishment or line-of-sight Hellfire!"
+    mobwarnings["deep elf mage"] = "can cast fireball and slow!"
+    mobwarnings["quicksilver dragon"] = "can dispel your buffs!"
+    mobwarnings["purple draconian"] = "can dispel your buffs!"
+    mobwarnings["yellow draconian"] = "can corrode your equipment at range!"
+    mobwarnings["mottled draconian"] = "can spit sticky flames at range!"
+    mobwarnings["vault sentinel"] = "can mark you and blow a signal horn!"
+    mobwarnings["vault warden"] = "can lockdown doors and staircases!"
+    mobwarnings["ironbrand convoker"] = "can recall allies and cast might on them!"
+    mobwarnings["ironheart preserver"] = "can absord the damage of its allies and heal itself!"
+    mobwarnings["Hell Sentinel"] = "can cast line-of-sight Hellfire and Iron Shot!"
+    mobwarnings["Asmodeus"] = "can cast line-of-sight Hellfire and Summon Greater Demons!"
+    mobwarnings["flayed ghost"] = "can Flay you to shreds!"
+    mobwarnings["Ice Fiend"] = "can cast Torment!"
+    mobwarnings["Shadow Fiend"] = "can cast Torment and Dispel Undead!"
+    mobwarnings["curse skull"] = "can cast Torment and Summon Undead!"
+    mobwarnings["tormentor"] = "can cast Torment!"
+    mobwarnings["curse toe"] = "can cast Torment and Summon Fungus!"
+    mobwarnings["Menkaure"] = "can cast torment!"
+    mobwarnings["Gloorx Vloq"] = "can cast Torment!"
+    mobwarnings["Ereshkigal"] = "can cast Torment and paralyse!"
+    mobwarnings["Brimstone Fiend"] = "can cast torment and line-of-sight Hellfire!"
+    mobwarnings["daeva"] = "can smite you!"
+    mobwarnings["balrug"] = "can smite you, and cast fireball!"
+    mobwarnings["smoke demon"] = "can smite you, and cast ranged sticky flame!"
+    mobwarnings["deep elf priest"] = "can smite you!"
+    mobwarnings["orc priest"] = "can smite you!"
+    mobwarnings["orc high priest"] = "can smite you!"
+    mobwarnings["starcursed mass"] = "can smite you!"
+    mobwarnings["Frances"] = "can smite you!"
+    mobwarnings["Mnoleg"] = "cast Summon Eyes and smite you!"
+    mobwarnings["deep elf high priest"] = "can cast smite-targeted Hellfire or smite you!"
+    mobwarnings["draconian zealot"] = "can cast smite-targeted Hellfire or smite you!"
+    mobwarnings["mummy priest"] = "can cast torment and smite you!"
+    mobwarnings["greater mummy"] = "can cast torment and smite you!"
+    mobwarnings["Khufu"] = "can cast torment and smite you!"
+    mobwarnings["sphinx"] = "can cast paralyse, slow, confuse, and smite you!"
+    mobwarnings["Norris"] = "can cast paralyse and smite you, or drain your Int!"
+    mobwarnings["catoblepas"] = "can petrify you with its breath!"
+    mobwarnings["Jorgrun"] = "can cast petrify and shatter!"
+    mobwarnings["brain worm"] = "can drain your Int!"
+    mobwarnings["orange crystal statue"] = "can cast confuse and Shadow Creatures, or drain your Int!"
+    mobwarnings["Jory"] = "can cast Lehudib's Crystal Spear or drain your Int!"
+    mobwarnings["neqoxec"] = "can mutate you or drain your Int!"
+    mobwarnings["cacodemon"] = "can mutate you!"
+    mobwarnings["shining eye"] = "can mutate you!"
+    mobwarnings["orb of fire"] = "can mutate you!"
+    mobwarnings["pulsating lump"] = "can mutate you in melee!"
+    mobwarnings["Cerebov"] = "can cast Fire Storm, Iron Shot, and Summon Greater Demons!"
+    mobwarnings["Mennas"] = "can cast silence and confuse!"
+    mobwarnings["Ignacio"] = "can cast Agony!"
+    mobwarnings["giant orange brain"] = "can cast Shadow Creatures, or drain your Int!"
+    mobwarnings["boggart"] = "can cast Shadow Creatures!"
+    mobwarnings["shadow demon"] = "can cast Shadow Creatures!"
+    mobwarnings["ynoxinul"] = "can cast Iron Shot!"
+    mobwarnings["Frederick"] = "can cast Iron Shot!"
+    mobwarnings["Dispater"] = "can cast line-of-sight Hellfire, Iron Shot, and summon Greater Demons!"
+    mobwarnings["ghost moth"] = "will drain your Magic!"
+    mobwarnings["eye of draining"] = "will drain your Magic!"
   
     -- Holds the overall alert message and count of dangers 
     local alerts = ""
@@ -161,15 +156,14 @@
     -- Checks to see if it matches the description of each mob in sight
     -- Excluding forms that can't cast: zombie, skeleton, simulcrum, but not incapacited forms
     for mons, count in pairs(getMonsterList()) do  
-      for values in mobwarnings do
-        local name, message, level = values[1], values[2], values[3]
-        if string.find(mons, name) 
+      for mob, message in pairs(mobwarnings) do
+        if string.find(mons, mob) 
         and not string.find(mons, "zombie") 
         and not string.find(mons, "skeleton")
         and not string.find(mons, "simulacr") then
           --Used to format the string for Unique/Named mobs
           local is_fiend = (string.find(mons, "Fiend") ~= nil)
-          local is_uppercase = (string.find(mons, "%u") ~= nil) and not is_fiend
+          local is_uppercase = (string.find(mons, "%u") ~= nil) or is_fiend
           --Holds this mobs alert message
           local alert = ""
           local mob_name = ""
@@ -215,7 +209,7 @@
     end
   end
   
-  -- Returns a table where the key is the monster description and the value is the total count of that mob in your vision
+  -- Returns a table where the key is the monster description and value is the total number of that mob in your vision
   function getMonsterList()
     local monsters = {}
     for x = -8,8 do
@@ -236,9 +230,9 @@
 
   --Escapes the special characters in a string for pattern matching
   function escape(str)
-    local escaped_parens = str:gsub('[%(%)]','%/%1')
+    local escape_parens = str:gsub('[%(%)]','%/%1')
     --Removes any coloration parts of the string
-    return (escaped_parens:gsub('<[^<]*>',''))
+    return (escape_parens:gsub('<[^<]*>',''))
   end
 >
 
@@ -1308,6 +1302,8 @@ msc += $item_dmg:Done waiting
 msc += $item_dmg:That really hurt
 
 #msc += $warning:
+msc += $warning:Smoke pours from your hands
+msc += $warning:curses noisily
 msc += $warning:is no longer blind
 msc += $warning:Lightning arcs down from a storm cloud
 msc += $warning:You feel strangely numb
@@ -1344,7 +1340,6 @@ msc += $warning:There's a creature in the doorway
 msc += $warning:They are\:
 msc += $warning:A card falls out of the deck
 msc += $warning:(dart|tomahawk|javelin|large rock|stone) disappears in a puff of smoke
-msc += $warning:Smoke pours from your hands
 msc += $warning:You feel less regenerative
 msc += $warning:You can't close doors while held in a net
 msc += $warning:A slime creature suddenly
@@ -1398,7 +1393,6 @@ msc += $warning:(shout|hisses|gurgles|screeches|barks|cheers|buzzes|grunts|makes
 msc += $warning:(shriek|roars|says|moans|keens|mumbles|wails|croak|screams|chants|Floosh|trumpets)
 msc += $warning:(gibbers|growls|whisper|wail|asks|sighs|laughs|yells|cries|caws|queries|sneers)
 msc += $warning:(jeers|bellows|chilling moan|scowls|sings|whimpers|cackles|mewls|snorts|grits)
-msc += $warning:curses noisily
 msc += $warning:imitates the bagpipes
 msc += $warning:Dowan breathes
 msc += $warning:You hear
