@@ -27,8 +27,9 @@
     mobwarnings["vampire mage"] = "can Summon Undead and Animate Dead!"
     mobwarnings["orc sorcerer"] = "can cast paralyse!"
     mobwarnings["fire giant"] = "can cast fireball and bolt of fire!"
+    mobwarnings["frost giant"] = "can cast bolt of cold!"
     mobwarnings["ice giant"] = "can cast bolt of ice!"
-    mobwarnings["orc wizard"] = "might cast slow or confuse!"
+    --mobwarnings["orc wizard"] = "might cast slow or confuse!"
     mobwarnings["wraith"] = "can slow you in melee!"
     mobwarnings["stone giant"] = "can throw large rocks and is a brute in melee!"
     mobwarnings["ettin"] = "is a beast in melee!"
@@ -79,7 +80,6 @@
     mobwarnings["chaos champion"] = "can dispel or entrap you, or other chaos effects!"
     mobwarnings["draconian shifter"] = "can block teleports, shift allies encircling you, or shift your position!"
     mobwarnings["Roxanne"] = "can cast LCS and Iron Shot at you, or shift your position!"
-    -- This (^c) excludes orc wizards from being identified from this line
     mobwarnings["(^c) wizard"] = "might cast banishment, paralyse, or LCS!"
     mobwarnings["ogre mage"] = "might cast banishment, paralyse, or LCS!"
     mobwarnings["lich"] = "might cast banishment, paralyse, summon demon, or LCS!"
@@ -129,7 +129,7 @@
     mobwarnings["Jorgrun"] = "can cast petrify and shatter!"
     mobwarnings["brain worm"] = "can drain your Int!"
     mobwarnings["orange crystal statue"] = "can cast confuse and Shadow Creatures, or drain your Int!"
-    mobwarnings["Jory"] = "can cast Lehudib's Crystal Spear or drain your Int!"
+    mobwarnings["Jory"] = "can mesmerise you, cast LCS and blink close!"
     mobwarnings["neqoxec"] = "can mutate you or drain your Int!"
     mobwarnings["cacodemon"] = "can mutate you!"
     mobwarnings["shining eye"] = "can mutate you!"
@@ -230,7 +230,7 @@
 
   --Escapes the special characters in a string for pattern matching
   function escape(str)
-    local escape_parens = str:gsub('[%(%)]','%/%1')
+    local escape_parens = str:gsub('[%(%)]','%\%1')
     --Removes any coloration parts of the string
     return (escape_parens:gsub('<[^<]*>',''))
   end
@@ -547,7 +547,7 @@ slot += Phase Shift:S
 
 ## paralyzing monsters ##
 auto_exclude += [^c] wizard, eyeball, orb of eyes, sphinx, lich, ancient lich, ogre-mage, Norris
-auto_exclude += vampire knight, orc sorcerer, Grinder, Rupert, Ereshkigal, Erolcha
+auto_exclude += vampire knight, orc sorcerer, Grinder, Rupert, Ereshkigal, Erolcha, Jory
 
 auto_exclude += Roxanne, Sigmund, Hydra, Pikel, slave, Prince Ribbit, Snorg
 auto_exclude += Menkaure, Duvessa, Dowan, Blork, Jospeh, jelly, Gastronok
@@ -962,6 +962,7 @@ more += Ignacio.*comes? into view.
 more += Ijyb.*comes? into view.
 more += Ilsuiw.*comes? into view.
 more += Jessica.*comes? into view.
+more += Jory.*comes? into view.
 more += Joseph.*comes? into view.
 more += Josephine.*comes? into view.
 more += Jozef.*comes? into view.
