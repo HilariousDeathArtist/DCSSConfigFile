@@ -22,12 +22,19 @@
     --"[The] Monster_Name Warning_Message"
     --If the Monster_Name includes a capital letter, the message will be prepended with [The] 
     mobwarnings["giant eyeball"] = "can paralyse you!"
+    mobwarnings["naga ritualist"] = "can remove poison resistance!"
+    mobwarnings["mana viper"] = "has an antimagic bite!"
+    mobwarnings["golden eyeball"] = "can confuse you!"
+    mobwarnings["electric golem"] = "has nasty electric attacks!"
+    mobwarnings["storm dragon"] = "has a nasty electric breath attack!"
     mobwarnings["great orb of eyes"] = "can cast paralyse, disintegrate, slow, confuse, and teleport you!"
     mobwarnings["vampire knight"] = "can cast paralyse!"
     mobwarnings["vampire mage"] = "can Summon Undead and Animate Dead!"
     mobwarnings["orc sorcerer"] = "can cast paralyse!"
     mobwarnings["fire giant"] = "can cast fireball and bolt of fire!"
     mobwarnings["frost giant"] = "can cast bolt of cold!"
+    mobwarnings["spriggan druid"] = "can awaken trees, and cast might on recalled animals!"
+    mobwarnings["thorn hunter"] = "can throw a nasty volley of thorns, and create brambles!"
     mobwarnings["ice giant"] = "can cast bolt of ice!"
     --mobwarnings["orc wizard"] = "might cast slow or confuse!"
     mobwarnings["wraith"] = "can slow you in melee!"
@@ -35,6 +42,7 @@
     mobwarnings["ettin"] = "is a beast in melee!"
     mobwarnings["fire dragon"] = "has a nasty fire breath attack!"
     mobwarnings["ice dragon"] = "has a nasty cold breath attack!"
+    mobwarnings["apocalypse crab"] = "has a chaos breath attack!"
     mobwarnings["shadow dragon"] = "has a nasty draining breath attack!"
     mobwarnings["golden dragon"] = "has multiple nasty breath attacks!"
     mobwarnings["tentacled monstrosity"] = "is a beast in melee!"
@@ -60,9 +68,10 @@
     mobwarnings["Sonja"] = "will probably banish you in melee!"
     mobwarnings["draconian caller"] = "can summon Dragons and Death Drakes!"
     mobwarnings["draconian annihilator"] = "can cast Lehudib's Crystal Spear or Iron Shot!"
+    mobwarnings["draconian zealot"] = "can cast smite-targeted Hellfire or smite you!"
     mobwarnings["deep elf annihilator"] = "can cast Lehudib's Crystal Spear or Iron Shot!"
     mobwarnings["blood saint"] = "can cast LCS and other Legendary Destruction!"
-    mobwarnings["black sun"] = "has some abilities I don't know!"
+    mobwarnings["black sun"] = "can give allies a dangerous black mark which gives melee effects!"
     mobwarnings["corrupter"] = "can summon allies from various branches!"
     mobwarnings["moth of wrath"] = "can enrage both enemies and you!"
     mobwarnings["orb spider"] = "can cast Orb of Destruction!"
@@ -71,6 +80,7 @@
     mobwarnings["brown very ugly thing"] = "can cause corrosion in melee!"
     mobwarnings["red ugly thing"] = "can burn your scrolls in melee!"
     mobwarnings["red very ugly thing"] = "can cause sticky flames in melee!"
+    mobwarnings["flaming corpse"] = "can cause sticky flames in melee!"
     mobwarnings["purple ugly thing"] = "can cause sickness in melee!"
     mobwarnings["purple very ugly thing"] = "can cause rotting in melee!"
     mobwarnings["komodo dragon"] = "can cause sickness in melee!"
@@ -78,9 +88,10 @@
     mobwarnings["deep troll shaman"] = "can cast haste and might on allies!"
     mobwarnings["warmonger"] = "can sap your magic and summon a grand avatar!"
     mobwarnings["chaos champion"] = "can dispel or entrap you, or other chaos effects!"
-    mobwarnings["draconian shifter"] = "can block teleports, shift allies encircling you, or shift your position!"
+    mobwarnings["draconian shifter"] = "can block teleports, blink allies encircling you, or cause you to blink!"
+    mobwarnings["guardian serpent"] = "can blink allies encircling you!"
     mobwarnings["Roxanne"] = "can cast LCS and Iron Shot at you, or shift your position!"
-    mobwarnings["(^c) wizard"] = "might cast banishment, paralyse, or LCS!"
+    mobwarnings["^c wizard"] = "might cast banishment, paralyse, or LCS!"
     mobwarnings["ogre mage"] = "might cast banishment, paralyse, or LCS!"
     mobwarnings["lich"] = "might cast banishment, paralyse, summon demon, or LCS!"
     mobwarnings["Erolcha"] = "might cast banishment, paralyse, or LCS!"
@@ -119,7 +130,6 @@
     mobwarnings["Frances"] = "can smite you!"
     mobwarnings["Mnoleg"] = "cast Summon Eyes and smite you!"
     mobwarnings["deep elf high priest"] = "can cast smite-targeted Hellfire or smite you!"
-    mobwarnings["draconian zealot"] = "can cast smite-targeted Hellfire or smite you!"
     mobwarnings["mummy priest"] = "can cast torment and smite you!"
     mobwarnings["greater mummy"] = "can cast torment and smite you!"
     mobwarnings["Khufu"] = "can cast torment and smite you!"
@@ -129,7 +139,7 @@
     mobwarnings["Jorgrun"] = "can cast petrify and shatter!"
     mobwarnings["brain worm"] = "can drain your Int!"
     mobwarnings["orange crystal statue"] = "can cast confuse and Shadow Creatures, or drain your Int!"
-    mobwarnings["Jory"] = "can mesmerise you, cast LCS and blink close!"
+    mobwarnings["Jory"] = "can mesmerise, cast LCS and blink close!"
     mobwarnings["neqoxec"] = "can mutate you or drain your Int!"
     mobwarnings["cacodemon"] = "can mutate you!"
     mobwarnings["shining eye"] = "can mutate you!"
@@ -160,10 +170,11 @@
         if string.find(mons, mob) 
         and not string.find(mons, "zombie") 
         and not string.find(mons, "skeleton")
+        and not string.find(mons, "shaped block of ice")
         and not string.find(mons, "simulacr") then
           --Used to format the string for Unique/Named mobs
           local is_fiend = (string.find(mons, "Fiend") ~= nil)
-          local is_uppercase = (string.find(mons, "%u") ~= nil) or is_fiend
+          local is_uppercase = (string.find(mons, "%u") ~= nil) and not is_fiend
           --Holds this mobs alert message
           local alert = ""
           local mob_name = ""
@@ -192,7 +203,8 @@
     short_alert = string.sub(short_alert, 1, -3) .. "!"
     
     --If there is an alert and it was not displayed in the last six messages then display the warning
-    if not ((alerts == "") or string.find(crawl.messages(6), escape(alerts))) then
+    if not ((alerts == "") 
+    or string.find(crawl.messages(6), escape(alerts))) then
       --For a single monster
       if total_dangers == 1 then
         crawl.mpr("<lightgrey>Spoiler Alert:" .. alerts .. "</lightgrey>")
@@ -200,10 +212,10 @@
       elseif total_dangers < 4 then
         crawl.mpr("<yellow>Warning(" ..total_dangers .. "x):" .. alerts .. "</yellow>")
       --For 4 to 7
-      elseif total_dangers < 8 then
+      elseif total_dangers < 8 and (not string.find(crawl.messages(6), escape(short_alert))) then
         crawl.mpr("<lightred>Danger(" ..total_dangers .. "x):" .. short_alert .. "</lightred>")
       --For 8 or more
-      else
+      elseif not string.find(crawl.messages(6), escape(short_alert)) then
         crawl.mpr("<red>PANIC(" ..total_dangers .. "x):" .. short_alert .. "</red>")
       end
     end
@@ -230,9 +242,10 @@
 
   --Escapes the special characters in a string for pattern matching
   function escape(str)
-    local escape_parens = str:gsub('[%(%)]','%\%1')
+    --Escapes parens and dash "()-"
+    local escaped = str:gsub('[%(%)%-]','%\%1')
     --Removes any coloration parts of the string
-    return (escape_parens:gsub('<[^<]*>',''))
+    return (escaped:gsub('<[^<]*>',''))
   end
 >
 
@@ -546,15 +559,15 @@ slot += Phase Shift:S
 ################
 
 ## paralyzing monsters ##
-auto_exclude += [^c] wizard, eyeball, orb of eyes, sphinx, lich, ancient lich, ogre-mage, Norris
-auto_exclude += vampire knight, orc sorcerer, Grinder, Rupert, Ereshkigal, Erolcha, Jory
+auto_exclude += [^c] wizard [^s], eyeball [^s], orb of eyes [^s], sphinx [^s], lich [^s], ancient lich [^s], ogre-mage [^s], Norris [^s]
+auto_exclude += vampire knight [^s], orc sorcerer [^s], Grinder [^s], Rupert [^s], Ereshkigal [^s], Erolcha [^s], Jory [^s]
 
-auto_exclude += Roxanne, Sigmund, Hydra, Pikel, slave, Prince Ribbit, Snorg
-auto_exclude += Menkaure, Duvessa, Dowan, Blork, Jospeh, jelly, Gastronok
-auto_exclude += Urug, Harold, Aizul, Erica, Jorgrun, ancienct lich, orb of fire
-auto_exclude += Saint Roka, Boris, Mennas, Nessos, Sonja, Agnes, Wiglaf, Fannar, Louise
-auto_exclude += Mara, Arachne, Xtahua, Frances, Frederick, ice statue, Polyphemus
-auto_exclude += Death drake, Kirke, Hog, Jorgrun, Sojobo, Nergalle, Maud
+auto_exclude += Roxanne [^s], Sigmund [^s], Hydra [^s], Pikel [^s], slave [^s], Prince Ribbit [^s], Snorg [^s]
+auto_exclude += Menkaure [^s], Duvessa [^s], Dowan [^s], Blork [^s], Jospeh [^s], jelly [^s], Gastronok [^s]
+auto_exclude += Urug [^s], Harold [^s], Aizul [^s], Erica [^s], Jorgrun [^s], ancienct lich [^s], orb of fire [^s]
+auto_exclude += Saint Roka [^s], Boris [^s], Mennas [^s], Nessos [^s], Sonja [^s], Agnes [^s], Wiglaf [^s], Fannar [^s], Louise [^s]
+auto_exclude += Mara [^s], Arachne [^s], Xtahua [^s], Frances [^s], Frederick [^s], ice statue [^s], Polyphemus [^s]
+auto_exclude += Death drake [^s], Kirke [^s], Hog [^s], Jorgrun [^s], Sojobo [^s], Nergalle [^s], Maud [^s]
 
 ###############
 # Auto Travel #
@@ -626,7 +639,7 @@ stop += You fall through a shaft
 stop += An alarm trap emits a blaring wail
 stop += (blundered into a|invokes the power of) Zot
 stop += hear a soft click
-stop += A huge blade swings out and slices into you!
+stop += A huge blade swings out and slices into you[^r]
 stop += sense of stasis
 stop += flesh start
 stop += (starving|devoid of blood)
@@ -706,12 +719,13 @@ more += can cast Torment
 more += MASSIVE DAMAGE
 
 # Translocations
-more += You.*([^/+]blink|teleport) [^f]
+more += You.*teleport [^f]
+more += You blink
 more += Your surroundings suddenly seem different
 more += You feel strangely stable
 
 # Wands/Potions/evokes used by monsters
-more += zaps a wand
+more += zaps a (wand|rod)
 more += drinks a potion
 more += evokes.*(amulet|ring)
 
@@ -727,6 +741,7 @@ more += begins to recite a word of recall
 more += You are engulfed in dark miasma
 more += swoops through the air toward you
 more += orange crystal statue.*comes? into view
+more += The ghost moth stares at you
 
 # Interrupts for unexpected situations
 more += You don't.* that spell
@@ -799,6 +814,7 @@ more += Your fit of retching subsides
 more += You are wearing\:
 more += The walls and floor vibrate strangely for a moment
 more += You feel your flesh start to rot away
+more += Mara shimmers and seems to become three
 
 # Interrupts for Bad things
 more += Your surroundings flicker
@@ -873,7 +889,7 @@ more += You are mesmerised
 more += The barbed spikes become lodged in your body
 more += A sentinel's mark forms upon you
 more += The silver sears you
-more += seems to speed up
+more += [^Your].*seems to speed up
 more += steals.*your
 more += infuriates you
 more += reflects.*of reflection
@@ -1089,6 +1105,15 @@ msc =
 msc += white:You feel blessed for a moment
 
 #msc += $danger:
+msc += $danger:You feel the power of the Abyss delaying your translocation
+msc += $danger:Mara shimmers and seems to become three
+msc += $danger:Your spellforged servitor is blown up
+msc += $danger:Mutagenic energies flood into your body
+msc += $danger:seems to grow more fierce
+msc += $danger:attacks!
+msc += $danger:Your.*falls into the water
+msc += $danger:Something unseen opens the huge gate
+msc += $danger:changes into something you cannot see
 msc += $danger:The rod doesn't have enough magic points
 msc += $danger:The power of the Abyss keeps you in your place
 msc += $danger:Your.*is destroyed
@@ -1132,7 +1157,6 @@ msc += $danger:You are engulfed in calcifying dust
 msc += $danger:^It .* you
 msc += $danger:[^f]Something.*you[^r]
 msc += $danger:grabs you[^r]
-msc += $danger:constricts you[^r]
 msc += $danger:you convulse
 msc += $danger:is unaffected
 msc += $danger:blinks into view
@@ -1285,7 +1309,7 @@ msc += $danger:You feel a little less
 msc += $danger:You are wearing\:.*cursed
 msc += $danger:This card doesn't seem to belong here
 msc += $danger:You flicker back
-msc += $danger:Something is blocking the doorway
+msc += $danger:something.*blocking the
 msc += $danger:You slice into (a|the) (net|web)
 msc += $danger:It doesn't seem very happy
 msc += $danger:You have been turned into a pig
@@ -1302,7 +1326,7 @@ msc += $danger:appears unharmed
 #msc += $item_dmg:
 msc += $item_dmg:acid corrodes
 msc += $item_dmg:catch(es)? fire
-msc += $item_dmg:freezes? and shatters?
+msc ^= $item_dmg:freezes? and shatters?
 msc += $item_dmg:covered with spores
 msc += $item_dmg:devours some of your food
 msc += $item_dmg:rots? away
@@ -1315,8 +1339,12 @@ msc += $item_dmg:Done waiting
 msc += $item_dmg:That really hurt
 
 #msc += $warning:
+msc += $warning:The film of ice won't work on stone
+msc += $warning:The cursed.*is stuck to you
+msc += $warning:You cannot enchant this weapon
+msc += $warning:You sense an evil presence
+msc += $warning:Jory draws you further into his thrall
 msc += $warning:grabs your
-msc += $warning:constricts your
 msc += $warning:You shudder from the earth-shattering force
 msc += $warning:Smoke pours from your hands
 msc += $warning:curses noisily
@@ -1410,6 +1438,7 @@ msc += $warning:(shriek|roars|says|moans|keens|mumbles|wails|croak|screams|chant
 msc += $warning:(gibbers|growls|whisper|wail|asks|sighs|laughs|yells|cries|caws|queries|sneers)
 msc += $warning:(jeers|bellows|chilling moan|scowls|sings|whimpers|cackles|mewls|snorts|grits)
 msc += $warning:imitates the bagpipes
+msc += $warning:suddenly curses
 msc += $warning:Dowan breathes
 msc += $warning:You hear
 msc += $warning:You drop
@@ -1554,7 +1583,6 @@ msc += $warning:A toadstool grows
 msc += $warning:then quickly surges around you
 msc += $warning:A fierce wind blows
 msc += $warning:There is a sudden explosion of frost
-msc += $warning:There's something blocking the doorway
 msc += $warning:That was not very filling
 msc += $warning:You failed to disarm the trap
 msc += $warning:is covered with a thin layer of ice
@@ -1672,6 +1700,7 @@ msc += $warning:wrenching scream
 msc += $warning:Leave now/, before it is too late
 msc += $warning:picks up a throwing net
 msc += $warning:Nothing appears to happen
+msc += $warning:The dead are
 msc += $warning:begin to drag.*along the ground
 msc += $warning:merge to form a (macabre mass|small abomination|large abomination)
 msc += $warning:Two macabre masses merge
@@ -1688,6 +1717,7 @@ msc += $warning:There is a cloud of mutagenic fog here
 msc += $warning:howls
 msc += $warning:You part the fleshy orifice with a squelch
 msc += $warning:The air shimmers briefly around you
+msc += $warning:You are much too full right now
 msc += $warning:turns to fight
 msc += $warning:You turn into a bat
 msc += $warning:Your.*looks incredibly listless
@@ -1703,9 +1733,13 @@ msc += $warning:struggles to escape constriction
 msc += $warning:struggles to resist
 msc += $warning:You feel.*more hungry
 msc += $warning:You are outlined in light
-
+msc += $warning:You feel momentarily disoriented
+msc += $warning:(prevent|prevents) you from hitting
 
 #msc += $boring:
+msc += $boring:Your hands glow shimmering blue for a moment
+msc += $boring:You are already empty-handed
+msc ^= $boring:the.*shaped block of ice
 msc ^= $boring:briefly gains? a (red|green|yellow) sheen
 msc += $boring:The great wave of water passes through the water elemental
 msc += $boring:shimmers and vanishes
@@ -1740,13 +1774,14 @@ msc += $boring:Your.*jumps up and down with excitement
 msc += $boring:A monocle briefly appears over your left eye
 msc += $boring:Strange appendages sprout from
 msc += $boring:Suppurating sores blossom under
+msc += $boring:That beef jerky was jerk
 msc += $boring:A dozen eyes blink open in the
 msc += $boring:You part the fleshy orifice
 msc += $boring:There is an open fleshy orifice here
 msc += $boring:Your hair momentarily turns into snakes
 msc += $boring:The crimson imp grinds its teeth
 msc += $boring:The crimson imp spits at you
-msc += $boring:Duvessa weeps/, then rights herself and shakes her weapon
+msc += $boring:then rights herself and shakes her weapon
 msc += $boring:You smell burning hair
 msc += $boring:Your nose twitches suddenly
 msc += $boring:You are wearing that object
@@ -1798,7 +1833,7 @@ msc += $boring:That lemon was rather sour
 msc += $boring:You call on the dead to rise
 msc += $boring:You can't wear that
 msc += $boring:vibrates crazily for a second
-msc += $boring:The crimson imp breathes (steam|mist) at you
+msc ^= $boring:The crimson imp breathes (steam|mist) at you
 msc += $boring:showing sharp teeth
 msc += $boring:Branches wave dangerously above you
 msc += $boring:A root lunges up near you
@@ -1806,6 +1841,8 @@ msc += $boring:Maurice looks sneaky
 msc += $boring:Suddenly you are surrounded with a pale green light
 msc += $boring:really hit the spot
 msc += $boring:Mmmm... Yummy
+msc += $boring:Grum bares his teeth
+msc += $boring:Grum sniffs the air and quickly glances around
 msc += $boring:The shadow imp grinds its teeth
 msc += $boring:looks to the heavens
 msc += $boring:beckons to you
@@ -1903,7 +1940,6 @@ msc += $boring:misses you
 msc += $boring:Your? appears? unharmed
 msc += $boring:You are waved at by a branch
 msc += $boring:The trees move their gnarly branches around
-msc += $boring:The naga ritualist's toxic aura wanes.
 msc += $boring:You swap
 msc += $boring:The smell of rotting flesh
 msc += $boring:Ugh! There is something really disgusting
@@ -1982,13 +2018,13 @@ msc += $boring:You now have.*gold
 msc += $boring:Why would you want to do that
 msc += $boring:you're not good enough to have a special ability
 msc += $boring:You don't know.*spells?
-msc += $boring:You feel momentarily confused
 msc += $boring:holds its.*at the ready
 msc += $boring:There is a.*fountain.*here
 msc += $boring:Little bolts of electricity crackle over the disc
 msc += $boring:tries to grin evilly
 msc += $boring:The corpses? collapses? into a pulpy mess
 msc += $boring:There is an empty arch of ancient stone
+msc += $boring:Your.*glows dark umber for a moment
 msc += $boring:The runic seals? fades? away
 msc += $boring:Something drops 
 msc += $boring:tears the web
@@ -2048,6 +2084,7 @@ msc += $boring:You feel a surge of energy from the ground
 msc += $boring:You release your grib on
 msc += $boring:Your head hurts
 msc += $boring:The lightning grounds out
+msc += $boring:Your feet feel warm
 
 # Enemies taking damage
 msc += $good:You (hit|bite|slice|spit|open|slash|puncture|carve|perforate|stick|cut|chop|strike|skewer|impale|dice|headbutt|fracture|peck|touch|kick|freeze) 
@@ -2083,8 +2120,13 @@ msc += $good:(convulses|writhes in agony)
 msc += $good:is splashed with acid
 msc += $good:You feel life coursing into your body
 msc += $good:is struck by lightning
+msc += $good:A sheep catches fire
 
 # Non-damage combat messages
+#msc += $positive:
+msc += $positive:illusion disappears in a puff of smoke
+msc += $positive:Your.*is no longer encased in ice
+msc += $positive:You deflect
 msc += $positive:The lightning arcs
 msc += $positive:is knocked back by the lance of force
 msc += $positive:is dazzled
@@ -2094,6 +2136,7 @@ msc += $positive:You summon a servant imbued with your destructive magic
 msc ^= $positive:Your.*is no longer moving slowly 
 msc += $positive:You are suffused with power
 msc += $positive:The sheep.*panic
+msc += $positive:The sheep turns to a blind rush
 msc += $positive:Smoke pours from your nose
 msc += $positive:The trap is out of ammunition
 msc += $positive:You dart out from under the net
@@ -2109,7 +2152,8 @@ msc ^= $positive:You are no longer (glowing|entranced)
 msc += $positive:Your.*is no longer paralysed.
 msc += $positive:Your.*seems less confused
 msc += $positive:Your magical contamination has.*faded
-msc += $positive:Your white imp breaks free
+msc += $positive:Your.*breaks free
+msc += $positive:You feel momentarily confused
 msc += $positive:That potion was really gluggy
 msc += $positive:You resist
 msc += $positive:You (partially|easily) resist
@@ -2155,6 +2199,7 @@ msc += $positive:looks even sicker
 msc ^= $positive:You feel protected from missiles
 msc += $positive:A film of ice covers your body
 msc += $positive:is stunned!
+msc += $positive:is flash-frozen
 msc += $positive:seems to slow down
 msc += $positive:is moving more slowly
 msc += $positive:stops moving altogether
@@ -2165,6 +2210,7 @@ msc += $positive:the sound returns
 msc += $positive:Your amulet of stasis gives you a mild electric shock
 msc += $positive:You finish eating
 msc += $positive:Your icy armour thickens
+msc += $positive:The naga ritualist's toxic aura wanes
 msc += $positive:Your.*pulls away from the web
 msc += $positive:A chill wind blows around you
 msc += $positive:You become transparent for a moment
@@ -2191,7 +2237,7 @@ msc += $positive:You feel the strange sensation of being on two planes at once
 msc += $positive:You momentarily phase out as.*passes through you
 msc += $positive:You feel less exhausted
 msc += $positive:The.*melts
-msc ^= $positive:Your.*(unaffected|resists?)
+msc ^= $positive:Your.*(unaffected|resist[^a]|resists)
 msc += $positive:The flame cauterises the wound
 msc += $positive:You hack the.*last head off
 msc += $positive:You carefully extract the manticore spikes from your body
@@ -2256,6 +2302,7 @@ msc += $verypositive:You (kill|destroy|blow up)
 msc += $verypositive:is blown up
 msc += $verypositive:dies
 msc += $verypositive:is destroyed
+msc += $verypositive:The.*falls from the air
 msc += $verypositive:The.*simulacrum vapourises
 msc += $verypositive:more experienced
 msc ^= $verypositive:You.*and break free
@@ -2316,15 +2363,19 @@ msc += $verypositive:Found a gateway
 msc += $verypositive:Found a rocky tunnel leading out of this place
 msc += $verypositive:Found a portal to a secret trove of treasure
 msc += $verypositive:Found a magical portal
+msc += $verypositive:Found a flickering gateway to a bazaar
 msc += $verypositive:Found.*staircase
 msc += $verypositive:Found.*(shop|store|Emporium|Distillery|Boutique|Accessories|Antiques)
 msc += $verypositive:You feel your magical essence form a protective shroud around your flesh
 msc += $verypositive:You feel your.*returning
 msc += $verypositive:It is a scroll of brand weapon
 msc ^= $verypositive:Your.*seems to speed up
+msc += $verypositive:An interdimensional caravan has stopped on this level and set up a bazaar
 
 #Positive mutation - or losing bad ones
 #msc += $awesome:
+msc += $awesome:Your teeth lengthen and sharpen
+msc += $awesome:Your natural healing is strengthened
 msc += $awesome:You begin to regenerate
 msc += $awesome:You begin to radiate repulsive energy
 msc += $awesome:Your body's shape seems more normal
@@ -2373,6 +2424,12 @@ msc += $awesome:Your throat feels hot
 msc += $awesome:Your teeth grow very long and razor-sharp
 
 # Other rare and awesome stuff
+msc += $awesome:It is briefly surrounded by shifting shadows
+msc += $awesome:There is a gate to the Realm of Zot here
+msc += $awesome:A terribly searing pain shoots up your arm
+msc += $awesome:Your strength has recovered
+msc += $awesome:A flood of memories washes over you
+msc ^= $awesome:With a loud hiss the gate opens wide
 msc += $awesome:You have collected all the runes
 msc += $awesome:Now go and win
 msc += $awesome:You feel knowledgeable
@@ -2418,15 +2475,18 @@ msc += $awesome: Your hands briefly pass through it before you manage to get a f
 
 # You or an ally takes damage
 #msc += $negative:
+msc += $negative:You are caught in an extremely strong localised spatial distortion
+msc += $negative:You are blasted with searing flames
+msc += $negative:Your.*suffers a backlash
+msc ^= $negative:Your.*is smitten
 msc += $negative:You are blasted with fire
-msc ^= $negative:Your.*is engulfed in negative energy
+msc ^= $negative:Your.*is engulfed in
 msc ^= $negative:A huge blade swings out and slices into your?
 msc += $negative:Flames sear your flesh
 msc += $negative:A wave of violent energy washes through your body
 msc += $negative:You are caught in a localised spatial distortion
 msc += $negative:The acid blast engulfs you
 msc ^= $negative:Heat is drained from your body
-msc ^= $negative:Your.*is engulfed in roaring flames
 msc += $negative:Energy rips through your body
 msc += $negative:You feel you are being watched by something
 msc += $negative:Unholy energy fills the air
@@ -2441,6 +2501,7 @@ msc ^= $negative:The.*pierces through (you|your)
 msc ^= $negative:The walls? burns? you
 msc ^= $negative:Your.*is blown up
 msc += $negative:The throwing net hits your
+msc += $negative:constricts your?
 msc += $negative:(bites|hits|headbutts|punches|shocks|tentacle-slaps|claws|smites|stings|freezes|slaps|pecks|gores) your?
 msc += $negative:(tail-slaps|tramples|burns|poisons|gores|pecks|touches|kicks|trunk-slaps|skewers|drowns) your?
 # Thanks killer klowns
@@ -2448,7 +2509,6 @@ msc += $negative:(flogs|trip-wires|defenestrates) your?
 msc += $negative:Your.*burned by acid
 msc += $negative:Your.*appears confused
 msc += $negative:Your?.*is struck by the.*spines
-msc += $negative:(prevent|prevents) you from hitting
 msc += $negative:Your spectral weapon shares its damage
 msc += $negative:The.*begins to radiate
 msc += $negative:The.*toxic radiance grows
@@ -2479,7 +2539,6 @@ msc ^= $negative:strikes at you from the darkness
 msc += $negative:Your?.*burned terribly
 msc += $negative:You swing wildly
 msc += $negative:covered in liquid flames
-msc += $negative:Your.* is engulfed
 msc += $negative:You are blasted with ice
 msc += $negative:Your.*seems to slow down
 msc += $negative:You are electrocuted
@@ -2519,6 +2578,8 @@ msc += $danger:completely resists
 msc += $warning:resists
 
 msc ^= $takesaction:draws from the surrounding life force
+msc ^= $takesaction:(breathes|spits).*at you
+msc += $takesaction:You conjure a mighty blast of ice
 msc += $takesaction:conjures a mighty blast of ice
 msc ^= $takesaction:Your spellforged servitor (launches|casts|conjures)
 msc += $takesaction:You reach into the bag
@@ -2551,13 +2612,14 @@ msc += $takesaction:The manticore flicks its tail
 msc += $takesaction:You begin to abjure the creatures around you
 msc ^= $takesaction:The golden eye blinks at you
 
-msc += $godaction:(Elyvilon|Igni Ipthes|Elyvilon|Ashenzari|Cheibriados|Dithmenos|Fedhas|Okawaru)
+msc += $godaction:(Elyvilon|Igni Ipthes|Elyvilon|Ashenzari|Cheibriados|Dithmenos|Fedhas|Okawaru|Lugonu)
 msc += $godaction:(Kikubaaqudgha|Makhleb|Nemelex|Sif Muna|Trog|Vehumet|Xom|Yredelemnul|Zin[^g]|The Shining One)
-msc ^= $godaction:(Elyvilon|Igni Ipthes|Elyvilon|Ashenzari|Cheibriados|Dithmenos|Fedhas|Okawaru) says
+msc ^= $godaction:(Elyvilon|Igni Ipthes|Elyvilon|Ashenzari|Cheibriados|Dithmenos|Fedhas|Okawaru|Lugonu) says
 msc ^= $godaction:(Kikubaaqudgha|Makhleb|Nemelex|Sif Muna|Trog|Vehumet|Xom|Yredelemnul|Zin[^g]|The Shining One) says
 msc ^= $godaction:shimmer and break into pieces
 msc ^= $godaction:barely shimmers and breaks into pieces
 msc ^= $godaction:Your divine halo returns
+msc ^= $godaction:disappears into the void
 msc += $godaction:due to Igni's heat
 msc ^= $godaction:disappears without a glow
 msc ^= $godaction:disappears without a sign
@@ -2572,6 +2634,8 @@ msc += $godaction:The toadstool can now pick up its mycelia and move
 
 # Interface Messages
 #msc += $interface:
+msc += $interface:The bosom of this dungeon contains the most powerful artefact
+msc += $interface:Clearing travel trail
 msc += $interface:Your pack is full
 msc += $interface:You can't pick everything up
 msc += $interface:Could not pick up an item
@@ -2607,7 +2671,6 @@ msc += $interface:The.*answers the.*call
 msc += $interface:You're too full
 msc += $interface:Your memorisation is interrupted
 msc += $interface:surroundings become eerily quiet
-msc += $interface:The dead are
 msc += $interface:You fall into the shallow water
 msc += $interface:an escape hatch
 msc += $interface:You stop dropping stuff
@@ -2677,6 +2740,8 @@ msc += mute:You offer a prayer to Elyvilon
 msc += mute:You offer a prayer to Nemelex Xobeh
 msc += mute:You offer a prayer to Okawaru
 msc += mute:You offer a prayer to Makhleb
+msc += mute:You offer a prayer to Lugonu
+msc += mute:Lugonu accepts your kill
 msc += mute:Okawaru is noncommittal
 msc += mute:Nemelex Xobeh is noncommittal
 msc += mute:The plant looks sick
@@ -2719,6 +2784,12 @@ menu += lightblue:^unidentified .*weapon.*(runed|glowing)
 menu += lightblue:^unidentified .*armour.*(runed|glowing|embroidered)
 menu += lightblue:^unidentified .*armour.*(shiny|dyed)
 
+# Staffs
+menu += $awesome:staff of energy
+menu += $verypositive:staff of
+# rod
+menu += $awesome:rod
+
 # Wands
 menu += $boring:wand of (flame|frost|magic darts|random effects)
 menu += $positive:wand of (confusion|slowing|polymorph|enslavement|paralysis)
@@ -2748,8 +2819,8 @@ menu += $good:scrolls? of (fog|fear|summoning|immolation|silence|vulnerability)
 menu += $verypositive:scrolls? of (vorpalise|brand) weapon
 menu += $verypositive:scrolls? of recharging
 menu += $verypositive:scrolls? of enchant (weapon|armour)
+menu += $verypositive:scrolls? of magic mapping
 menu += $awesome:scrolls? of acquirement
-menu += $awesome:scrolls? of magic mapping
 menu += $tele:scrolls? of (blinking|teleportation)
 
 # Potions
@@ -2800,7 +2871,7 @@ menu += $awesome:deck of wonders
 menu += $tele:deck of escape
 menu += $good:deck of summoning
 menu += $danger:deck of destruction
-menu += $warning:deck of dungeon
+menu += $warning:deck of (dungeon|changes)
 menu += lightgrey:deck of cards
 menu += $positive:deck of
 
@@ -2828,6 +2899,7 @@ ai += [Mm]anual of:!d
 ai += dispersal:!f
 ai += throwing net:!f, !d
 ai += tome of destruction:!d
+ai += royal jell:restore abilities
 
 ai += ambrosia:+MP, and confuses
 ai += scrolls? of vulnerability:!r
@@ -2870,8 +2942,10 @@ ai += staff of death:rN+
 ai += staff of fire:rF+
 ai += staff of posion:rP+
 ai += staff of energy:+MP, hungerless spells, !d!a
-ai += staff of wizardy:wiz+, !d
-
+ai += staff of wizardry:wiz+, !a
+ai += staff of power:MP+10, !a
+ai += staff of conjuration:!a
+ai += staff of summoning:!a
 
 : if you.god() == "Fedhas" then
 	ai += fruit:!e
