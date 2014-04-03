@@ -22,7 +22,10 @@
     --"[The] Monster_Name Warning_Message"
     --If the Monster_Name includes a capital letter, the message will be prepended with [The] 
     mobwarnings["giant eyeball"] = "can paralyse you!"
-    mobwarnings["naga ritualist"] = "can remove poison resistance!"
+    mobwarnings["naga ritualist"] = "can remove poison resistance, and do damage over time with toxic radiance!"
+    mobwarnings["naga sharpshooter"] = "can shoot you with portal projectiles!"
+    mobwarnings["greater naga"] = "is strong in melee, and can cast poison arrow and IMB!"
+    mobwarnings["salamander mystic"] = "can haste allies, and can cast bolt of magma and IMB!"
     mobwarnings["mana viper"] = "has an antimagic bite!"
     mobwarnings["golden eyeball"] = "can confuse you!"
     mobwarnings["electric golem"] = "has nasty electric attacks!"
@@ -41,8 +44,9 @@
     mobwarnings["stone giant"] = "can throw large rocks and is a brute in melee!"
     mobwarnings["ettin"] = "is a beast in melee!"
     mobwarnings["fire dragon"] = "has a nasty fire breath attack!"
+    mobwarnings["fire crab"] = "has a flaming cloud breath attack!"
     mobwarnings["ice dragon"] = "has a nasty cold breath attack!"
-    mobwarnings["apocalypse crab"] = "has a chaos breath attack!"
+    mobwarnings["apocalypse crab"] = "has a chaos cloud breath attack!"
     mobwarnings["shadow dragon"] = "has a nasty draining breath attack!"
     mobwarnings["golden dragon"] = "has multiple nasty breath attacks!"
     mobwarnings["tentacled monstrosity"] = "is a beast in melee!"
@@ -54,6 +58,7 @@
     mobwarnings["air mage"] = "can cast airstrike!"
     mobwarnings["titan"] = "can cast airstrike!"
     mobwarnings["jumping spider"] = "can ensnare you in webs!"
+    mobwarnings["Aizul"] = "will try to put you to sleep and casts strong poison conjurations!"
     mobwarnings["Arachne"] = "can ensnare you in her webs!"
     mobwarnings["Harold"] = "can throw nets and cast bolt of fire"
     mobwarnings["blizzard demon"] = "can cast airstrike!"
@@ -61,7 +66,7 @@
     mobwarnings["Gastronok"] = "can cast airstrike!"
     mobwarnings["Enchantress"] = "can cast Dimension Anchor, Slow, Haste, Mass Confusion, and Strip Resistance!"
     mobwarnings["Sojobo"] = "can cast airstrike!"
-    mobwarnings["Maurice"] = "can steal your items, go invisible, and teleport away!"
+    mobwarnings["Maurice"] = "can steal items, go invisible, and teleport away!"
     mobwarnings["deep elf demonologist"] = "can cast banishment or summon Greater Demons!"
     mobwarnings["Louise"] = "can cast banishment!"
     mobwarnings["Psyche"] = "might banish you in melee!"
@@ -91,7 +96,7 @@
     mobwarnings["draconian shifter"] = "can block teleports, blink allies encircling you, or cause you to blink!"
     mobwarnings["guardian serpent"] = "can blink allies encircling you!"
     mobwarnings["Roxanne"] = "can cast LCS and Iron Shot at you, or shift your position!"
-    mobwarnings["^c wizard"] = "might cast banishment, paralyse, or LCS!"
+    mobwarnings["wizard"] = "might cast banishment, paralyse, or LCS!"
     mobwarnings["ogre mage"] = "might cast banishment, paralyse, or LCS!"
     mobwarnings["lich"] = "might cast banishment, paralyse, summon demon, or LCS!"
     mobwarnings["Erolcha"] = "might cast banishment, paralyse, or LCS!"
@@ -168,7 +173,8 @@
     for mons, count in pairs(getMonsterList()) do  
       for mob, message in pairs(mobwarnings) do
         if string.find(mons, mob) 
-        and not string.find(mons, "zombie") 
+        and not string.find(mons, "zombie")
+        and not string.find(mons, "orc wizard") -- there should be a better way to do this
         and not string.find(mons, "skeleton")
         and not string.find(mons, "shaped block of ice")
         and not string.find(mons, "simulacr") then
@@ -427,13 +433,11 @@ ae += <artefact
 	local pickup_arrows = false
   local pickup_bolts = false
   local pickup_stones = false
-  local pickup_darts = false
+  local pickup_darts = true
   local pickup_needles = true
   local pickup_tomahawk = true
   local pickup_javelin = true
   local pickup_nets = true
-	local first_stones = true
-  local first_darts = true
   
 	local function init_spells()
 		local spell_list = {}
@@ -456,30 +460,32 @@ ae += <artefact
       if name:find("bolt") then return true end
 		end
     
-		if pickup_stones or known_spells["Sandblast"] or first_stones then
-      if name:find("stone") then 
-        first_stones = false
+		if pickup_stones or known_spells["Sandblast"] then
+      if name:find("stone") and not name:find("stone giant") then 
         return true 
       end
 		end
     
-		if pickup_darts or first_darts then
-      if name:find("dart") then 
-        first_darts = false
+		if name:find("dart") then
+       if pickup_darts or name:find("dispersal") then 
         return true 
       end
 		end
 		
-		if pickup_needles then
-			if name:find("needle") then return true end
+		if name:find("needle") then
+      if pickup_needles or name:find("curare") then
+        return true 
+      end
 		end
 		
     if pickup_tomahawk then
 			if name:find("tomahawk") then return true end
 		end
     
-    if pickup_javelin then
-			if name:find("javelin") then return true end
+    if name:find("javelin") then
+      if pickup_javelin or name:find("returning") then
+			  return true 
+      end
 		end
     
 		if pickup_nets then
@@ -559,15 +565,15 @@ slot += Phase Shift:S
 ################
 
 ## paralyzing monsters ##
-auto_exclude += [^c] wizard [^s], eyeball [^s], orb of eyes [^s], sphinx [^s], lich [^s], ancient lich [^s], ogre-mage [^s], Norris [^s]
-auto_exclude += vampire knight [^s], orc sorcerer [^s], Grinder [^s], Rupert [^s], Ereshkigal [^s], Erolcha [^s], Jory [^s]
+auto_exclude += [^c] wizard, eyeball, orb of eyes, sphinx, lich, ancient lich, ogre-mage, Norris
+auto_exclude += vampire knight, orc sorcerer, Grinder, Rupert, Ereshkigal, Erolcha, Jory
 
-auto_exclude += Roxanne [^s], Sigmund [^s], Hydra [^s], Pikel [^s], slave [^s], Prince Ribbit [^s], Snorg [^s]
-auto_exclude += Menkaure [^s], Duvessa [^s], Dowan [^s], Blork [^s], Jospeh [^s], jelly [^s], Gastronok [^s]
-auto_exclude += Urug [^s], Harold [^s], Aizul [^s], Erica [^s], Jorgrun [^s], ancienct lich [^s], orb of fire [^s]
-auto_exclude += Saint Roka [^s], Boris [^s], Mennas [^s], Nessos [^s], Sonja [^s], Agnes [^s], Wiglaf [^s], Fannar [^s], Louise [^s]
-auto_exclude += Mara [^s], Arachne [^s], Xtahua [^s], Frances [^s], Frederick [^s], ice statue [^s], Polyphemus [^s]
-auto_exclude += Death drake [^s], Kirke [^s], Hog [^s], Jorgrun [^s], Sojobo [^s], Nergalle [^s], Maud [^s]
+auto_exclude += Roxanne, Sigmund, Hydra, Pikel, slave, Prince Ribbit, Snorg
+auto_exclude += Menkaure, Duvessa, Dowan, Blork, Jospeh, jelly, Gastronok
+auto_exclude += Urug, Harold, Aizul, Erica, Jorgrun, ancienct lich, orb of fire
+auto_exclude += Saint Roka, Boris, Mennas, Nessos, Sonja, Agnes, Wiglaf, Fannar, Louise
+auto_exclude += Mara, Arachne, Xtahua, Frances, Frederick, ice statue, Polyphemus
+auto_exclude += Death drake, Kirke, Hog, Jorgrun, Sojobo, Nergalle, Maud
 
 ###############
 # Auto Travel #
@@ -582,7 +588,8 @@ explore_stop += greedy_sacrificeable
 
 # Adjusts how much autoexplore favours attempting to discover room perimeters and corners. 
 # At values higer than 0, autoexplore will more heavily favour visiting squares that are next to walls
-explore_wall_bias = 2
+# values range from 0 to 1000 maybe?
+explore_wall_bias = 10
 
 # Make auto travel sacrifice corpses
 sacrifice_before_explore = true
@@ -744,6 +751,7 @@ more += orange crystal statue.*comes? into view
 more += The ghost moth stares at you
 
 # Interrupts for unexpected situations
+more += The.*shudders
 more += You don't.* that spell
 more += You fail to use your ability
 more += You miscast
@@ -759,6 +767,7 @@ more += You don't have any such object
 more += do not work when you're silenced
 more += You cannot cast spells when silenced
 more += The barbed spikes dig painfully into your body as you move
+more += The water nymph flows with the water
 more += You can't unwield
 more += You don't have enough magic
 more += You haven't enough magic at the moment
@@ -794,7 +803,7 @@ more += begins to accept its allies' injuries
 more += doors? slams? shut
 more += The vault warden activates a sealing rune
 more += Miasma billows from the
-more += firmly anchored in space
+more += You feel.*firmly anchored in space
 more += You stumble into the trap
 more += You have no appropriate body parts free
 more += drinks a potion
@@ -815,10 +824,12 @@ more += You are wearing\:
 more += The walls and floor vibrate strangely for a moment
 more += You feel your flesh start to rot away
 more += Mara shimmers and seems to become three
+more += You sense the presence of something unfriendly
 
 # Interrupts for Bad things
 more += Your surroundings flicker
 more += You feel yourself grow more vulnerable to poison
+more += You feel less vulnerable to poison
 more += The poison in your body grows stronger
 more += burn any scroll you tried to read
 more += Your icy (shield|armour) evaporates
@@ -853,6 +864,7 @@ more += Green shoots are pushing up through the earth
 more += your.*devoured
 more += You are drained
 more += shoots a curare
+more += You feel your attacks grow feeble
 more += You are blown backwards by the freezing wind
 more += You are knocked back by the lance of force
 more += You are knocked back by the blast of cold
@@ -892,7 +904,7 @@ more += The silver sears you
 more += [^Your].*seems to speed up
 more += steals.*your
 more += infuriates you
-more += reflects.*of reflection
+more += [^Your].*reflects
 more += You cannot afford.*fee
 more += You can move again
 more += You slip out of the net
@@ -942,86 +954,86 @@ more += Your skin stops crawling
 more += You are firmly grounded in the material plane once more
 
 # Uniques
-more += 27-headed.*comes? into view.
-more += Agnes.*comes? into view.
-more += Aizul.*comes? into view.
-more += Antaeus.*comes? into view.
-more += Arachne.*comes? into view.
-more += Asmodeus.*comes? into view.
-more += Asterion.*comes? into view.
-more += Azrael.*comes? into view.
-more += Blork the orc.*comes? into view.
-more += Boris.*comes? into view.
-more += Cerebov.*comes? into view.
-more += Crazy Yiuf.*comes? into view.
-more += Dispater.*comes? into view.
-more += Dissolution.*comes? into view.
-more += Donald.*comes? into view.
-more += Dowan.*comes? into view.
-more += Duvessa.*comes? into view.
-more += Edmund.*comes? into view.
-more += Ereshkigal.*comes? into view.
-more += Erica.*comes? into view.
-more += Erolcha.*comes? into view.
-more += Eustachio.*comes? into view.
-more += Fannar.*comes? into view.
-more += Frances.*comes? into view.
-more += Francis.*comes? into view.
-more += Frederick.*comes? into view.
-more += Gastronok.*comes? into view.
-more += Geryon.*comes? into view.
-more += Gloorx Vloq.*comes? into view.
-more += Grinder.*comes? into view.
-more += Grum.*comes? into view.
-more += Harold.*comes? into view.
-more += Ignacio.*comes? into view.
-more += Ijyb.*comes? into view.
-more += Ilsuiw.*comes? into view.
-more += Jessica.*comes? into view.
-more += Jory.*comes? into view.
-more += Joseph.*comes? into view.
-more += Josephine.*comes? into view.
-more += Jozef.*comes? into view.
-more += Khufu.*comes? into view.
-more += Kirke.*comes? into view.
-more += Lamia.*comes? into view.
-more += Lom Lobon.*comes? into view.
-more += Louise.*comes? into view.
-more += Mara.*comes? into view.
-more += Margery.*comes? into view.
-more += Maud.*comes? into view.
-more += Maurice.*comes? into view.
-more += Menkaure.*comes? into view.
-more += Mennas.*comes? into view.
-more += Mnoleg.*comes? into view.
-more += Murray.*comes? into view.
-more += Natasha.*comes? into view.
-more += Nergalle.*comes? into view.
-more += Nessos.*comes? into view.
-more += Nikola.*comes? into view.
-more += Norris.*comes? into view.
-more += Pikel.*comes? into view.
-more += Polyphemus.*comes? into view.
-more += Prince Ribbit.*comes? into view.
-more += Psyche.*comes? into view.
-more += Purgy.*comes? into view.
-more += Roxanne.*comes? into view.
-more += Rupert.*comes? into view.
-more += Saint Roka.*comes? into view.
-more += Sigmund.*comes? into view.
-more += Snorg.*comes? into view.
-more += Sojobo.*comes? into view.
-more += Sonja.*comes? into view.
-more += Terence.*comes? into view.
-more += The Lernaean hydra.*comes? into view.
-more += The royal jelly.*comes? into view.
-more += The Serpent of Hell.*comes? into view.
-more += Tiamat.*comes? into view.
-more += Urug.*comes? into view.
-more += Vashnia.*comes? into view.
-more += Wiglaf.*comes? into view.
-more += Xtahua.*comes? into view.
-more += 's ghost.* comes? into view
+more += 27-headed.*(comes? into view|opens the)
+more += Agnes.*(comes? into view|opens the)
+more += Aizul.*(comes? into view|opens the)
+more += Antaeus.*(comes? into view|opens the)
+more += Arachne.*(comes? into view|opens the)
+more += Asmodeus.*(comes? into view|opens the)
+more += Asterion.*(comes? into view|opens the)
+more += Azrael.*(comes? into view|opens the)
+more += Blork the orc.*(comes? into view|opens the)
+more += Boris.*(comes? into view|opens the)
+more += Cerebov.*(comes? into view|opens the)
+more += Crazy Yiuf.*(comes? into view|opens the)
+more += Dispater.*(comes? into view|opens the)
+more += Dissolution.*(comes? into view|opens the)
+more += Donald.*(comes? into view|opens the)
+more += Dowan.*(comes? into view|opens the)
+more += Duvessa.*(comes? into view|opens the)
+more += Edmund.*(comes? into view|opens the)
+more += Ereshkigal.*(comes? into view|opens the)
+more += Erica.*(comes? into view|opens the)
+more += Erolcha.*(comes? into view|opens the)
+more += Eustachio.*(comes? into view|opens the)
+more += Fannar.*(comes? into view|opens the)
+more += Frances.*(comes? into view|opens the)
+more += Francis.*(comes? into view|opens the)
+more += Frederick.*(comes? into view|opens the)
+more += Gastronok.*(comes? into view|opens the)
+more += Geryon.*(comes? into view|opens the)
+more += Gloorx Vloq.*(comes? into view|opens the)
+more += Grinder.*(comes? into view|opens the)
+more += Grum.*(comes? into view|opens the)
+more += Harold.*(comes? into view|opens the)
+more += Ignacio.*(comes? into view|opens the)
+more += Ijyb.*(comes? into view|opens the)
+more += Ilsuiw.*(comes? into view|opens the)
+more += Jessica.*(comes? into view|opens the)
+more += Jory.*(comes? into view|opens the)
+more += Joseph.*(comes? into view|opens the)
+more += Josephine.*(comes? into view|opens the)
+more += Jozef.*(comes? into view|opens the)
+more += Khufu.*(comes? into view|opens the)
+more += Kirke.*(comes? into view|opens the)
+more += Lamia.*(comes? into view|opens the)
+more += Lom Lobon.*(comes? into view|opens the)
+more += Louise.*(comes? into view|opens the)
+more += Mara.*(comes? into view|opens the)
+more += Margery.*(comes? into view|opens the)
+more += Maud.*(comes? into view|opens the)
+more += Maurice.*(comes? into view|opens the)
+more += Menkaure.*(comes? into view|opens the)
+more += Mennas.*(comes? into view|opens the)
+more += Mnoleg.*(comes? into view|opens the)
+more += Murray.*(comes? into view|opens the)
+more += Natasha.*(comes? into view|opens the)
+more += Nergalle.*(comes? into view|opens the)
+more += Nessos.*(comes? into view|opens the)
+more += Nikola.*(comes? into view|opens the)
+more += Norris.*(comes? into view|opens the)
+more += Pikel.*(comes? into view|opens the)
+more += Polyphemus.*(comes? into view|opens the)
+more += Prince Ribbit.*(comes? into view|opens the)
+more += Psyche.*(comes? into view|opens the)
+more += Purgy.*(comes? into view|opens the)
+more += Roxanne.*(comes? into view|opens the)
+more += Rupert.*(comes? into view|opens the)
+more += Saint Roka.*(comes? into view|opens the)
+more += Sigmund.*(comes? into view|opens the)
+more += Snorg.*(comes? into view|opens the)
+more += Sojobo.*(comes? into view|opens the)
+more += Sonja.*(comes? into view|opens the)
+more += Terence.*(comes? into view|opens the)
+more += The Lernaean hydra.*(comes? into view|opens the)
+more += The royal jelly.*(comes? into view|opens the)
+more += The Serpent of Hell.*(comes? into view|opens the)
+more += Tiamat.*(comes? into view|opens the)
+more += Urug.*(comes? into view|opens the)
+more += Vashnia.*(comes? into view|opens the)
+more += Wiglaf.*(comes? into view|opens the)
+more += Xtahua.*(comes? into view|opens the)
+more += 's ghost.*(comes? into view|opens the)
 
 # Others
 more += You have reached level
@@ -1105,12 +1117,17 @@ msc =
 msc += white:You feel blessed for a moment
 
 #msc += $danger:
+msc += $danger:A shaft opens up in the floor
+msc += $danger:You are held in a net
+msc += $danger:(The|Your).*falls away!
+msc += $danger:The orbs collide in a blinding explosion
 msc += $danger:You feel the power of the Abyss delaying your translocation
 msc += $danger:Mara shimmers and seems to become three
 msc += $danger:Your spellforged servitor is blown up
 msc += $danger:Mutagenic energies flood into your body
 msc += $danger:seems to grow more fierce
 msc += $danger:attacks!
+msc += $danger:You sense the presence of something unfriendly
 msc += $danger:Your.*falls into the water
 msc += $danger:Something unseen opens the huge gate
 msc += $danger:changes into something you cannot see
@@ -1249,6 +1266,7 @@ msc += $danger:There is a sealed passage
 msc += $danger:doors? slams? shut
 msc += $danger:A basket of spiders falls from above
 msc += $danger:is bolstered by the flame
+msc ^= $danger:Mennas' surroundings become eerily quiet
 msc += $danger:attempts to bespell you
 msc += $danger:You feel horribly lethargic
 msc += $danger:firmly anchored in space
@@ -1256,7 +1274,7 @@ msc += $danger:drinks a potion
 msc += $danger:You hear a zap
 msc += $danger:You stop (a|de)scending the stairs
 msc += $danger:You tear a large gash into the net
-msc += $danger:reflects.*of reflection
+msc += $danger:reflects
 msc += $danger:The walls disappear
 msc += $danger:You cannot afford.*fee
 msc += $danger:This weapon is already enchanted
@@ -1295,7 +1313,8 @@ msc += $danger:Your icy (shield|armour) evaporates
 msc += $danger:You struggle to detach yourself from the web
 msc += $danger:You are more confused
 msc += $danger:You are confused
-msc += $danger:You're too confused
+msc += $danger:breaks free
+msc += $danger:(You are|You're) too confused
 msc += $danger:Your skin stops crawling
 msc += $danger:Your resistance to elements expires
 msc += $danger:You are blasted by holy energy
@@ -1322,6 +1341,14 @@ msc += $danger:is completely unfazed by your meager offer of peace
 msc += $danger:deflects the
 msc += $danger:The blink frog basks in the distortional energy
 msc += $danger:appears unharmed
+msc += $danger:You have lost your religion
+msc += $danger:Your shroud unravels
+msc += $danger:Your attacks are no longer magically infused
+msc += $danger:You feel your attacks grow feeble
+msc += $danger:Magical energy is drained from your
+msc += $danger:A chorus of chattering voices calls out to you
+msc += $danger:You can no longer
+msc += $danger:The.*shudders
 
 #msc += $item_dmg:
 msc += $item_dmg:acid corrodes
@@ -1337,8 +1364,28 @@ msc += $item_dmg:You are engulfed in dark miasma
 msc += $item_dmg:You feel guilty
 msc += $item_dmg:Done waiting
 msc += $item_dmg:That really hurt
+msc += $item_dmg:PTOANNNG
+msc += $item_dmg:PANG
+msc += $item_dmg:GONNNNG
+msc += $item_dmg:BOUMMMMG
+msc += $item_dmg:SHROANNG
+msc += $item_dmg:BONNNG
 
 #msc += $warning:
+msc += $warning:I'll put it outside for you
+msc += $warning:A pair of horns grows on your head
+msc += $warning:is held in a (net|web)
+msc += $warning:Smoke pours forth from your.*of chaos
+msc += $warning:You cannot go berserk while under stasis
+msc += $warning:You feel less woody
+msc += $warning:is no longer paralysed
+msc += $warning:The antennae on your head shrink away
+msc += $warning:You feel less stealthy
+msc += $warning:falls into the lava
+msc ^= $warning:Your spellforged servitor disappears
+msc += $warning:This weapon is vampiric, and you must be Full or above to equip it
+msc += $warning:The shock serpent's electric aura discharges
+msc += $warning:The air sparks with electricity
 msc += $warning:The film of ice won't work on stone
 msc += $warning:The cursed.*is stuck to you
 msc += $warning:You cannot enchant this weapon
@@ -1346,7 +1393,7 @@ msc += $warning:You sense an evil presence
 msc += $warning:Jory draws you further into his thrall
 msc += $warning:grabs your
 msc += $warning:You shudder from the earth-shattering force
-msc += $warning:Smoke pours from your hands
+msc += $warning:Smoke pours from your
 msc += $warning:curses noisily
 msc += $warning:is no longer blind
 msc += $warning:Lightning arcs down from a storm cloud
@@ -1434,7 +1481,7 @@ msc += $warning:seems to gain new vigour
 msc += $warning:You feel strangely stable
 msc += $warning:(recites|explains|preaches|embarks|launches|threatens|murmurs|breathes|mutters|prattles)
 msc += $warning:(shout|hisses|gurgles|screeches|barks|cheers|buzzes|grunts|makes a sound|complains)
-msc += $warning:(shriek|roars|says|moans|keens|mumbles|wails|croak|screams|chants|Floosh|trumpets)
+msc += $warning:(shriek|roars|says|moans|brags|keens|mumbles|wails|croak|screams|chants|Floosh|trumpets)
 msc += $warning:(gibbers|growls|whisper|wail|asks|sighs|laughs|yells|cries|caws|queries|sneers)
 msc += $warning:(jeers|bellows|chilling moan|scowls|sings|whimpers|cackles|mewls|snorts|grits)
 msc += $warning:imitates the bagpipes
@@ -1673,7 +1720,7 @@ msc += $warning:belts out
 msc += $warning:yelps
 msc += $warning:goes tick-tock
 msc += $warning:gives off a wolf whistle
-msc ^= $warning:Your.* of resist
+msc ^= $warning:[e] your.* of resist
 msc += $warning:cracks jokes
 msc += $warning:Your orb of destruction dissipates
 msc += $warning:regales you with its life story
@@ -1684,6 +1731,7 @@ msc += $warning:makes a horrible noise
 msc += $warning:burps loudly
 msc += $warning:You are caught in a violent explosion
 msc += $warning:pulses with an eldritch light
+msc += $warning:appears from out of your range of vision
 msc += $warning:You feel controlled for a moment
 msc += $warning:You stop putting on your armour
 msc += $warning:You feel buoyant
@@ -1701,6 +1749,7 @@ msc += $warning:Leave now/, before it is too late
 msc += $warning:picks up a throwing net
 msc += $warning:Nothing appears to happen
 msc += $warning:The dead are
+msc += $warning:The boulder beetle hits a closed door
 msc += $warning:begin to drag.*along the ground
 msc += $warning:merge to form a (macabre mass|small abomination|large abomination)
 msc += $warning:Two macabre masses merge
@@ -1711,14 +1760,20 @@ msc += $warning:You create a pond
 msc += $warning:Mennas becomes audible again
 msc += $warning:That was extremely unsatisfying
 msc += $warning:The wind howls around you
+msc += $warning:You are feeling less magically infused
 msc += $warning:Something invisible bursts forth from the water
 msc += $warning:Something.*misses
 msc += $warning:There is a cloud of mutagenic fog here
 msc += $warning:howls
 msc += $warning:You part the fleshy orifice with a squelch
+msc += $warning:The orb of energy explodes
 msc += $warning:The air shimmers briefly around you
 msc += $warning:You are much too full right now
 msc += $warning:turns to fight
+msc += $warning:You feel transcendent for a moment
+msc += $warning:You're too terrified to move while being watched
+msc += $warning:You have drawn Pain
+msc += $warning:The queen bee calls on the killer bee to defend her
 msc += $warning:You turn into a bat
 msc += $warning:Your.*looks incredibly listless
 msc += $warning:The mass is resisting your pull
@@ -1735,8 +1790,34 @@ msc += $warning:You feel.*more hungry
 msc += $warning:You are outlined in light
 msc += $warning:You feel momentarily disoriented
 msc += $warning:(prevent|prevents) you from hitting
+msc += $warning:The water nymph flows with the water
+msc += $warning:summons a
+msc += $warning:cannot make way for you
+msc += $warning:The horns on your head shrink away
+msc += $warning:Your shroud begins to fray at the edges
+msc += $warning:You'd need three hands to do that
+msc += $warning:Your.*disappears
+msc += $warning:That's too.*for you
+msc += $warning:The dungeon trembles and rubble falls from the walls
+msc += $warning:Finesse? Hah! Time to rip out guts
 
 #msc += $boring:
+msc += $boring:holds its ground
+msc += $boring:The door collapses
+msc += $boring:The lightning arc grounds out
+msc += $boring:Fannar glares icily
+msc += $boring:ghost twirls its
+msc += $boring:You attack empty space
+msc += $boring:Eustachio twirls his moustache
+msc += $boring:is briefly tinged with black
+msc += $boring:The dust glows 
+msc += $boring:glow pale yellow for a moment
+msc += $boring:Crazy Yiuf scratches his head thoughtfully
+msc += $boring:Crazy Yiuf counts something out on his finger
+msc += $boring:You aren't quite hungry enough to eat that
+msc += $boring:The crystal guardian glitters
+msc += $boring:glows brightly for a moment
+msc += $boring:The wizard's fingertips start to glow
 msc += $boring:Your hands glow shimmering blue for a moment
 msc += $boring:You are already empty-handed
 msc ^= $boring:the.*shaped block of ice
@@ -1762,12 +1843,10 @@ msc += $boring:unwise to walk into this
 msc += $boring:The tree breaks and falls down
 msc += $boring:Nessos tries to tell you a complicated story about hydras
 msc += $boring:The boulder beetle hits.*wall
-msc += $boring:The dust glows pale blue
 msc += $boring:Shadowy shapes form in the air around you
 msc += $boring:A root reaches out and grasps at passing movement
 msc += $boring:Tangled roots snake along the ground
 msc += $boring:The white imp grinds its teeth
-msc += $boring:The dust glows pulsating marigold
 msc += $boring:Your.*imp grins impishly at you
 msc += $boring:Your hooves feel warm
 msc += $boring:Your.*jumps up and down with excitement
@@ -1804,7 +1883,6 @@ msc += $boring:Your bones ache
 msc += $boring:Thank you for shopping
 msc += $boring:Your ears itch
 msc += $boring:Prince Ribbit hops awkwardly around
-msc += $boring:The dust glows shining gridelin
 msc += $boring:You pass into a different region of Pandemonium
 msc += $boring:You smell brimstone
 msc += $boring:Something frightening happens
@@ -1874,7 +1952,6 @@ msc += $boring:unborn seems to be listening
 msc += $boring:You can only put on jewellery
 msc ^= $boring:You smell decay. Yuck!
 msc += $boring:Ouch!
-msc += $boring:The water nymph flows with the water
 msc += $boring:There isn't anything here
 msc += $boring:The air around you briefly surges with heat
 msc += $boring:Your skin glows momentarily
@@ -1953,6 +2030,7 @@ msc += $boring:You feel troubled
 msc += $boring:You feel a wave of unholy energy pass over you
 msc += $boring:blocks
 msc += $boring:grins evilly
+msc += $boring:glows faint lavender for a moment
 msc += $boring:A huge blade swings just past you
 msc += $boring:(The|Something).*disappears
 msc += $boring:The.*glitters chillingly
@@ -1979,6 +2057,7 @@ msc += $boring:The.*eats the
 msc += $boring:The winds cease moving at the.*will
 msc += $boring:The ground creaks as gnarled roots bulge its surface
 msc += $boring:rages
+msc += $boring:Your acid blob dissolves into a puddle of slime
 msc += $boring:You feel a wrenching sensation
 msc += $boring:The.*falls off the wall
 msc += $boring:The.*jiggles
@@ -1997,7 +2076,7 @@ msc += $boring:You (fly|climb) (up|down)wards
 msc += $boring:You go (up|down)
 msc += $boring:You fly (up|down) through the gate
 msc += $boring:You must enter the number of times for the command to repeat
-msc += $boring:Use Z to cast anyway.
+msc += $boring:Use Z to cast anyway
 msc += $boring:There are no items here
 msc += $boring:it crumbles to dust
 msc += $boring:The hatch slams shut behind you
@@ -2011,6 +2090,7 @@ msc += $boring:The floor vibrates
 msc += $boring:Sand pours from your
 msc += $boring:Strange energies run through your body
 msc += $boring:You smell something strange
+msc += $boring:ghost tries to sneak away
 msc += $boring:evades a web
 msc += $boring:The.*goes (up|down) the stairs.
 msc += $boring:Found.*gold
@@ -2026,17 +2106,18 @@ msc += $boring:The corpses? collapses? into a pulpy mess
 msc += $boring:There is an empty arch of ancient stone
 msc += $boring:Your.*glows dark umber for a moment
 msc += $boring:The runic seals? fades? away
+msc += $boring:looks hungrier
 msc += $boring:Something drops 
 msc += $boring:tears the web
 msc += $boring:lashes its tail
 msc += $boring:smirks and points a slender finger
+msc += $boring:The orb of destruction dissipates
 msc += $boring:spectral weapon stumbles backwards
 msc += $boring:Your (hands|claws) glow momentarily
 msc += $boring:Weird images run through your mind
 msc += $boring:safely over a trap
 msc += $boring:avoid triggering a
 msc += $boring:A net swings high above you
-msc += $boring:Your.*disappears
 msc += $boring:Natasha extends her claws
 msc += $boring:The shadow imp breathes steam at you
 msc += $boring:You feel weak for a moment
@@ -2071,6 +2152,7 @@ msc += $boring:You feel uncomfortably hot
 msc += $boring:Nergalle blows her nose
 msc += $boring:Nergalle looks more energetic
 msc += $boring:stampedes away
+msc += $boring:fails to trigger a.*trap
 msc += $boring:You feel a numb sensation
 msc += $boring:You can't eat that
 msc += $boring:You smell sulphur
@@ -2084,14 +2166,18 @@ msc += $boring:You feel a surge of energy from the ground
 msc += $boring:You release your grib on
 msc += $boring:Your head hurts
 msc += $boring:The lightning grounds out
-msc += $boring:Your feet feel warm
+msc += $boring:Your.*feel warm
+msc += $boring:This isn't a weapon
+msc += $boring:You feel as though nothing has changed
+msc += $boring:Blork the orc's eyes start to glow
 
 # Enemies taking damage
 msc += $good:You (hit|bite|slice|spit|open|slash|puncture|carve|perforate|stick|cut|chop|strike|skewer|impale|dice|headbutt|fracture|peck|touch|kick|freeze) 
-msc += $good:You (grab|squeeze|constrict|sock|thump|flatten|tail-slap|burn|claw|mangle|punch|drain|bludgeon|whack|shatter|hammer|sears|beat|pound|crush) 
-msc += $good:(hits|bites|slices|spits|opens|slashes|punctures|carves|perforates|sticks|freezes|poisons|engulfs|draws|tail-slaps) [^y]
-msc += $good:(cuts|chops|strikes|skewers|attacks|hits|constricts|grabs|claws|burns|shocks|drains|sears|pecks|gores|stings|tentacle-slaps|headbutts) [^y]
+msc += $good:You (pummel|squash|pulverise|grab|squeeze|constrict|sock|thump|flatten|tail-slap|burn|claw|mangle|punch|drain|bludgeon|whack|shatter|hammer|sears|beat|pound|crush|eviscerate) 
+msc += $good:(hits|bites|slices|spits|opens|slashes|punctures|carves|perforates|sticks|freezes|poisons|engulfs|draws|tail-slaps|kicks) [^y]
+msc += $good:(pummels|squashes|pulverises|cuts|chops|strikes|skewers|attacks|hits|constricts|grabs|claws|burns|shocks|drains|sears|pecks|gores|stings|tentacle-slaps|headbutts|eviscerates) [^y]
 msc += $good:burns
+msc += $good:Asterion shares his spectral weapon's damage
 msc += $good:is struck by lightning
 msc += $good:A guardian golem appears
 msc += $good:is covered in liquid flames
@@ -2121,9 +2207,17 @@ msc += $good:is splashed with acid
 msc += $good:You feel life coursing into your body
 msc += $good:is struck by lightning
 msc += $good:A sheep catches fire
+msc += $good:is burned by acid
 
 # Non-damage combat messages
 #msc += $positive:
+msc += $positive:The rubble rises up and takes form
+msc += $positive:You begin to abjure the creatures around you
+msc += $positive:You extend your aura of abjuration
+msc += $positive:A divine shield forms around you
+msc += $positive:Your attacks no longer feel as feeble
+msc += $positive:Your shroud bends the
+msc ^= $positive:You feel a little less hungry
 msc += $positive:illusion disappears in a puff of smoke
 msc += $positive:Your.*is no longer encased in ice
 msc += $positive:You deflect
@@ -2225,7 +2319,7 @@ msc += $positive:is burned terribly
 msc += $positive:[^y].*is frozen
 msc += $positive:You furiously retaliate
 msc += $positive:The scroll dissolves into smoke
-msc += $positive:Your.*reflects
+msc ^= $positive:Your.*reflects
 msc += $positive:is no longer unusually agile
 msc += $positive:the former slaves? thanks? you
 msc += $positive:Something gets caught in the net
@@ -2264,7 +2358,7 @@ msc += $positive:You feel quick
 msc += $positive:You no longer feel sluggish
 msc += $positive:You feel odd for a moment
 msc += $positive:returns to your pack
-msc += $positive:is devoured by a tear in reality
+msc += $positive:Space distorts slightly along a thin shroud covering your body
 msc += $positive:You are covered in a thin layer of ice
 msc += $positive:You feel (weak|clumsy|dopey) for a moment
 msc += $positive:and things crawl out
@@ -2289,8 +2383,12 @@ msc += $positive:struggles (to escape|against) the net
 msc += $positive:Your fit of retching subsides
 msc += $positive:Your magic seems less tainted
 msc += $positive:You feel your power returning
+msc += $positive:You shudder from the blast and a jelly pops out
+msc += $positive:looks weaker
 
 #msc += $verypositive:
+msc += $verypositive:Your.*rod.*glows for a moment
+msc += $verypositive:the tentacle is hauled back through the portal
 msc += $verypositive:You feel more in control of your magic
 msc += $verypositive:releases its grip on you
 msc += $verypositive:You feel magically charged
@@ -2302,6 +2400,9 @@ msc += $verypositive:You (kill|destroy|blow up)
 msc += $verypositive:is blown up
 msc += $verypositive:dies
 msc += $verypositive:is destroyed
+msc += $verypositive:is killed
+msc += $verypositive:is incinerated
+msc += $verypositive:is devoured by a tear in reality
 msc += $verypositive:The.*falls from the air
 msc += $verypositive:The.*simulacrum vapourises
 msc += $verypositive:more experienced
@@ -2314,6 +2415,7 @@ msc += $verypositive:Your wand.*glows for a moment
 msc += $verypositive:You may choose your destination
 msc += $verypositive:You feel yourself speed up
 msc += $verypositive:You feel stealthy
+msc += $verypositive:You feel less vulnerable to poison
 msc += $verypositive:Your skill with magical items lets you calculate the power of this device
 msc += $verypositive:You can move again
 msc += $verypositive:The fungal colony is destroyed
@@ -2327,6 +2429,7 @@ msc += $verypositive:You break free from the net
 msc += $verypositive:Your.*wand glows for a moment
 msc += $verypositive:Your life force is being protected
 msc += $verypositive:It is a scroll of recharging
+msc += $verypositive:is converted
 msc += $verypositive:It is a scroll of enchant
 msc += $verypositive:That put a bit of spring back into your step
 msc += $verypositive:You feel vaguely more buoyant than before
@@ -2374,13 +2477,29 @@ msc += $verypositive:An interdimensional caravan has stopped on this level and s
 
 #Positive mutation - or losing bad ones
 #msc += $awesome:
+msc += $awesome:You feel able to eat a more balanced diet
+msc += $awesome:You feel genetically stable
+msc ^= $awesome:You feel a.*healthier
+msc += $awesome:You hunger for flesh
+msc ^= $awesome:You feel your magical essence form a protective shroud around your flesh
+msc += $awesome:Your body becomes stretchy
+msc += $awesome:Your skin becomes partially translucent
+msc ^= $warning:You feel a sudden chill
+msc += $warning:You feel hot for a moment
+msc += $awesome:You feel less concerned about cold
+msc += $awesome:You feel cleansed
+msc ^= $awesome:You feel resistant to hostile enchantments
+msc += $awesome:You are surrounded by darkness
+msc += $awesome:Your skin functions as natural camouflage
+msc += $awesome:You begin to emit a foul stench of rot and decay
+msc += $awesome:You hunger for rotting flesh
+msc += $awesome:You feel completely energised by your suffering
 msc += $awesome:Your teeth lengthen and sharpen
 msc += $awesome:Your natural healing is strengthened
 msc += $awesome:You begin to regenerate
 msc += $awesome:You begin to radiate repulsive energy
 msc += $awesome:Your body's shape seems more normal
 msc += $awesome:You feel the presence of a demonic guardian
-msc += $awesome:You feel a sudden chill
 msc += $awesome:Your scales feel tougher
 msc += $awesome:Your teeth are very long and razor-sharp
 msc += $awesome:You feel negative
@@ -2400,7 +2519,10 @@ msc += $awesome:The wave of death grows in power
 msc += $awesome:Sharp spines emerge from
 msc += $awesome:Your vision sharpens
 msc += $awesome:Your urge to shout disappears
-msc ^= $awesome:scales grow over part of your body
+msc ^= $awesome:scales grow over part of your
+msc ^= $awesome:scales spread over more of your
+msc += $awesome:scales cover you.*completely
+msc += $awesome:You are partially covered in thin metallic scales
 msc ^= $awesome:Something appears at your feet
 msc ^= $awesome:Something appears before you
 msc ^= $awesome:Your urge to shout disappears
@@ -2424,7 +2546,12 @@ msc += $awesome:Your throat feels hot
 msc += $awesome:Your teeth grow very long and razor-sharp
 
 # Other rare and awesome stuff
+msc += $awesome:You sense traps nearby
+msc += $awesome:You sense items nearby
+msc += $awesome:You feel somewhat nimbler
+msc += $awesome:A mystic portal forms
 msc += $awesome:It is briefly surrounded by shifting shadows
+msc += $awesome:You are no longer firmly anchored in space
 msc += $awesome:There is a gate to the Realm of Zot here
 msc += $awesome:A terribly searing pain shoots up your arm
 msc += $awesome:Your strength has recovered
@@ -2475,6 +2602,9 @@ msc += $awesome: Your hands briefly pass through it before you manage to get a f
 
 # You or an ally takes damage
 #msc += $negative:
+msc ^= $warning:The golden flame engulfs you
+msc ^= $negative:The Shining One blasts you with cleansing flame
+msc += $negative:You are struck by lightning
 msc += $negative:You are caught in an extremely strong localised spatial distortion
 msc += $negative:You are blasted with searing flames
 msc += $negative:Your.*suffers a backlash
@@ -2505,7 +2635,7 @@ msc += $negative:constricts your?
 msc += $negative:(bites|hits|headbutts|punches|shocks|tentacle-slaps|claws|smites|stings|freezes|slaps|pecks|gores) your?
 msc += $negative:(tail-slaps|tramples|burns|poisons|gores|pecks|touches|kicks|trunk-slaps|skewers|drowns) your?
 # Thanks killer klowns
-msc += $negative:(flogs|trip-wires|defenestrates) your?
+msc += $negative:(flogs|trip-wires|defenestrates|headlocks) your?
 msc += $negative:Your.*burned by acid
 msc += $negative:Your.*appears confused
 msc += $negative:Your?.*is struck by the.*spines
@@ -2515,14 +2645,13 @@ msc += $negative:The.*toxic radiance grows
 msc += $negative:Your.*loses its grip
 msc += $negative:The water swirls and strikes you
 msc += $negative:Your.*is knocked back
-msc ^= $negative:The orb of energy explodes
 msc += $negative:The shock serpent's electric aura discharges violently
 msc += $negative:The lightning shocks
 msc += $negative:The tentacled starspawn engulfs you
 msc += $negative:The.*ugly thing engulfs you
 msc += $negative:Your life force is offered up
 msc ^= $negative:The (fireball|.*hellfire|ghostly fireball|explosion|blast of flame|great blast of fire|fiery explosion) engulfs your?
-msc ^= $negative:The (explosion of dart fragments|explosion of spores|stinking cloud|explosion of sling fragments) engulfs your?
+msc ^= $negative:The (explosion of dart fragments|explosion of spores|stinking cloud|explosion of sling bullet fragments) engulfs your?
 msc ^= $negative:The (blast of magma|plume of ash|blast of lightning) engulfs your?
 msc += $negative:Pain shoots through your body
 msc += $negative:Your.*is flash-frozen
@@ -2577,7 +2706,12 @@ msc += $negative:The great icy blast engulfs you
 msc += $danger:completely resists
 msc += $warning:resists
 
+# For the text that describes ranged attacks and spells
+#msc ^= $takesaction:
+msc ^= $takesaction:Asterion utters an invocation to Makhleb
+msc ^= $takesaction:The wizard howls an incantation
 msc ^= $takesaction:draws from the surrounding life force
+msc ^= $takesaction:Gastronok chants a spell
 msc ^= $takesaction:(breathes|spits).*at you
 msc += $takesaction:You conjure a mighty blast of ice
 msc += $takesaction:conjures a mighty blast of ice
@@ -2611,29 +2745,39 @@ msc += $takesaction:The weapon returns to the
 msc += $takesaction:The manticore flicks its tail
 msc += $takesaction:You begin to abjure the creatures around you
 msc ^= $takesaction:The golden eye blinks at you
+msc ^= $takesaction:Frances chants phrases taken from a Devil's mouth
+msc ^= $takesaction:Frances screams a word of power
+msc ^= $takesaction:Frances whispers indecipherable words
+msc ^= $takesaction:Frances mutters in a terrible tongue
 
-msc += $godaction:(Elyvilon|Igni Ipthes|Elyvilon|Ashenzari|Cheibriados|Dithmenos|Fedhas|Okawaru|Lugonu)
+msc += $godaction:(Elyvilon|Igni Ipthes|Elyvilon|Ashenzari|Cheibriados|Dithmenos|Fedhas|Okawaru|Lugonu|Jiyva)
 msc += $godaction:(Kikubaaqudgha|Makhleb|Nemelex|Sif Muna|Trog|Vehumet|Xom|Yredelemnul|Zin[^g]|The Shining One)
-msc ^= $godaction:(Elyvilon|Igni Ipthes|Elyvilon|Ashenzari|Cheibriados|Dithmenos|Fedhas|Okawaru|Lugonu) says
+msc ^= $godaction:(Elyvilon|Igni Ipthes|Elyvilon|Ashenzari|Cheibriados|Dithmenos|Fedhas|Okawaru|Lugonu|Jiyva) says
 msc ^= $godaction:(Kikubaaqudgha|Makhleb|Nemelex|Sif Muna|Trog|Vehumet|Xom|Yredelemnul|Zin[^g]|The Shining One) says
-msc ^= $godaction:shimmer and break into pieces
-msc ^= $godaction:barely shimmers and breaks into pieces
+msc ^= mute:shimmer and break into pieces
+msc ^= mute:barely shimmers and breaks into pieces
 msc ^= $godaction:Your divine halo returns
-msc ^= $godaction:disappears into the void
+msc ^= mute:disappears into the void
 msc += $godaction:due to Igni's heat
-msc ^= $godaction:disappears without a glow
-msc ^= $godaction:disappears without a sign
-msc ^= $godaction:glows slightly and disappears
-msc += $godaction:is slowly consumed by flames
-msc ^= $godaction:slowly burns to ash
-msc ^= $godaction:slowly burns to ash
+msc ^= mute:disappears without a glow
+msc ^= mute:disappears without a sign
+msc ^= mute:glow with a rainbow of weird colours and disappear
+msc ^= mute:glows slightly and disappears
+msc ^= mute:is slowly consumed by flames
+msc ^= mute:slowly burns to ash
+msc ^= mute:slowly burns to ash
 msc += $godaction:A mighty gale blasts forth
 msc += $godaction:A fiery fortress appears around you!
 msc += $godaction:is consumed in a column of flame
 msc += $godaction:The toadstool can now pick up its mycelia and move
+msc += $godaction:Slime for the Slime God
+msc ^= mute:stares at you suspiciously for a moment
+msc += mute:trembles before you
 
 # Interface Messages
 #msc += $interface:
+msc += $interface:You need a rune to enter this place
+msc ^= $interface:There is an ice covered gate leading back out of here here
 msc += $interface:The bosom of this dungeon contains the most powerful artefact
 msc += $interface:Clearing travel trail
 msc += $interface:Your pack is full
@@ -2701,7 +2845,7 @@ msc += $interface:You travel at normal speed
 msc += $interface:Your reserves of magic are already full
 msc += $interface:There are no corpses nearby
 msc += $interface:No target in view
-msc += $interface:It was a (potion|scroll)
+msc += $interface:It (is|was) a (potion|scroll)
 
 # Muted - unnecessary 
 #msc += mute:
@@ -2714,7 +2858,7 @@ msc += mute:Throwing.*\:
 msc += mute:You can\'t see any susceptible monsters within range
 msc += mute:Press\: \? \- help, Shift\-Dir \- straight line, f \- you
 msc += mute:for a list of commands and other information
-msc += mute:Firing \(i \- inventory\. \(\,\) \- cycle\)\:
+msc += mute:Firing \(i
 msc += mute:Fire\/throw which item\?
 msc += mute:Okay\, then
 msc += mute:You swap places
@@ -2743,7 +2887,7 @@ msc += mute:You offer a prayer to Makhleb
 msc += mute:You offer a prayer to Lugonu
 msc += mute:Lugonu accepts your kill
 msc += mute:Okawaru is noncommittal
-msc += mute:Nemelex Xobeh is noncommittal
+msc += mute:Nemelex Xobeh is (noncommittal|pleased)
 msc += mute:The plant looks sick
 
 
@@ -2786,7 +2930,7 @@ menu += lightblue:^unidentified .*armour.*(shiny|dyed)
 
 # Staffs
 menu += $awesome:staff of energy
-menu += $verypositive:staff of
+menu += $verypositive:[^r] staff of
 # rod
 menu += $awesome:rod
 
@@ -2800,16 +2944,17 @@ menu += $awesome:wand of heal
 menu += $tele:wand of teleportation
 
 # Food
+menu += $warning:poisonous
 menu += $boring:inedible
 menu += $verypositive:royal jell
 menu += $warning:ambrosia
 menu += $good:ration
 menu += $good:preferred
 menu += $positive:contaminated
-menu += $warning:poisonous
 menu += $danger:evil_eating
 menu += $danger:rot-inducing
 menu += magenta:mutagenic
+menu += $good:corpse
 
 # Scrolls
 menu += $danger:scrolls? of torment
@@ -2943,7 +3088,7 @@ ai += staff of fire:rF+
 ai += staff of posion:rP+
 ai += staff of energy:+MP, hungerless spells, !d!a
 ai += staff of wizardry:wiz+, !a
-ai += staff of power:MP+10, !a
+ai += staff of power:MP+17, !a
 ai += staff of conjuration:!a
 ai += staff of summoning:!a
 
