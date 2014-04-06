@@ -1,5 +1,6 @@
-#Got suggestions/improvements?
-#https://github.com/HilariousDeathArtist/DCSSConfigFile
+# TEAMCAPTAIN MoogleDan
+# Got suggestions/improvements?
+# https://github.com/HilariousDeathArtist/DCSSConfigFile
 # or find me on crawl.s-z.org
 
 <
@@ -568,12 +569,13 @@ slot += Phase Shift:S
 auto_exclude += [^c] wizard, eyeball, orb of eyes, sphinx, lich, ancient lich, ogre-mage, Norris
 auto_exclude += vampire knight, orc sorcerer, Grinder, Rupert, Ereshkigal, Erolcha, Jory
 
-auto_exclude += Roxanne, Sigmund, Hydra, Pikel, slave, Prince Ribbit, Snorg
-auto_exclude += Menkaure, Duvessa, Dowan, Blork, Jospeh, jelly, Gastronok
+## uniques ##
+auto_exclude += Roxanne, Sigmund, Hydra, Pikel, slave, Prince Ribbit, Snorg, Ijyb
+auto_exclude += Menkaure, Duvessa, Dowan, Blork, Jospeh, jelly, Gastronok, Edmund
 auto_exclude += Urug, Harold, Aizul, Erica, Jorgrun, ancienct lich, orb of fire
 auto_exclude += Saint Roka, Boris, Mennas, Nessos, Sonja, Agnes, Wiglaf, Fannar, Louise
 auto_exclude += Mara, Arachne, Xtahua, Frances, Frederick, ice statue, Polyphemus
-auto_exclude += Death drake, Kirke, Hog, Jorgrun, Sojobo, Nergalle, Maud
+auto_exclude += Death drake, Kirke, Hog, Jorgrun, Sojobo, Nergalle, Maud, Eustachio
 
 ###############
 # Auto Travel #
@@ -589,7 +591,7 @@ explore_stop += greedy_sacrificeable
 # Adjusts how much autoexplore favours attempting to discover room perimeters and corners. 
 # At values higer than 0, autoexplore will more heavily favour visiting squares that are next to walls
 # values range from 0 to 1000 maybe?
-explore_wall_bias = 10
+explore_wall_bias = 5
 
 # Make auto travel sacrifice corpses
 sacrifice_before_explore = true
@@ -729,7 +731,7 @@ more += MASSIVE DAMAGE
 more += You.*teleport [^f]
 more += You blink
 more += Your surroundings suddenly seem different
-more += You feel strangely stable
+more += You feel strangely (unstable|stable)
 
 # Wands/Potions/evokes used by monsters
 more += zaps a (wand|rod)
@@ -749,9 +751,14 @@ more += You are engulfed in dark miasma
 more += swoops through the air toward you
 more += orange crystal statue.*comes? into view
 more += The ghost moth stares at you
+more += You feel you are being watched by something
+more += Its appearance distorts for a moment
+more += You feel haunted
+more += The octopode crusher throws you
 
 # Interrupts for unexpected situations
 more += The.*shudders
+more += You feel a genetic drift
 more += You don't.* that spell
 more += You fail to use your ability
 more += You miscast
@@ -772,7 +779,6 @@ more += You can't unwield
 more += You don't have enough magic
 more += You haven't enough magic at the moment
 more += You feel your control is inadequate
-more += You feel strangely unstable
 more += Your guardian golem overheats
 more += You have finished your manual
 more += You can't take your gloves off to put on a ring
@@ -1117,6 +1123,7 @@ msc =
 msc += white:You feel blessed for a moment
 
 #msc += $danger:
+msc += $danger:Its appearance distorts for a moment
 msc += $danger:A shaft opens up in the floor
 msc += $danger:You are held in a net
 msc += $danger:(The|Your).*falls away!
@@ -1209,6 +1216,7 @@ msc += $danger:You fall asleep
 msc += $danger:The forest starts to sway and rumble
 msc += $danger:Vines fly forth from the trees!
 msc += $danger:Roots grasp at your
+msc += $danger:Roots rise up from beneath you and drag you back to the ground
 msc += $danger:The.*picks up a wand
 msc += $danger:You struggle against (a|the) (net|web)
 msc += $danger:You struggle to escape the net
@@ -1351,6 +1359,9 @@ msc += $danger:A chorus of chattering voices calls out to you
 msc += $danger:You can no longer
 msc += $danger:The.*shudders
 msc += $danger:Your transformation has ended
+msc += $danger:Nothing appears to have answered your call
+msc += $danger:The grasping roots prevent you from becoming airborne
+msc += $danger:You kill your
 
 #msc += $item_dmg:
 msc += $item_dmg:acid corrodes
@@ -1366,6 +1377,7 @@ msc += $item_dmg:You are engulfed in dark miasma
 msc += $item_dmg:You feel guilty
 msc += $item_dmg:Done waiting
 msc += $item_dmg:That really hurt
+msc += $item_dmg:You fall into the water
 msc += $item_dmg:PTOANNNG
 msc += $item_dmg:PANG
 msc += $item_dmg:GONNNNG
@@ -1374,6 +1386,12 @@ msc += $item_dmg:SHROANNG
 msc += $item_dmg:BONNNG
 
 #msc += $warning:
+msc += $warning:Faint laughter comes from somewhere
+msc += $warning:shadowy figures dance through the air in front of you
+msc += $warning:This room is filled with shadowy figures
+msc += $warning:You feel spirits watching over you
+msc += $warning:You feel a genetic drift
+msc += $warning:You return to the normal time flow
 msc += $warning:reappears nearby
 msc += $warning:I'll put it outside for you
 msc += $warning:A pair of horns grows on your head
@@ -1450,6 +1468,7 @@ msc += $warning:The heat melts your.*(armour|shield)
 msc += $warning:You are engulfed in a cloud of spores
 msc += $warning:You feel less perceptive
 msc += $warning:A profound silence engulfs you
+msc += $warning:An unnatural silence engulfs you
 msc ^= $warning:Hurry and find it before the entrance collapses
 msc += $warning:Your memory of.*unravels
 msc += $warning:You speak a Word of immense power
@@ -1516,7 +1535,7 @@ msc += $warning:basks in the mutagenic energy
 msc += $warning:Flickering shadows surround you
 msc += $warning:You found a.*trap
 msc += $warning:You.*one of the.*heads off
-msc += $warning:The ironheart preserver begins to accept
+msc += $warning:begins to accept
 msc += $warning:slime creatures merge
 msc += $warning:roars a battle-cry
 msc += $warning:The.*is healed
@@ -1806,8 +1825,16 @@ msc += $warning:You fail to extend your transformation any further
 msc += $warning:This spell does not affect your current form
 msc += $warning:You can't wield anything in your present form
 msc += $warning:Your hands revert to their normal proportions
+msc += $warning:Suddenly Natasha's spirit rises from her lifeless body
+--Demonspawn gaining a mutation they already have
+msc += $warning:Your mutations feel more permanent
+msc += $warning:Roots rise up from beneath.*and drag it to the ground
 
 #msc += $boring:
+msc += $boring:avoids triggering.*trap
+msc += $boring:Terence looks scornfully at you
+msc += $boring:Sigmund looks at you with fury
+msc += $boring:Your.*glows brilliant magenta for a moment
 msc += $boring:holds its ground
 msc += $boring:The door collapses
 msc += $boring:The lightning arc grounds out
@@ -1851,6 +1878,7 @@ msc += $boring:Nessos tries to tell you a complicated story about hydras
 msc += $boring:The boulder beetle hits.*wall
 msc += $boring:A root reaches out and grasps at passing movement
 msc += $boring:Tangled roots snake along the ground
+msc += $boring:You smell coffee
 msc += $boring:The white imp grinds its teeth
 msc += $boring:Your.*imp grins impishly at you
 msc += $boring:Your hooves feel warm
@@ -2130,6 +2158,8 @@ msc += $boring:You can't see any susceptible monsters within range
 msc += $boring:You are momentarily dazzled by a brilliant light
 msc += $boring:You feel momentarily weightless
 msc += $boring:You feel uncomfortably cold
+msc += $boring:Your fire elemental sizzles in the rain
+msc += $boring:Nessos pounds the earth with his hooves
 msc += $boring:Frost spreads across the the floor
 msc += $boring:You sense an ancient evil watching you
 msc += $boring:Your.*(looks|smiles) at you
@@ -2159,7 +2189,7 @@ msc += $boring:fails to trigger a.*trap
 msc += $boring:You feel a numb sensation
 msc += $boring:You can't eat that
 msc += $boring:You smell sulphur
-msc += $boring:There's nothing to close nearby
+msc += $boring:There's nothing to (open|close) nearby
 msc += $boring:glows dull silver for a moment
 msc += $boring:Your.*stumbles backwards
 msc += $boring:ghost takes a fighting stance
@@ -2173,13 +2203,19 @@ msc += $boring:Your.*feel warm
 msc += $boring:This isn't a weapon
 msc += $boring:You feel as though nothing has changed
 msc += $boring:Blork the orc's eyes start to glow
+msc += $boring:Blork the orc shakes
+msc += $boring:You smell wet wool
 
 # Enemies taking damage
-msc += $good:You (hit|bite|slice|spit|open|slash|puncture|carve|perforate|stick|cut|chop|strike|skewer|impale|dice|headbutt|fracture|peck|touch|kick|freeze) 
-msc += $good:You (pummel|squash|pulverise|grab|squeeze|constrict|sock|thump|flatten|tail-slap|burn|claw|mangle|punch|drain|bludgeon|whack|shatter|hammer|sears|beat|pound|crush|eviscerate) 
-msc += $good:(hits|bites|slices|spits|opens|slashes|punctures|carves|perforates|sticks|freezes|poisons|engulfs|draws|tail-slaps|kicks) [^y]
-msc += $good:(pummels|squashes|pulverises|cuts|chops|strikes|skewers|attacks|hits|constricts|grabs|claws|burns|shocks|drains|sears|pecks|gores|stings|tentacle-slaps|headbutts|eviscerates) [^y]
-msc += $good:burns
+msc += $good:You (hit|bite|slice|spit|open|slash|puncture|carve|perforate|stick|cut)
+msc += $good:You (chop|strike|skewer|impale|dice|headbutt|fracture|peck|touch|kick|freeze|smack|shred) 
+msc += $good:You (pummel|squash|pulverise|grab|squeeze|constrict|sock|thump|flatten|tail-slap)
+msc += $good:You (burn|claw|mangle|punch|drain|bludgeon|whack|shatter|hammer|sears|beat|pound|crush|eviscerate) 
+msc += $good:(hits|bites|slices|spits|opens|slashes|punctures|carves|perforates|sticks) [^y]
+msc += $good:(freezes|poisons|engulfs|draws|tail-slaps|kicks|smacks|shreds|burns|melts) [^y]
+msc += $good:(pummels|squashes|pulverises|cuts|chops|strikes|skewers|attacks|hits|constricts) [^y]
+msc += $good:(grabs|claws|burns|shocks|drains|sears|pecks|gores|stings|tentacle-slaps|headbutts|eviscerates) [^y]
+msc += $good:is struck by the twisting air
 msc += $good:Asterion shares his spectral weapon's damage
 msc += $good:is struck by lightning
 msc += $good:A guardian golem appears
@@ -2214,6 +2250,9 @@ msc += $good:is burned by acid
 
 # Non-damage combat messages
 #msc += $positive:
+msc += $positive:Roots rise up to grasp you\, but you nimbly evade
+msc += $positive:Nessos is no longer moving quickly
+msc ^= $positive:Cheibriados rebukes [^y]
 msc += $positive:You create a snake
 msc += $positive:apparition takes form in the air
 msc += $positive:The rubble rises up and takes form
@@ -2337,7 +2376,6 @@ msc += $positive:Your new body merges with your icy armour
 msc += $positive:You feel the strange sensation of being on two planes at once
 msc += $positive:You momentarily phase out as.*passes through you
 msc += $positive:You feel less exhausted
-msc += $positive:The.*melts
 msc ^= $positive:Your.*(unaffected|resist[^a]|resists)
 msc += $positive:The flame cauterises the wound
 msc += $positive:You hack the.*last head off
@@ -2393,6 +2431,7 @@ msc += $positive:Your magic seems less tainted
 msc += $positive:You feel your power returning
 msc += $positive:You shudder from the blast and a jelly pops out
 msc += $positive:looks weaker
+msc += $positive:falls into the water
 
 #msc += $verypositive:
 msc += $verypositive:You feel nimbler
@@ -2411,6 +2450,7 @@ msc += $verypositive:is destroyed
 msc += $verypositive:is killed
 msc += $verypositive:is incinerated
 msc += $verypositive:is devoured by a tear in reality
+msc += $verypositive:drowns
 msc += $verypositive:The.*falls from the air
 msc += $verypositive:The.*simulacrum vapourises
 msc += $verypositive:more experienced
@@ -2484,12 +2524,15 @@ msc += $verypositive:An interdimensional caravan has stopped on this level and s
 
 #Positive mutation - or losing bad ones
 #msc += $awesome:
+msc += $awesome:You feel less concerned about heat
 msc += $awesome:You begin to radiate miasma
 msc += $awesome:You feel able to eat a more balanced diet
 msc += $awesome:You feel genetically stable
 msc ^= $awesome:You feel a.*healthier
 msc += $awesome:You hunger for flesh
+msc += $awesome:You feel your life force and your magical essence meld
 msc ^= $awesome:You feel your magical essence form a protective shroud around your flesh
+msc += $awesome:You feel your magic shroud grow more resilient
 msc += $awesome:Your body becomes stretchy
 msc += $awesome:Your skin becomes partially translucent
 msc ^= $warning:You feel a sudden chill
@@ -2501,7 +2544,8 @@ msc += $awesome:You are surrounded by darkness
 msc += $awesome:Your skin functions as natural camouflage
 msc += $awesome:You begin to emit a foul stench of rot and decay
 msc += $awesome:You hunger for rotting flesh
-msc += $awesome:You feel completely energised by your suffering
+msc ^= $awesome:You feel energised by your suffering
+msc ^= $awesome:You feel even more energised by your suffering
 msc += $awesome:Your teeth lengthen and sharpen
 msc += $awesome:Your natural healing is strengthened
 msc += $awesome:You begin to regenerate
@@ -2546,7 +2590,6 @@ msc += $awesome:Your feet stretch into talons
 msc += $awesome:Your feet thicken and deform
 msc ^= $awesome:A pair of antennae grows on your head
 msc ^= $awesome:The antennae on your head grow some more
-msc ^= $awesome:You feel energised by your suffering
 msc ^= $awesome:There is a nasty taste in your mouth for a moment
 msc ^= $awesome:You feel stable
 msc += $awesome:Large bone plates grow
@@ -2554,6 +2597,8 @@ msc += $awesome:Your throat feels hot
 msc += $awesome:Your teeth grow very long and razor-sharp
 
 # Other rare and awesome stuff
+msc += $awesome:A genie takes form and thunders\: \"Choose your reward
+msc += $awesome:You manage to scramble free
 msc += $awesome:You sense traps nearby
 msc += $awesome:You sense items nearby
 msc += $awesome:You feel somewhat nimbler
@@ -2610,6 +2655,7 @@ msc += $awesome: Your hands briefly pass through it before you manage to get a f
 
 # You or an ally takes damage
 #msc += $negative:
+msc += $negative:You are caught in a strong localised spatial distortion
 msc ^= $warning:The golden flame engulfs you
 msc ^= $negative:The Shining One blasts you with cleansing flame
 msc += $negative:You are struck by lightning
@@ -2715,7 +2761,10 @@ msc += $danger:completely resists
 msc += $warning:resists
 
 # For the text that describes ranged attacks and spells
-#msc ^= $takesaction:
+#msc += $takesaction:
+msc += $takesaction:You step out of the flow of time
+msc += $takesaction:You can feel time thicken for a moment
+msc += $takesaction:The flow of time bends around you
 msc ^= $takesaction:Asterion utters an invocation to Makhleb
 msc ^= $takesaction:The wizard howls an incantation
 msc ^= $takesaction:draws from the surrounding life force
@@ -2762,8 +2811,7 @@ msc += $godaction:(Elyvilon|Igni Ipthes|Elyvilon|Ashenzari|Cheibriados|Dithmenos
 msc += $godaction:(Kikubaaqudgha|Makhleb|Nemelex|Sif Muna|Trog|Vehumet|Xom|Yredelemnul|Zin[^g]|The Shining One)
 msc ^= $godaction:(Elyvilon|Igni Ipthes|Elyvilon|Ashenzari|Cheibriados|Dithmenos|Fedhas|Okawaru|Lugonu|Jiyva) says
 msc ^= $godaction:(Kikubaaqudgha|Makhleb|Nemelex|Sif Muna|Trog|Vehumet|Xom|Yredelemnul|Zin[^g]|The Shining One) says
-msc ^= mute:shimmer and break into pieces
-msc ^= mute:barely shimmers and breaks into pieces
+msc ^= mute:shimmers? and breaks? into pieces
 msc ^= $godaction:Your divine halo returns
 msc ^= mute:disappears into the void
 msc += $godaction:due to Igni's heat
@@ -2772,7 +2820,6 @@ msc ^= mute:disappears without a sign
 msc ^= mute:glow with a rainbow of weird colours and disappear
 msc ^= mute:glows slightly and disappears
 msc ^= mute:is slowly consumed by flames
-msc ^= mute:slowly burns to ash
 msc ^= mute:slowly burns to ash
 msc += $godaction:A mighty gale blasts forth
 msc += $godaction:A fiery fortress appears around you!
@@ -2784,6 +2831,10 @@ msc += mute:trembles before you
 
 # Interface Messages
 #msc += $interface:
+msc += $interface:Your.*feel slithery
+msc += $interface:You can't wear anything in your present form
+msc += $interface:You're too inexperienced to learn that spell
+msc += $interface:You're already wearing two cursed rings
 msc += $interface:You need a rune to enter this place
 msc ^= $interface:There is an ice covered gate leading back out of here here
 msc += $interface:The bosom of this dungeon contains the most powerful artefact
@@ -2881,9 +2932,9 @@ msc += mute:Was it this warm in here before
 msc += mute:The flames dance
 msc += mute:Your shadow attacks
 msc += mute:Marking area around
-msc += mute:Placed new exclusion
-msc += mute:Reduced exclusion size to a single square
-msc += mute:Removed exclusion
+#msc += mute:Placed new exclusion
+#msc += mute:Reduced exclusion size to a single square
+#msc += mute:Removed exclusion
 msc += mute:You can access your shopping list by pressing
 msc += mute:for starvation awaits
 msc += mute:As you enter the labyrinth
