@@ -576,6 +576,7 @@ auto_exclude += Urug, Harold, Aizul, Erica, Jorgrun, ancienct lich, orb of fire
 auto_exclude += Saint Roka, Boris, Mennas, Nessos, Sonja, Agnes, Wiglaf, Fannar, Louise
 auto_exclude += Mara, Arachne, Xtahua, Frances, Frederick, ice statue, Polyphemus
 auto_exclude += Death drake, Kirke, Hog, Jorgrun, Sojobo, Nergalle, Maud, Eustachio
+auto_exclude += Crazy Yiuf, Asterion
 
 ###############
 # Auto Travel #
@@ -590,8 +591,8 @@ explore_stop += greedy_sacrificeable
 
 # Adjusts how much autoexplore favours attempting to discover room perimeters and corners. 
 # At values higer than 0, autoexplore will more heavily favour visiting squares that are next to walls
-# values range from 0 to 1000 maybe?
-explore_wall_bias = 5
+# reasonable values range from 0 to 10 maybe?
+explore_wall_bias = 3
 
 # Make auto travel sacrifice corpses
 sacrifice_before_explore = true
@@ -907,10 +908,10 @@ more += You are mesmerised
 more += The barbed spikes become lodged in your body
 more += A sentinel's mark forms upon you
 more += The silver sears you
-more += [^Your].*seems to speed up
+more += [^Y].*seems to speed up
 more += steals.*your
 more += infuriates you
-more += [^Your].*reflects
+more += [^Y].*reflects
 more += You cannot afford.*fee
 more += You can move again
 more += You slip out of the net
@@ -1090,15 +1091,6 @@ default_manual_training = true
 # darkgrey, lightblue, lightgreen, lightcyan, lightred,
 # lightmagenta, yellow, white
 
-# Standard colours to be used for item highlighting
-$inedible     := darkgrey
-$evil         := red
-$preferred    := yellow
-$rot-inducing := lightred
-$mutagenic    := magenta
-$dangerous    := magenta
-$poisonous    := lightgreen
-
 # Standard colours to be used for message highlighting
 $danger   := lightred
 $item_dmg := red
@@ -1106,11 +1098,11 @@ $warning  := yellow
 $boring   := darkgrey
 $negative := brown
 $good     := lightblue
-$positive := blue
-$verypositive := green
-$awesome := lightgreen
+$positive := green
+$verypositive := lightgreen
+$awesome := lightmagenta
 $interface := cyan
-$takesaction := lightmagenta
+$takesaction := blue
 $godaction := magenta
 
 #channel.floor = darkgrey
@@ -1123,6 +1115,9 @@ msc =
 msc += white:You feel blessed for a moment
 
 #msc += $danger:
+msc += $danger:Not with that terrain in the way
+msc += $danger:Your teleport is interrupted
+msc += $danger:Your hands revert to their normal proportions
 msc += $danger:Its appearance distorts for a moment
 msc += $danger:A shaft opens up in the floor
 msc += $danger:You are held in a net
@@ -1172,6 +1167,7 @@ msc += $danger:strangely unstable
 msc += $danger:curare-tipped.*hits you
 msc += $danger:Space warps.* around you
 msc += $danger:Space bends around you
+msc += $danger:Space bends sharply around you!
 msc += $danger:sense of stasis
 msc += $danger:clumsily bash
 msc += $danger:goes berserk
@@ -1362,6 +1358,8 @@ msc += $danger:Your transformation has ended
 msc += $danger:Nothing appears to have answered your call
 msc += $danger:The grasping roots prevent you from becoming airborne
 msc += $danger:You kill your
+msc += $danger:You feel less regenerative
+msc += $danger:Lernaean hydra knocks down a tree
 
 #msc += $item_dmg:
 msc += $item_dmg:acid corrodes
@@ -1386,6 +1384,7 @@ msc += $item_dmg:SHROANNG
 msc += $item_dmg:BONNNG
 
 #msc += $warning:
+msc += $warning:puts on a
 msc += $warning:Faint laughter comes from somewhere
 msc += $warning:shadowy figures dance through the air in front of you
 msc += $warning:This room is filled with shadowy figures
@@ -1429,7 +1428,7 @@ msc += $warning:You feel extremely nervous for a moment
 msc += $warning:The orb fizzles
 msc += $warning:A film of ice covers the
 msc += $warning:That ambrosia tasted strange
-msc += $warning:Your orb of destruction hits.*wall
+msc += $warning:orb of destruction hits.*wall
 msc += $warning:Something tries to affect you
 msc += $warning:You block its attack
 msc += $warning:A large net falls down
@@ -1452,7 +1451,6 @@ msc += $warning:There's a creature in the doorway
 msc += $warning:They are\:
 msc += $warning:A card falls out of the deck
 msc += $warning:(dart|tomahawk|javelin|large rock|stone) disappears in a puff of smoke
-msc += $warning:You feel less regenerative
 msc += $warning:You can't close doors while held in a net
 msc += $warning:A slime creature suddenly
 msc += $warning:You feel closer to the material plane
@@ -1504,8 +1502,8 @@ msc += $warning:You feel strangely stable
 msc += $warning:(recites|explains|preaches|embarks|launches|threatens|murmurs|breathes|mutters|prattles)
 msc += $warning:(shout|hisses|gurgles|screeches|barks|cheers|buzzes|grunts|makes a sound|complains)
 msc += $warning:(shriek|roars|says|moans|brags|keens|mumbles|wails|croak|screams|chants|Floosh|trumpets)
-msc += $warning:(gibbers|growls|whisper|wail|asks|sighs|laughs|yells|cries|caws|queries|sneers)
-msc += $warning:(jeers|bellows|chilling moan|scowls|sings|whimpers|cackles|mewls|snorts|grits)
+msc += $warning:(gibbers|growls|whisper|wail|asks|sighs|laughs|yells|cries|caws|queries|sneers|groans|grumbles)
+msc += $warning:(jeers|bellows|chilling moan|scowls|sings|whimpers|cackles|mewls|snorts|grits|snarls)
 msc += $warning:imitates the bagpipes
 msc += $warning:suddenly curses
 msc += $warning:Dowan breathes
@@ -1742,6 +1740,7 @@ msc += $warning:yelps
 msc += $warning:goes tick-tock
 msc += $warning:gives off a wolf whistle
 msc ^= $warning:[e] your.* of resist
+msc += $warning:phases out as you
 msc += $warning:cracks jokes
 msc += $warning:Your orb of destruction dissipates
 msc += $warning:regales you with its life story
@@ -1752,6 +1751,7 @@ msc += $warning:makes a horrible noise
 msc += $warning:burps loudly
 msc += $warning:You are caught in a violent explosion
 msc += $warning:pulses with an eldritch light
+msc += $warning:the glow from your magical contamination prevents you from becoming completely invisible
 msc += $warning:appears from out of your range of vision
 msc += $warning:You feel controlled for a moment
 msc += $warning:You stop putting on your armour
@@ -1810,6 +1810,7 @@ msc += $warning:struggles to resist
 msc += $warning:You feel.*more hungry
 msc += $warning:You are outlined in light
 msc += $warning:You feel momentarily disoriented
+msc += $warning:You are now empty
 msc += $warning:(prevent|prevents) you from hitting
 msc += $warning:The water nymph flows with the water
 msc += $warning:summons a
@@ -1824,11 +1825,15 @@ msc += $warning:Finesse? Hah! Time to rip out guts
 msc += $warning:You fail to extend your transformation any further
 msc += $warning:This spell does not affect your current form
 msc += $warning:You can't wield anything in your present form
-msc += $warning:Your hands revert to their normal proportions
+msc += $warning:Your.*revert to their normal proportions
 msc += $warning:Suddenly Natasha's spirit rises from her lifeless body
 --Demonspawn gaining a mutation they already have
 msc += $warning:Your mutations feel more permanent
 msc += $warning:Roots rise up from beneath.*and drag it to the ground
+msc ^= $warning:You hunger for vegetation
+msc ^= $warning:You feel a sudden chill
+msc += $warning:You feel hot for a moment
+msc += $warning:stop glowing
 
 #msc += $boring:
 msc += $boring:avoids triggering.*trap
@@ -1851,8 +1856,8 @@ msc += $boring:You aren't quite hungry enough to eat that
 msc += $boring:The crystal guardian glitters
 msc += $boring:glows brightly for a moment
 msc += $boring:The wizard's fingertips start to glow
-msc += $boring:Your hands glow shimmering blue for a moment
-msc += $boring:You are already empty-handed
+msc += $boring:Your.*glow shimmering blue for a moment
+msc += $boring:You are already empty-
 msc ^= $boring:the.*shaped block of ice
 msc ^= $boring:briefly gains? a (red|green|yellow) sheen
 msc += $boring:The great wave of water passes through the water elemental
@@ -2042,6 +2047,7 @@ msc += $boring:You start (resting|waiting)
 msc += $boring:Unknown command
 msc += $boring:but (do no|doesn't do any|does no) damage
 msc += $boring:miss
+msc += $boring:Wisps of poison gas drift from your
 msc += $boring:You walk carefully through
 msc += $boring:grow from
 msc += $boring:withers and dies
@@ -2207,12 +2213,12 @@ msc += $boring:Blork the orc shakes
 msc += $boring:You smell wet wool
 
 # Enemies taking damage
-msc += $good:You (hit|bite|slice|spit|open|slash|puncture|carve|perforate|stick|cut)
+msc += $good:You (hit|bite|slice|spit|open|slash|puncture|carve|perforate|stick|cut|trample|maul)
 msc += $good:You (chop|strike|skewer|impale|dice|headbutt|fracture|peck|touch|kick|freeze|smack|shred) 
 msc += $good:You (pummel|squash|pulverise|grab|squeeze|constrict|sock|thump|flatten|tail-slap)
 msc += $good:You (burn|claw|mangle|punch|drain|bludgeon|whack|shatter|hammer|sears|beat|pound|crush|eviscerate) 
-msc += $good:(hits|bites|slices|spits|opens|slashes|punctures|carves|perforates|sticks) [^y]
-msc += $good:(freezes|poisons|engulfs|draws|tail-slaps|kicks|smacks|shreds|burns|melts) [^y]
+msc += $good:(hits|bites|slices|spits|opens|slashes|punctures|carves|perforates|sticks|tramples) [^y]
+msc += $good:(freezes|poisons|engulfs|draws|tail-slaps|kicks|smacks|shreds|burns|melts|mauls) [^y]
 msc += $good:(pummels|squashes|pulverises|cuts|chops|strikes|skewers|attacks|hits|constricts) [^y]
 msc += $good:(grabs|claws|burns|shocks|drains|sears|pecks|gores|stings|tentacle-slaps|headbutts|eviscerates) [^y]
 msc += $good:is struck by the twisting air
@@ -2234,7 +2240,7 @@ msc += $good:is drained
 msc += $good:You drain (its|her|his) (magic|power)
 msc += $good:You drain the
 msc += $good:Something (hits|bites) the
-msc += $good:The.*is blasted
+msc += $good:is blasted
 msc += $good:is burned by your radiant heat
 msc += $good:The boulder beetle smashes into the
 msc += $good:The golden flame engulfs
@@ -2251,7 +2257,7 @@ msc += $good:is burned by acid
 # Non-damage combat messages
 #msc += $positive:
 msc += $positive:Roots rise up to grasp you\, but you nimbly evade
-msc += $positive:Nessos is no longer moving quickly
+msc += $positive:is no longer moving quickly
 msc ^= $positive:Cheibriados rebukes [^y]
 msc += $positive:You create a snake
 msc += $positive:apparition takes form in the air
@@ -2284,6 +2290,7 @@ msc += $positive:Your jumping spider.*pounces on the
 msc ^= $positive:You feel as if something is helping you
 msc += $positive:You are unaffected
 msc += $positive:no longer looks unusually strong
+msc += $positive:The area is filled with flickering shadows
 msc += $positive:You block
 msc += $positive:flinches away
 msc += $positive:The.*is (repelled|deflected)
@@ -2312,7 +2319,6 @@ msc += $positive:struggles to get unstuck from the (web|net)
 msc += $positive:loses its grip on you
 msc += $positive:The sentinel's mark upon you fades away
 msc ^= $positive:The terrible wounds on your body vanish
-msc += $positive:The.*is no longer moving quickly
 msc += $positive:The lost soul (fades away|flickers out)
 msc += $positive:You turn into a creature of crystalline ice
 msc ^= $positive:The.*dark mirror aura disappears
@@ -2343,6 +2349,7 @@ msc += $positive:seems to slow down
 msc += $positive:is moving more slowly
 msc += $positive:stops moving altogether
 msc += $positive:Your skin hardens
+msc += $positive:Your new body merges with your stone armour
 msc += $positive:gives you a mild electric shock
 msc += $positive:Eating
 msc += $positive:the sound returns
@@ -2374,6 +2381,7 @@ msc += $positive:the hog turns into a human
 msc += $positive:the hogs revert to their human forms
 msc += $positive:Your new body merges with your icy armour
 msc += $positive:You feel the strange sensation of being on two planes at once
+msc += $positive:You feel the material plane grow further away
 msc += $positive:You momentarily phase out as.*passes through you
 msc += $positive:You feel less exhausted
 msc ^= $positive:Your.*(unaffected|resist[^a]|resists)
@@ -2434,6 +2442,7 @@ msc += $positive:looks weaker
 msc += $positive:falls into the water
 
 #msc += $verypositive:
+msc ^= $verypositive:begin to glow red
 msc += $verypositive:You feel nimbler
 msc += $verypositive:the tentacle is hauled back through the portal
 msc += $verypositive:You feel more in control of your magic
@@ -2450,6 +2459,7 @@ msc += $verypositive:is destroyed
 msc += $verypositive:is killed
 msc += $verypositive:is incinerated
 msc += $verypositive:is devoured by a tear in reality
+msc += $verypositive:The spatial vortex dissipates
 msc += $verypositive:drowns
 msc += $verypositive:The.*falls from the air
 msc += $verypositive:The.*simulacrum vapourises
@@ -2467,6 +2477,8 @@ msc += $verypositive:You feel less vulnerable to poison
 msc += $verypositive:Your skill with magical items lets you calculate the power of this device
 msc += $verypositive:You can move again
 msc += $verypositive:The fungal colony is destroyed
+msc ^= $verypositive:The starcursed mass shudders and is absorbed by its neighbour
+msc ^= $verypositive:The starcursed mass shudders and withdraws
 msc += $verypositive:You are no longer firmly anchored in space
 msc += $verypositive:Magic courses through your body
 msc += $verypositive:You have disarmed the trap
@@ -2525,6 +2537,7 @@ msc += $verypositive:An interdimensional caravan has stopped on this level and s
 #Positive mutation - or losing bad ones
 #msc += $awesome:
 msc += $awesome:You feel less concerned about heat
+msc += $awesome:You smell fire and brimstone
 msc += $awesome:You begin to radiate miasma
 msc += $awesome:You feel able to eat a more balanced diet
 msc += $awesome:You feel genetically stable
@@ -2535,8 +2548,6 @@ msc ^= $awesome:You feel your magical essence form a protective shroud around yo
 msc += $awesome:You feel your magic shroud grow more resilient
 msc += $awesome:Your body becomes stretchy
 msc += $awesome:Your skin becomes partially translucent
-msc ^= $warning:You feel a sudden chill
-msc += $warning:You feel hot for a moment
 msc += $awesome:You feel less concerned about cold
 msc += $awesome:You feel cleansed
 msc ^= $awesome:You feel resistant to hostile enchantments
@@ -2580,7 +2591,7 @@ msc ^= $awesome:Something appears before you
 msc ^= $awesome:Your urge to shout disappears
 msc += $awesome:You feel (agile|clever|stronger)
 msc += $awesome:Your metabolism slows
-msc += $awesome:Your bones become slightly less dense
+msc += $awesome:Your bones become.*less dense
 msc += $awesome:You feel (more robust|robust|very robust)
 msc += $awesome:You feel more energetic
 msc += $awesome:You feel insulated
@@ -2598,11 +2609,14 @@ msc += $awesome:Your teeth grow very long and razor-sharp
 
 # Other rare and awesome stuff
 msc += $awesome:A genie takes form and thunders\: \"Choose your reward
+msc += $awesome:You turn into a fearsome dragon
+msc += $awesome:You turn into a living statue of rough stone
 msc += $awesome:You manage to scramble free
 msc += $awesome:You sense traps nearby
 msc += $awesome:You sense items nearby
 msc += $awesome:You feel somewhat nimbler
 msc += $awesome:A mystic portal forms
+msc += $awesome:You may select the general direction of your translocation
 msc += $awesome:It is briefly surrounded by shifting shadows
 msc += $awesome:You are no longer firmly anchored in space
 msc += $awesome:There is a gate to the Realm of Zot here
@@ -2651,10 +2665,13 @@ msc += $awesome:You hear the crackle of electricity
 msc += $awesome:Your.*tingle!
 msc += $awesome:You feel a dreadful hunger
 msc ^= $awesome:Your.*glows (red|green|.*yellow|purple)
-msc += $awesome: Your hands briefly pass through it before you manage to get a firm grip on it
+msc += $awesome:Your.*briefly pass through it before you manage to get a firm grip on it
 
 # You or an ally takes damage
 #msc += $negative:
+msc += $negative:You feel like your blood is boiling
+msc += $negative:The magical storm engulfs you
+msc += $negative:Your body is flooded with distortional energies
 msc += $negative:You are caught in a strong localised spatial distortion
 msc ^= $warning:The golden flame engulfs you
 msc ^= $negative:The Shining One blasts you with cleansing flame
@@ -2714,7 +2731,6 @@ msc += $negative:you feel sick
 msc += $negative:Something smites you
 msc += $negative:The air twists around and.*strikes you
 msc += $negative:You are hit by a branch
-msc += $negative:phases out as you
 msc += $negative:momentarily phases out
 msc += $negative:You are caught in an explosion of flying shrapnel
 msc += $negative:You are hit by flying rocks
@@ -2762,10 +2778,14 @@ msc += $warning:resists
 
 # For the text that describes ranged attacks and spells
 #msc += $takesaction:
+msc += $takesaction:coils itself and waves its upper body at you
+msc += $takesaction:casts a spell at you
+msc += $takesaction:You breathe a blast of fire
 msc += $takesaction:You step out of the flow of time
 msc += $takesaction:You can feel time thicken for a moment
 msc += $takesaction:The flow of time bends around you
 msc ^= $takesaction:Asterion utters an invocation to Makhleb
+msc ^= $takesaction:Asterion conjures a destructive force in the name of Makhleb
 msc ^= $takesaction:The wizard howls an incantation
 msc ^= $takesaction:draws from the surrounding life force
 msc ^= $takesaction:Gastronok chants a spell
@@ -2806,6 +2826,7 @@ msc ^= $takesaction:Frances chants phrases taken from a Devil's mouth
 msc ^= $takesaction:Frances screams a word of power
 msc ^= $takesaction:Frances whispers indecipherable words
 msc ^= $takesaction:Frances mutters in a terrible tongue
+msc += $takesaction:You warp the flow of time around you
 
 msc += $godaction:(Elyvilon|Igni Ipthes|Elyvilon|Ashenzari|Cheibriados|Dithmenos|Fedhas|Okawaru|Lugonu|Jiyva)
 msc += $godaction:(Kikubaaqudgha|Makhleb|Nemelex|Sif Muna|Trog|Vehumet|Xom|Yredelemnul|Zin[^g]|The Shining One)
@@ -2831,7 +2852,18 @@ msc += mute:trembles before you
 
 # Interface Messages
 #msc += $interface:
-msc += $interface:Your.*feel slithery
+msc += $interface:waypoint
+msc += $interface:You aren't in the Abyss
+msc += $interface:You see here
+msc += $interface:Things that are here
+msc += $interface:You haven't found any runes yet
+msc += $interface:This weapon is holy and will not allow you to wield it
+msc += $interface:Huh\?
+msc += $interface:You can't drink
+msc += $interface:You cannot cast that spell in your current form
+msc ^= $interface:is stuck to you
+msc += $interface:is melded into your body
+msc ^= $interface:Your.*feels? slithery
 msc += $interface:You can't wear anything in your present form
 msc += $interface:You're too inexperienced to learn that spell
 msc += $interface:You're already wearing two cursed rings
@@ -2883,7 +2915,6 @@ msc += $interface:There's nothing close enough
 msc += $interface:Autopickup is now
 msc += $interface:Hurry and find it before the portal
 msc += $interface:You slide downwards
-msc += $interface:You are now empty
 msc += $interface:Can't find anything matching that
 msc += $interface:No item to drop
 msc += $interface:you feel a great hunger. Being not satiated
@@ -2932,9 +2963,9 @@ msc += mute:Was it this warm in here before
 msc += mute:The flames dance
 msc += mute:Your shadow attacks
 msc += mute:Marking area around
-#msc += mute:Placed new exclusion
-#msc += mute:Reduced exclusion size to a single square
-#msc += mute:Removed exclusion
+msc += mute:Placed new exclusion
+msc += mute:Reduced exclusion size to a single square
+msc += mute:Removed exclusion
 msc += mute:You can access your shopping list by pressing
 msc += mute:for starvation awaits
 msc += mute:As you enter the labyrinth
@@ -2960,47 +2991,48 @@ menu := menu_colour
 menu =
 
 # Variables 
-$tele := lightmagenta
-$equipped := cyan
+$decent := white
+#interface := cyan
 #danger   := lightred
+#item_dmg   := red
 #warning  := yellow
 #boring   := darkgrey
 #negative := brown
-#positive := blue
+#positive := green
 #good     := lightblue
-#verypositive := green
-#awesome := lightgreen
+#verypositive := lightgreen
+#awesome := lightmagenta
 
 # General 
 menu += $boring:(melded)
 menu += $boring:.*useless_item.*
-menu += red:.*evil_item.*
+menu += $item_dmg:.*evil_item.*
 menu += $danger:[^n]cursed
 menu += inventory:$danger:[^n]cursed
-menu += inventory:$equipped:.*equipped.*
-menu += white:.*artefact.*
+menu += inventory:$interface:.*equipped.*
+menu += $decent:.*artefact.*
 menu += $negative:shield of the gong
 menu += $danger:.*artefact.* cursed
 
 menu += $warning:^unidentified .*(potion|scroll|wand|jewellery).*
-menu += lightblue:^unidentified .*weapon.*(runed|glowing)
-menu += lightblue:^unidentified .*armour.*(runed|glowing|embroidered)
-menu += lightblue:^unidentified .*armour.*(shiny|dyed)
+menu += $good:^unidentified .*weapon.*(runed|glowing)
+menu += $good:^unidentified .*armour.*(runed|glowing|embroidered)
+menu += $good:^unidentified .*armour.*(shiny|dyed)
 
 # Staffs
-menu += $awesome:staff of energy
-menu += $verypositive:[^r] staff of
+menu += $verypositive:staff of energy
+menu += $awesome:[^r] staff of
 # rod
-menu += $awesome:rod
+menu += $verypositive:rod
 
 # Wands
 menu += $boring:wand of (flame|frost|magic darts|random effects)
-menu += $positive:wand of (confusion|slowing|polymorph|enslavement|paralysis)
+menu += $decent:wand of (confusion|slowing|polymorph|enslavement|paralysis)
 menu += $good:wand of (draining|digging|lightning|fireball)
 menu += $good:wand of (fire|cold|disintegration|invisibility)
-menu += $verypositive:wand of hasting
-menu += $awesome:wand of heal
-menu += $tele:wand of teleportation
+menu += $positive:wand of hasting
+menu += $verypositive:wand of heal wounds
+menu += $awesome:wand of teleportation
 
 # Food
 menu += $warning:poisonous
@@ -3009,7 +3041,7 @@ menu += $verypositive:royal jell
 menu += $warning:ambrosia
 menu += $good:ration
 menu += $good:preferred
-menu += $positive:contaminated
+menu += blue:contaminated
 menu += $danger:evil_eating
 menu += $danger:rot-inducing
 menu += magenta:mutagenic
@@ -3018,29 +3050,27 @@ menu += $good:corpse
 # Scrolls
 menu += $danger:scrolls? of torment
 menu += $boring:scrolls? of (noise|random)
-menu += white:scrolls? of (holy word|identify|remove curse|amnesia)
+menu += $decent:scrolls? of (holy word|identify|remove curse|amnesia)
 menu += $good:scrolls? of (fog|fear|summoning|immolation|silence|vulnerability)
-menu += $verypositive:scrolls? of (vorpalise|brand) weapon
-menu += $verypositive:scrolls? of recharging
-menu += $verypositive:scrolls? of enchant (weapon|armour)
-menu += $verypositive:scrolls? of magic mapping
-menu += $awesome:scrolls? of acquirement
-menu += $tele:scrolls? of (blinking|teleportation)
+menu += $positive:scrolls? of recharging
+menu += $positive:scrolls? of enchant (weapon|armour)
+menu += $positive:scrolls? of (magic mapping|vorpalise|brand)
+menu += $verypositive:scrolls? of acquirement
+menu += $awesome:scrolls? of (blinking|teleportation)
 
 # Potions
 menu += $danger:potions? of berserk
 menu += magenta:potions? of mutation
-menu += $boring:potions? of lignification
-menu += white:potions? of (restore|flight)
-menu += $positive:potions? of (might|agility|brilliance|resistance)
-menu += $good:potions? of (speed|haste|invisibility)
-menu += $verypositive:potions? of (heal wounds|magic|curing)
+menu += $decent:potions? of (restore|flight|lignification)
+menu += $good:potions? of (might|agility|brilliance|resistance|invisibility)
+menu += $positive:potions? of (curing|magic)
+menu += $verypositive:potions? of (haste|speed|heal wounds)
 menu += $awesome:potions? of (experience|cure mutation|gain|beneficial)
 
 # Amulets
 menu += $boring:amulet of inaccuracy
-menu += $positive:amulet of (stasis|warding|guardian spirit)
-menu += $good:amulet of (rage|faith)
+menu += $good:amulet of (stasis|warding|guardian spirit)
+menu += $positive:amulet of (rage|faith)
 menu += $verypositive:amulet of (resist mutation|resist corrosion|the gourmand)
 menu += $verypositive:amulet of (clarity|conservation)
 
@@ -3048,10 +3078,11 @@ menu += $verypositive:amulet of (clarity|conservation)
 menu += $negative:ring of hunger
 menu += $negative:ring of \-.*(slaying|evasion|protection|dexterity|intelligence|strength)
 menu += $warning:ring of (ice|fire)
-menu += $good:ring of (poison resistance|protection from magic|see invisible|teleport control|protection from fire|protection from cold)
-menu += $positive:ring of (.*evasion|.*protection|sustain abilities|wizardry|invisibility|magical power)
-menu += $verypositive:ring of (slaying|regeneration)
-menu += $tele:ring of teleportation
+menu += $decent:ring of flight
+menu ^= $verypositive:ring of (slaying|regeneration)
+menu += $positive:ring of (poison resistance|protection from magic|see invisible|teleport control|protection from fire|protection from cold)
+menu += $good:ring of (.*evasion|.*protection|sustain abilities|wizardry|invisibility|magical power)
+menu += $awesome:ring of teleportation
 
 # Misc items
 menu += $warning:tome of Destruction
@@ -3063,21 +3094,21 @@ menu += $good:phial of floods
 menu += $good:fan of gales
 menu += $good:sack of spiders
 menu += $good:throwing net
-menu += $positive:stone of tremors
-menu += $positive:lantern of shadows
-menu += $positive:box of beasts
-menu += $positive:disc of storms
-menu += $verypositive:crystal ball of energy
-menu += $awesome:Staff of Wucad Mu
+menu += $decent:stone of tremors
+menu += $decent:lantern of shadows
+menu += $decent:box of beasts
+menu += $decent:disc of storms
+menu += $positive:crystal ball of energy
+menu += $verypositive:Staff of Wucad Mu
 
 # Deck colouring
 menu += $awesome:deck of wonders
-menu += $tele:deck of escape
-menu += $good:deck of summoning
+menu += $awesome:deck of escape
+menu += $positive:deck of summoning
 menu += $danger:deck of destruction
 menu += $warning:deck of (dungeon|changes)
-menu += lightgrey:deck of cards
-menu += $positive:deck of
+menu += $good:deck of defence
+menu += $decent:deck of 
 
 ####################
 # Autoinscriptions #
