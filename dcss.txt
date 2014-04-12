@@ -759,6 +759,9 @@ more += You feel you are being watched by something
 more += Its appearance distorts for a moment
 more += You feel haunted
 more += The octopode crusher throws you
+more += Mara shimmers
+more += There is a horrible\, sudden wrenching feeling in your soul
+more += Mara seems to draw the.*out of itself
 
 # Interrupts for unexpected situations
 more += The.*shudders
@@ -833,7 +836,6 @@ more += Your fit of retching subsides
 more += You are wearing\:
 more += The walls and floor vibrate strangely for a moment
 more += You feel your flesh start to rot away
-more += Mara shimmers and seems to become three
 more += You sense the presence of something unfriendly
 
 # Interrupts for Bad things
@@ -1128,7 +1130,7 @@ msc += $danger:You are held in a net
 msc += $danger:(The|Your).*falls away!
 msc += $danger:The orbs collide in a blinding explosion
 msc += $danger:You feel the power of the Abyss delaying your translocation
-msc += $danger:Mara shimmers and seems to become three
+msc += $danger:Mara shimmers
 msc += $danger:Your spellforged servitor is blown up
 msc += $danger:Mutagenic energies flood into your body
 msc += $danger:seems to grow more fierce
@@ -1390,6 +1392,7 @@ msc += $item_dmg:BONNNG
 msc ^= $item_dmg:This could place you under penance
 
 #msc += $warning:
+msc += $warning:There is nothing there\, so you fail to move
 msc += $warning:You enter the passage of Golubria
 msc += $warning:You start to feel a little slower
 msc += $warning:drowns your?
@@ -1512,7 +1515,7 @@ msc += $warning:(recites|explains|preaches|embarks|launches|threatens|murmurs|br
 msc += $warning:(shout|hisses|gurgles|screeches|barks|cheers|buzzes|grunts|makes a sound|complains)
 msc += $warning:(shriek|roars|says|moans|brags|keens|mumbles|wails|croak|screams|chants|Floosh|trumpets)
 msc += $warning:(gibbers|growls|whisper|wail|asks|sighs|laughs|yells|cries|caws|queries|sneers|groans|grumbles)
-msc += $warning:(jeers|bellows|chilling moan|scowls|sings|whimpers|cackles|mewls|snorts|grits|snarls)
+msc += $warning:(jeers|bellows|chilling moan|scowls|sings|whimpers|cackles|mewls|snorts|grits|snarls|calls)
 msc += $warning:(pleads|curses loudly)
 msc += $warning:imitates the bagpipes
 msc += $warning:looks more energetic
@@ -1854,8 +1857,10 @@ msc += $warning:seems less confused
 msc += $warning:You could not reach far enough
 msc ^= $warning:The golden flame engulfs you
 msc += $warning:You shudder
+msc += $warning:The giant firefly flashes a warning beacon
 
 #msc += $boring:
+msc += $boring:Jory stares carefully at you
 msc += $boring:seems to be having trouble coordinating.*its legs
 msc += $boring:Your.*flashes
 msc += $boring:You create a blast of thin mist
@@ -2247,7 +2252,7 @@ msc += $good:You (pummel|squash|pulverise|grab|squeeze|constrict|sock|thump|thra
 msc += $good:You (burn|claw|mangle|punch|drain|bludgeon|whack|shatter|hammer|sears|beat|pound|crush|eviscerate) 
 msc += $good:(hits|bites|slices|spits|opens|slashes|punctures|carves|perforates|sticks|tramples) [^y]
 msc += $good:(freezes|poisons|engulfs|draws|tail-slaps|kicks|smacks|shreds|melts|mauls|touches) [^y]
-msc += $good:(pummels|squashes|pulverises|cuts|chops|strikes|skewers|attacks|hits|constricts) [^y]
+msc += $good:(pummels|squashes|pulverises|cuts|chops|strikes|skewers|attacks|hits|constricts|burns) [^y]
 msc += $good:(grabs|claws|shocks|drains|sears|pecks|gores|stings|tentacle-slaps|headbutts|eviscerates) [^y]
 msc += $good:is struck by the twisting air
 msc += $good:burns!
@@ -2817,6 +2822,12 @@ msc += $warning:resists
 
 # For the text that describes ranged attacks and spells
 #msc += $takesaction:
+msc += $takesaction:Jory is infused with unholy energy
+msc += $takesaction:The shambling mangrove reaches out with a gnarled limb
+msc += $takesaction:You jump-attack
+msc += $takesaction:The injured rakshasa weaves a defensive illusion
+msc += $takesaction:Mara seems to draw the.*out of itself
+msc += $takesaction:Mara shimmers
 msc += $takesaction:begins to recite a word of recall
 msc += $takesaction:The curse skull calls on the powers of darkness
 msc += $takesaction:The curse skull rattles its jaw
@@ -2901,6 +2912,8 @@ msc += mute:trembles before you
 
 # Interface Messages
 #msc += $interface:
+msc += $interface:I'll put part of them outside for you
+msc += $interface:You're in a travel-excluded area\, stopping explore
 msc += $interface:There is a passage of Golubria here
 msc += $interface:you can't auto-travel out of here
 msc += $interface:waypoint
