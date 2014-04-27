@@ -29,93 +29,102 @@ end >
 -- Automatically chops valid corpses if we are standing on them and we have no chunks
 -- Will stop autotravel at Near Starving
 -- TODO: better detection of non-edible corpses before standing on them
+-- If you don't have rP you will get stuck on poisonous corpses, chop or otherwise get rid of them to continue
 
 :function safetravel()
 :  local mp, max_mp = you.mp()
 :  local hp, max_hp = you.hp()
 :  local first_monster = next(getMonsterList())
-:  local should_check_for_corpse = true
+:  local should_check_for_corpse = not (no_results() or dont_know_how_to_get_there())
 :  local is_safe = (first_monster == nil)
--- First argument enables/disables debug messages
-:  debugtravel(false, is_safe, should_rest(hp, mp, max_hp, max_mp), you_are_hungry(), you_are_gourmand(), you.hunger_name(), on_corpses(), have_no_chunks(), seen_enemy, no_results())
+:  local missing_mp = (mp < max_mp)
+:  local you_are_sif = string.find(you.god(), "Sif")
+:  local you_are_mummy = string.find(you.race(), "Mummy")
+:  local you_are_sifmummy = you_are_sif and you_are_mummy
+:  local gourmand_and_hungry = you_are_gourmand() and not you_are_engorged()
+:  local you_want_chunks = have_no_chunks() and (you_are_hungry() or gourmand_and_hungry)
+:  if (false) then
+:    crawl.mpr(string.format("is_safe is: %s", is_safe and "True" or "False"))
+:    crawl.mpr(string.format("should_rest is: %s", should_rest(hp, mp, max_hp, max_mp) and "True" or "False"))
+:    crawl.mpr(string.format("hungername is: %s", you.hunger_name()))
+:    crawl.mpr(string.format("you_are_engorged is: %s", you_are_engorged() and "True" or "False"))
+:    crawl.mpr(string.format("you_are_hungry is: %s", you_are_hungry() and "True" or "False"))
+:    crawl.mpr(string.format("you_are_near_starving is: %s", you_are_near_starving() and "True" or "False"))
+:    crawl.mpr(string.format("you_are_carnivore is: %s", you_are_carnivore() and "True" or "False"))
+:    crawl.mpr(string.format("you_are_gourmand is: %s", you_are_gourmand() and "True" or "False"))
+:    crawl.mpr(string.format("have_no_chunks is: %s", have_no_chunks() and "True" or "False"))
+:    crawl.mpr(string.format("on_corpses is: %s", on_corpses() and "True" or "False"))
+:    crawl.mpr(string.format("no_results is: %s", no_results() and "True" or "False"))
+:    crawl.mpr(string.format("dont_know_how_to_get_there is: %s", dont_know_how_to_get_there() and "True" or "False"))
+:    crawl.mpr(string.format("should_check_for_corpse is: %s", should_check_for_corpse and "True" or "False"))
+:    crawl.mpr(string.format("missing_mp is: %s", missing_mp and "True" or "False"))
+:    crawl.mpr(string.format("you_are_sif is: %s", you_are_sif and "True" or "False"))
+:    crawl.mpr(string.format("you_are_sifmummy is: %s", you_are_sifmummy and "True" or "False"))
+:    crawl.mpr(string.format("gourmand_and_hungry is: %s", gourmand_and_hungry and "True" or "False"))
+:    crawl.mpr(string.format("you_want_chunks is: %s", you_want_chunks and "True" or "False"))
+:  end
 :  if (is_safe) then 
-:    if (string.find(you.god(), "Sif") and (mp < max_mp) and (string.find(you.race(), "Mummy") or you_are_full())) then
+:    if (missing_mp and you_are_sifmummy) then
+:      crawl.mpr("<green>Autochanneling.</green>")
 :      sendkeys('aa')
 :    elseif should_rest(hp, mp, max_hp, max_mp) then
 :      rest()
-:    elseif have_no_chunks() and (you_are_hungry() or (you_are_gourmand() and you_are_full())) then 
-:      if on_corpses() then
-:        chop_corpses()
-:      elseif no_results() or dont_know_how_to_get_there() then
---:        crawl.mpr("<lightred>No corpses found, continuing autotravel.</lightred>")
-:        should_check_for_corpse = false
-:        autoexplore()
+:    elseif you_want_chunks and not on_chunks() then 
+:      if on_corpses() then 
+:        if restricted_corpse() then
+:          autoexplore()
+:        else
+:         chop_corpses()
+:        end
+:      elseif you_are_near_starving() then
+:        crawl.mpr("<lightred>You should find something to eat.</lightred>")
 :      elseif should_check_for_corpse then
 :        find_corpses()
 :      else
+:        --Keep looking for things to kill
 :        autoexplore()
 :      end
-:    elseif (string.find(you.hunger_name(), "near starving")) and have_no_chunks() and not on_corpses() then 
-:      if on_corpses() then
-:        chop_corpses()
-:      else
-:        --Forces player interaction at near starving
-:        crawl.mpr("<lightred>You should find something to eat.</lightred>")
-:      end
 :    else
+:      --This does the general travelling
 :      autoexplore()
 :    end
 :  else 
-:    should_check_for_corpse = true
 :    --This will provide the "foo is nearby" message 
 :    autoexplore()
 :  end
 :end
 
-: function debugtravel(isdebug, is_safe, should_rest, you_are_hungry, you_are_gourmand, hungername, on_corpses, have_no_chunks, seen_enemy, no_results)
-:   if (isdebug) then
-:    crawl.mpr(string.format("is_safe is: %s", is_safe and "True" or "False"))
-:    crawl.mpr(string.format("should_rest is: %s", should_rest and "True" or "False"))
-:    crawl.mpr(string.format("you_are_hungry is: %s", you_are_hungry and "True" or "False"))
-:    crawl.mpr(string.format("you_are_gourmand is: %s", you_are_gourmand and "True" or "False"))
-:    crawl.mpr(string.format("hungername is: %s", hungername))
-:    crawl.mpr(string.format("on_corpses is: %s", on_corpses and "True" or "False"))
-:    crawl.mpr(string.format("have_no_chunks is: %s", have_no_chunks and "True" or "False"))
-:    crawl.mpr(string.format("seen_enemy is: %s", seen_enemy and "True" or "False"))
-:    crawl.mpr(string.format("no_results is: %s", no_results and "True" or "False"))
-:   end
-: end
-
 : function should_rest(hp, mp, max_hp, max_mp)
 :   local is_mummy = string.find(you.race(), "Mummy")
-:   return is_mummy or
+:   return is_mummy and
 :          (mp < (max_mp*0.50)) 
 :           or (hp < (max_hp*0.75)) 
 :           or ((max_hp-hp) > 30) 
 :           or ((max_mp-mp) > 20) 
 :           or (you.slowed()) 
 :           or (you.poisoned()) 
+:           or (you.confused())
 :           or (you.exhausted())
 : end
 
+-- Hungry, Very Hungry, Near Starving
 : function you_are_hungry()
-:   return ((string.find(you.hunger_name(), "hungry")) or you_are_near_starving and not you_are_not_hungry())
+:   return not you_are_not_hungry() and ((string.find(you.hunger_name(), "hungry")) or you_are_near_starving())
 : end
 
+-- Normal Satiation
 : function you_are_not_hungry()
 :   return (string.find(you.hunger_name(), "not hungry"))
 : end
 
+-- Engorged
 : function you_are_engorged()
 :   return (string.find(you.hunger_name(), "completely stuffed"))
 : end
 
+-- Near Starving, Starving
 : function you_are_near_starving()
-:   return (string.find(you.hunger_name(), "near starving"))
-: end
-
-: function you_are_full()
-:   return ((string.find(you.hunger_name(), "full")) and not (string.find(you.hunger_name(), "very full")))
+:   return (string.find(you.hunger_name(), "starving"))
 : end
 
 : function autoexplore()
@@ -123,11 +132,12 @@ end >
 : end
 
 : function no_results()
-:   return string.find(crawl.messages(3), escape("Can't find anything matching that"))   
+:   return string.find(crawl.messages(10), escape("Can't find anything matching that"))   
 : end
 
 : function dont_know_how_to_get_there()
-:   return string.find(crawl.messages(3), escape("know how to get there"))   
+:   return string.find(crawl.messages(10), escape("know how to get there"))
+:       or string.find(crawl.messages(10), escape("Have to go through"))
 : end
 
 : function rest()
@@ -136,7 +146,12 @@ end >
 
 : function you_are_gourmand()
 :   local gourmand_race = (you.race() == "Troll" or you.race() == "Kobold" or you.race() == "Felid")
-:   return (gourmand_race or string.find(items.equipped_at("amulet").name(), "gourmand"))
+:   local has_amulet = items.equipped_at("amulet")
+:   local gourmand_amulet = false
+:   if (has_amulet) then
+:     gourmand_amulet = string.find(has_amulet.name(), "gourmand")
+:   end 
+:   return (gourmand_race or gourmand_amulet)
 : end
 
 : function have_no_chunks()
@@ -147,7 +162,7 @@ end >
 :     if it 
 :        and string.find(it.name(),"chunk") 
 :        and not food.dangerous(it) 
-:        and (not food.rotting(it)) then
+:        and (you_are_carnivore() or food.rotting(it)) then
 :       return false
 :     end
 :   end
@@ -157,9 +172,49 @@ end >
 : function on_corpses()
 :   local fl = you.floor_items()
 :   for it in iter.invent_iterator:new(fl) do
-:     if string.find(it.name(), "corpse")
-:        and not string.find(it.name(), "rotting") 
-:        and not food.dangerous(it) then
+:     if (food.dangerous(it) or food.rotting(it)) and you_are_not_ghoul() then
+:       return false
+:     elseif string.find(it.name(), "corpse") then
+:       return true
+:     end
+:   end
+: end
+
+: function on_chunks()
+:   local fl = you.floor_items()
+:   for it in iter.invent_iterator:new(fl) do
+:     if (food.dangerous(it) or food.rotting(it)) and you_are_not_ghoul() then
+:       return false
+:     elseif string.find(it.name(), "chunk") then
+:       return true
+:     end
+:   end
+: end
+
+: function you_are_carnivore()
+:   return (string.find(you.race(), "ghoul")) or  
+:          (string.find(you.race(), "kobold")) or 
+:          (string.find(you.race(), "ogre")) or 
+:          (string.find(you.race(), "hill orc")) or 
+:          (string.find(you.race(), "felid")) 
+: end
+
+: function you_are_not_ghoul()
+:   return not (string.find(you.race(), "ghoul"))
+: end
+
+: function restricted_corpse()
+:   local fl = you.floor_items()
+:   for it in iter.invent_iterator:new(fl) do
+:     if you_are_not_ghoul() and 
+:       ((string.find(it.name(), "orc") and you.god() =="Beogh")
+:         or string.find(it.name(), "ugly")
+:         or string.find(it.name(), "death")
+:         or string.find(it.name(), "vampire")
+:         or string.find(it.name(), "sky beast")
+:         or string.find(it.name(), "mana viper")
+:         or string.find(it.name(), "shadow")
+:         or string.find(it.name(), "shapeshifter")) then
 :       return true
 :     end
 :   end
@@ -175,7 +230,10 @@ end >
 
 : function find_corpses()
 --:   crawl.mpr("<yellow>You may need something to eat soon, looking for the nearest corpse.</yellow>")
-:   sendkeys(string.char(6) .. "@corpse&&!!rott&&!!skel&&!!ugly&&!!death&&!!vampire&&!!sky beast&&!!mana viper&&!!shapeshift&&!!shadow" .. "\ra\r")
+:   sendkeys(string.char(6) .. "@corpse&&!!rott&&!!skel&&!!sky&&!!vampire" .. "\r")
+:   if (not (no_results() or dont_know_how_to_get_there())) then
+:     sendkeys("a\r")
+:   end
 : end
 
 ##################
@@ -191,38 +249,84 @@ end >
     --"[The] Monster_Name Warning_Message"
     --If the Monster_Name includes a capital letter, the message will be prepended with [The] 
     
+    if you.xl() < 3 then
+      mobwarnings["giant mite"] = "can poison!"
+      mobwarnings["giant cockroach"] = "is fast!"
+      mobwarnings["giant gecko"] = "is fast!"
+      mobwarnings["jackal"] = "is fast!"
+    end
+    if you.xl() < 5 then
+      mobwarnings["adder"] = "is fast and can poison!"
+      mobwarnings["worm"] = "can do moderate damage in melee!"
+      mobwarnings["scorpion"] = "can poison!"
+    end
     if you.xl() < 7 then
-      mobwarnings["jelly"] = "can corrode equipment in melee and has acid branded attacks!"
+      mobwarnings["worker ant"] = "is fast and can poison!"
+      mobwarnings["jelly"] = "can corrode equipment in melee!"
+      mobwarnings["phantom"] = "can blink and does moderate damage in melee!"
+      mobwarnings["mummy"] = "can do moderate damage in melee!"
       mobwarnings["ogre"] = "can do high damage in melee!"
-      mobwarnings["Sigmund"] = "can cast slow, confuse, and go invisible!"
+      mobwarnings["gnoll"] = "can do moderate damage in melee, and throws nets!"
+      mobwarnings["Sigmund"] = "can cast Slow, Confuse, Throw Flame, and go Invisible!"
+      mobwarnings["Eustachio"] = "can summon minor creatures and blink!"
+      mobwarnings["Blork"] = "can cast Haste, Throw Frost, Throw Flame, and go Invisible!"
       mobwarnings["Crazy Yiuf"] = "can hit for high damage!"
-      mobwarnings["Duvessa"] = "can hit for high damage, and goes berserk when Dowan dies!"
-      mobwarnings["Dowan"] = "can haste Duvessa, and will haste and cast Throw Icicle when Duvessa dies!"
+      mobwarnings["Duvessa"] = "can hit for high damage, and goes Berserk when Dowan dies!"
+      mobwarnings["Dowan"] = "can Haste Duvessa, and will become Hasted and cast Throw Icicle when Duvessa dies!"
+      mobwarnings["Ijyb"] = "will often zap you with wands!"
+      mobwarnings["orc wizard"] = "might cast slow or confuse!"
+      mobwarnings["big kobold"] = "will probably throw things at you!"
     end
     if you.xl() < 14 then
-      mobwarnings["Prince Ribbit"] = "can hit for high damage in melee!"
-      mobwarnings["spiny frog"] = "can hit for high damage in melee!"
-      mobwarnings["orc wizard"] = "might cast slow or confuse!"
+      mobwarnings["shadow imp"] = "can cast Pain and Animate Dead!"
+      mobwarnings["wight"] = "can drain you in melee!"
+      mobwarnings["warg"] = "if fast and can hit for moderate damage in melee!"
+      mobwarnings["white imp"] = "can cast Throw Frost and break potions!"
+      mobwarnings["slave"] = "means Pikel is nearby!"
+      mobwarnings["Pikel"] = "can hit for high damage in melee!"
+      mobwarnings["gargoyle"] = "can cast Stone Arrow!"
+      mobwarnings["blink frog"] = "is fast, blinks, and can hit for moderate damage in melee!"
+      mobwarnings["soldier ant"] = "is fast and can poison!"
+      mobwarnings["wolf"] = "is very fast and can hit for moderate damage in melee!"
+      mobwarnings["goliath beetle"] = "can hit for high damage in melee!"
+      mobwarnings["wyvern"] = "is fast and can hit for high damage in melee!"
+      mobwarnings["hippogriff"] = "can hit for high damage in melee!"
+      mobwarnings["small abomination"] = "might be fast and can hit for high damage in melee!"
+      mobwarnings["water moccasin"] = "is fast and can poison!"
+      mobwarnings["queen ant"] = "can berserk other ants!"
+      mobwarnings["gnoll shaman"] = "can heal itself and can heal or Haste other gnolls!"
+      mobwarnings["Prince Ribbit"] = "is fast and can hit for high damage in melee!"
+      mobwarnings["spiny frog"] = "is fast and can hit for high damage in melee!"
+      mobwarnings["killer bee"] = "is very fast, and does poison damage!"
       mobwarnings["orc warrior"] = "can hit for high damage!"
-      mobwarnings["black mamba"] = "can hit for high damage in melee!"
-      mobwarnings["ice beast"] = "has ice branded attacks!"
+      mobwarnings["hill giant"] = "can hit for high damage in melee!"
+      mobwarnings["troll"] = "can hit for high damage in melee, and regenerates quickly!"
+      mobwarnings["black mamba"] = "is very fast and can hit for high damage in melee!"
+      mobwarnings["ice beast"] = "can break potions and do moderate damage in melee!"
       mobwarnings["Grinder"] = "can cast paralyse!"
       mobwarnings["Psyche"] = "might banish you in melee!"
       mobwarnings["two-headed ogre"] = "can do high damage in melee!"
-      mobwarnings["raven"] = "is very fast and can hit for high damage in melee!"
-      mobwarnings["centaur"] = "can hit for high damage at range!"
-      mobwarnings["large slime creature"] = "can hit for high damage in melee!"
-      mobwarnings["raiju"] = "can Lightning Bolt itself at you!"
+      mobwarnings["raven"] = "is very fast and can hit for moderate damage in melee!"
+      mobwarnings["yak"] = "can hit for moderate damage in melee!"
+      mobwarnings["centaur"] = "is fast and can hit for moderate damage at range!"
+      mobwarnings["electric eel"] = "can hit for high damage at range!"
+      mobwarnings["slime creature"] = "can hit for high damage in melee!"
     end
     if you.xl() < 21 then
+      mobwarnings["minotaur"] = "can hit for very high damage!"
+      mobwarnings["wolf spider"] = "is fast andcan hit for high damage in melee!"
+      mobwarnings["Snorg"] = "can berserk!"
+      mobwarnings["manticore"] = "can hit for high damage at range, and impale you with Barbs!"
+      mobwarnings["large abomination"] = "might be fast and can hit for high damage in melee!"
+      mobwarnings["raiju"] = "is fast and can Lightning Bolt itself at you!"
       mobwarnings["harpy"] = "is very fast and can hit for high damage in melee!"
       mobwarnings["bog body"] = "can cast Bolt of Cold and Slow!"
       mobwarnings["anaconda"] = "is very fast and can constrict you!"
       mobwarnings["Kirke"] = "can summon Monstrous Menageries, go invisible, turn you into a pig, and deflects missiles!"
       mobwarnings["thorn lotus"] = "can hit for high damage at range!"
-      mobwarnings["shock serpent"] = "can cast Lightning Bolt and has an electric aura!"
-      mobwarnings["tengu conjurer"] = "can cast Force Lance, IMB, Bolt of Magma, Lightning Bolt, or Venom Bolt!"
-      mobwarnings["tengu warrior"] = "can hit for high damage in melee!"
+      mobwarnings["shock serpent"] = "is fast and can cast Lightning Bolt and has an electric aura!"
+      mobwarnings["tengu conjurer"] = "is fast and can cast Force Lance, IMB, Bolt of Magma, Lightning Bolt, or Venom Bolt!"
+      mobwarnings["tengu warrior"] = "is fast and can hit for high damage in melee!"
       mobwarnings["salamander"] = "can burn your scrolls in melee and at range!"
       mobwarnings["naga warrior"] = "can constrict you and hit for high damage in melee!"
       mobwarnings["naga mage"] = "can cast IMB and Poison Arrow!"
@@ -230,6 +334,7 @@ end >
       mobwarnings["kobold demonologist"] = "can summon minor demons!"
       mobwarnings["death yak"] = "can hit for high damage in melee!"
       mobwarnings["centaur warrior"] = "can hit for high damage at range!"
+      mobwarnings["large slime creature"] = "can hit for high damage in melee!"
       mobwarnings["enormous slime creature"] = "can hit for high damage in melee!"
       mobwarnings["hydra"] = "can hit for high damage in melee!"
       mobwarnings["dire elephant"] = "can hit for high damage in melee!"
@@ -242,27 +347,27 @@ end >
       mobwarnings["Maurice"] = "can steal items, go invisible, and teleport away!"
       mobwarnings["Sonja"] = "will probably banish you in melee!"
       mobwarnings["komodo dragon"] = "can cause sickness in melee!"
-      mobwarnings["purple ugly thing"] = "can cause sickness in melee!"
-      mobwarnings["brown ugly thing"] = "can cause corrosion in melee!"
-      mobwarnings["brown very ugly thing"] = "can cause corrosion in melee!"
-      mobwarnings["red ugly thing"] = "can burn your scrolls in melee!"
-      mobwarnings["tarantella"] = "can cause confusion in melee!"
+      mobwarnings["purple ugly thing"] = "is fast and can cause sickness in melee!"
+      mobwarnings["brown ugly thing"] = "is fast and can cause corrosion in melee!"
+      mobwarnings["brown very ugly thing"] = "is fast and can cause corrosion in melee!"
+      mobwarnings["red ugly thing"] = "is fast and can burn your scrolls in melee!"
+      mobwarnings["tarantella"] = "is fast and can cause confusion in melee!"
       mobwarnings["Erolcha"] = "might cast banishment, paralyse, or LCS!"
     end
     if you.xl() < 27 then 
       mobwarnings["water nymph"] = "can create water, teleport to other water, and Waterstrike you!"
-      mobwarnings["salamander firebrand"] = "will surround you with flame clouds on melee attacks!"
+      mobwarnings["salamander firebrand"] = "is fast and melee attacks will surround you with flame clouds!"
       mobwarnings["eidolon"] = "can cast Bolt of Draining and Fear!"
       mobwarnings["yaktaur"] = "can hit for high damage at range!"
       mobwarnings["Wiglaf"] = "can cast might and haste on himself!"
       mobwarnings["orc warlord"] = "can hit for high damage!"
       mobwarnings["titanic slime creature"] = "can hit for high damage in melee!"
       mobwarnings["Rupert"] = "can paralyse you in fear!"
-      mobwarnings["tengu reaver"] = "may cast Bolt of Magma, Fireball, Lightning Bolt, or Freezing Cloud!"
+      mobwarnings["tengu reaver"] = "is fast and might cast Bolt of Magma, Fireball, Lightning Bolt, or Freezing Cloud!"
       mobwarnings["greater naga"] = "is strong in melee, and can cast poison arrow and IMB!"
       mobwarnings["salamander mystic"] = "can haste allies, and can cast bolt of magma and IMB!"
       mobwarnings["Vashnia"] = "can blink herself and allies away!"
-      mobwarnings["electric golem"] = "has nasty electric attacks!"
+      mobwarnings["electric golem"] = "is fast and has nasty electric attacks!"
       mobwarnings["great orb of eyes"] = "can cast paralyse, disintegrate, slow, confuse, and teleport you!"
       mobwarnings["vampire knight"] = "can cast paralyse!"
       mobwarnings["vampire mage"] = "can Summon Undead and Animate Dead!"
@@ -273,11 +378,11 @@ end >
       mobwarnings["fire dragon"] = "has a nasty fire breath attack!"
       mobwarnings["ice dragon"] = "has a nasty cold breath attack!"
       mobwarnings["storm dragon"] = "has a nasty electric breath attack!"
-      mobwarnings["Aizul"] = "will try to put you to sleep and casts strong poison conjurations!"
+      mobwarnings["Aizul"] = "is very fast and casts Sleep and Poison Arrow!"
       mobwarnings["Louise"] = "can cast banishment!"
-      mobwarnings["purple very ugly thing"] = "can cause rotting in melee!"
-      mobwarnings["red very ugly thing"] = "can cause sticky flames in melee!"
-      mobwarnings["flaming corpse"] = "can cause sticky flames in melee!"
+      mobwarnings["purple very ugly thing"] = "is fast and can cause rotting in melee!"
+      mobwarnings["red very ugly thing"] = "is fast and can cause sticky flames in melee!"
+      mobwarnings["flaming corpse"] = "is fast and can cause sticky flames in melee!"
       mobwarnings["deep troll earth mage"] = "can cast LRD and dig!"
       mobwarnings["wizard"] = "might cast banishment, paralyse, or LCS!"    
       mobwarnings["ogre mage"] = "might cast banishment, paralyse, or LCS!"
@@ -293,23 +398,23 @@ end >
     mobwarnings["phantasmal warrior"] = "can bypass armour and shields, and lowers MR!"
     mobwarnings["fire crab"] = "has a flaming cloud breath attack!"
     mobwarnings["giant eyeball"] = "can paralyse you!"
-    mobwarnings["mana viper"] = "has an antimagic bite!"
+    mobwarnings["mana viper"] = "is fast and has an antimagic bite!"
     mobwarnings["golden eyeball"] = "can confuse you!"
-    mobwarnings["spriggan druid"] = "can awaken trees, and cast might on recalled animals!"
+    mobwarnings["spriggan druid"] = "is very fast and can awaken trees, and cast might on recalled animals!"
     mobwarnings["thorn hunter"] = "can throw a nasty volley of thorns, and create brambles!"
-    mobwarnings["apocalypse crab"] = "has a chaos cloud breath attack!"
+    mobwarnings["apocalypse crab"] = "is fast and has a chaos cloud breath attack!"
     mobwarnings["tentacled monstrosity"] = "has dangerous constriction in melee!"
-    mobwarnings["red wasp"] = "can paralyse, slow, and poison in melee!"
-    mobwarnings["yellow wasp"] = "can paralyse and poison in melee!"
+    mobwarnings["red wasp"] = "is very fast and can paralyse, slow, and poison in melee!"
+    mobwarnings["yellow wasp"] = "is very fast and can paralyse and poison in melee!"
     mobwarnings["air mage"] = "can cast airstrike!"
     mobwarnings["titan"] = "can cast airstrike!"
-    mobwarnings["jumping spider"] = "can ensnare you in webs!"
+    mobwarnings["jumping spider"] = "is fast and can ensnare you in webs!"
     mobwarnings["Arachne"] = "can ensnare you in her webs!"
     mobwarnings["blizzard demon"] = "can cast airstrike!"
     mobwarnings["wind drake"] = "can cast airstrike!"
     mobwarnings["Gastronok"] = "can cast airstrike!"
-    mobwarnings["Enchantress"] = "can cast Dimension Anchor, Slow, Haste, Mass Confusion, and Strip Resistance!"
-    mobwarnings["Sojobo"] = "can cast airstrike!"
+    mobwarnings["Enchantress"] = "is very fast and can cast Dimension Anchor, Slow, Haste, Mass Confusion, and Strip Resistance!"
+    mobwarnings["Sojobo"] = "is fast and can cast airstrike!"
     mobwarnings["deep elf demonologist"] = "can cast banishment or summon Greater Demons!"
     mobwarnings["draconian caller"] = "can summon Dragons and Death Drakes!"
     mobwarnings["draconian annihilator"] = "can cast Lehudib's Crystal Spear or Iron Shot!"
@@ -318,8 +423,8 @@ end >
     mobwarnings["blood saint"] = "can cast LCS and other Legendary Destruction!"
     mobwarnings["black sun"] = "can give allies a dangerous black mark which gives melee effects!"
     mobwarnings["corrupter"] = "can summon allies from various branches!"
-    mobwarnings["moth of wrath"] = "can enrage both enemies and you!"
-    mobwarnings["orb spider"] = "can cast Orb of Destruction!"
+    mobwarnings["moth of wrath"] = "is fast and can enrage both enemies and you!"
+    mobwarnings["orb spider"] = "is fast and can cast Orb of Destruction!"
     mobwarnings["deep troll shaman"] = "can cast haste and might on allies!"
     mobwarnings["warmonger"] = "can sap your magic and summon a grand avatar!"
     mobwarnings["chaos champion"] = "can dispel or entrap you, or other chaos effects!"
@@ -594,8 +699,8 @@ autofight_fire_stop = true
 fire_order  = launcher, return
 fire_order += large rock, javelin, tomahawk, dart, stone
 
-# Prevent me from tab-fighting to death below 75% HP
-autofight_stop = 75
+# Prevent me from tab-fighting to death by keeping this high
+autofight_stop = 60
 
 # Enables automagic attacks
 automagic_enable = false
@@ -633,7 +738,7 @@ autopickup += $?!:"/%}\|
 {
 add_autopickup_func(function(item, name)
 	if item.class(true) == "armour" then	
-		local good_slots = {cloak="Cloak", helmet="Helmet", gloves="Gloves", boots="Boots"}
+		local good_slots = {cloak="Cloak", helmet="Helmet", gloves="Gloves", boots="Boots", shield="Shield"}
 		sub_type, _ = item.subtype()
     current_item = items.equipped_at(good_slots[sub_type])
     
@@ -966,9 +1071,9 @@ more += (The|Your).*falls away!
 more += acid corrodes
 more += catch(es)? fire
 more += freezes? and shatters?
-more += can cast banishment
-more += can cast paralyse
-more += can cast Torment
+more += cast banishment
+more += cast paralyse
+more += cast Torment
 more += MASSIVE DAMAGE
 more += Your body shudders with the violent release of wild energies
 more += is duplicated
@@ -1378,6 +1483,7 @@ msc =
 msc += white:You feel blessed for a moment
 
 #msc += $danger:
+msc += $danger:You are contaminated with residual magics
 msc += $danger:is duplicated
 msc += $danger:You sense a malign presence
 msc += $danger:The deck only has
@@ -1465,7 +1571,7 @@ msc += $danger:The mark upon you grows brighter.
 msc += $danger:flickers (and vanishes|out of sight)
 msc += $danger:Terrible wounds (open|spread)
 msc += $danger:The acid burns
-msc += $danger:The.*is recalled.
+msc += $danger:The.*is recalled
 msc += $danger:The.*blows on a signal horn!
 msc += $danger:You miscast
 msc += $danger:zaps a wand
@@ -1660,6 +1766,7 @@ msc += $danger:You feel less (heat|cold) resistant
 msc += $danger:You feel vulnerable to (heat|cold)
 msc += $danger:You feel less resistant to poisons
 msc += $danger:You no longer feel resistant to poison
+msc += $danger:picks up.*throwing net
 
 #msc += $item_dmg:
 msc += $item_dmg:acid corrodes
@@ -1690,6 +1797,7 @@ msc += $item_dmg:You hear a zap
 msc += $item_dmg:reads a scroll
 
 #msc += $warning:
+msc += $warning:You stop recalling your allies
 msc += $warning:You feel a little guilty
 msc += $warning:snaps.*out of.*fear
 msc += $warning:Your stasis keeps you stable
@@ -1826,7 +1934,7 @@ msc += $warning:The crackling of melting ice is subsiding rapidly
 msc += $warning:seems to gain new vigour
 msc += $warning:You feel strangely stable
 msc += $warning:(recites|explains|preaches|embarks|launches|threatens|murmurs|breathes|mutters|prattles)
-msc += $warning:(shout|hisses|gurgles|screeches|barks|cheers|buzzes|grunts|makes a sound|complains)
+msc += $warning:(shout|hisses|gurgles|screeches|barks|cheers|buzzes|grunts|makes a sound|complains|giggles)
 msc += $warning:(shriek|roars|says|moans|brags|keens|mumbles|wails|croak|screams|chants|Floosh|trumpets)
 msc += $warning:(gibbers|growls|whisper|wail|asks|sighs|laughs|yells|cries|caws|queries|sneers|groans|grumbles)
 msc += $warning:(jeers|bellows|chilling moan|scowls|sings|whimpers|cackles|mewls|snorts|grits|snarls|calls)
@@ -1845,7 +1953,7 @@ msc += $warning:[^un]wields
 msc += $warning:There is a portal leading out of here
 msc += $warning:Natasha's spirit plunges in to the ground
 msc += $warning:Natasha's spirit rises from its lifeless body
-msc += $warning:The.*wears
+msc += $warning:wears
 msc += $warning:You are.*contaminated
 msc += $warning:blinks
 msc += $warning:You are starting to lose your buoyancy
@@ -2096,7 +2204,7 @@ msc += $warning:You feel a terrible foreboding
 msc += $warning:You will not leave this place
 msc += $warning:wrenching scream
 msc += $warning:Leave now/, before it is too late
-msc += $warning:picks up a throwing net
+msc += $warning:picks up
 msc += $warning:Nothing appears to happen
 msc += $warning:The dead are
 msc += $warning:The boulder beetle hits a closed door
@@ -2196,8 +2304,14 @@ msc += $warning:You create some ball lightning
 msc += $warning:dances into the air
 msc += $warning:appears
 msc += $warning:Your divine protection wanes
+msc += $warning:The sheep \"Baaaas\" balefully
 
 #msc += $boring:
+msc += $boring:Everything looks hazy for a moment
+msc += $boring:There is a strange surge of energy around
+msc += $boring:orc priest shimmers for a moment
+msc += $boring:orc priest's eyes start to glow
+msc += $boring:The weapon returns to your
 msc += $boring:Your bandages flutter
 msc += $boring:The water in the fountain briefly bubbles
 msc += $boring:The bush looks momentarily different
@@ -2283,7 +2397,6 @@ msc += $boring:The white imp grinds its teeth
 msc += $boring:Your.*imp grins impishly at you
 msc += $boring:Your hooves feel warm
 msc += $boring:Your.*jumps up and down with excitement
-msc += $boring:A monocle briefly appears over your left eye
 msc += $boring:Strange appendages sprout from
 msc += $boring:Suppurating sores blossom under
 msc += $boring:That beef jerky was jerk
@@ -2478,7 +2591,7 @@ msc += $boring:Your summoned ally is left behind
 msc += $boring:That felt strangely unrewarding
 msc += $boring:The air around you crackles with energy
 msc += $boring:in your inventory have.*rotted away
-msc += $boring:(drops|picks up|unwields)
+msc += $boring:(drops|unwields)
 msc += $boring:The battlesphere dissipates
 msc += $boring:(The|Your?).*(passes|pick your way) through a web
 msc += $boring:passes through a web
@@ -2565,13 +2678,14 @@ msc += $boring:You sense an ancient evil watching you
 msc += $boring:Your.*(looks|smiles) at you
 msc += $boring:You experience a momentary feeling of inescapable doom
 msc += $boring:Something in your inventory has become rotten
+msc += $boring:There is something rotten in your inventory
 msc += $boring:assumes a wrestling stance
 msc += $boring:feints to the
 msc += $boring:Purgy looks around nervously
 msc += $boring:You smell pepper
 msc += $boring:You feel faint for a moment
 msc += $boring:You suddenly feel all small and vulnerable
-msc += $boring:Your.*takes off
+msc += $boring:takes off
 msc += $boring:There is a rock-blocked tunnel here
 msc += $boring:The bat flutters around in erratic circles
 msc += $boring:You swing at nothing
@@ -2663,6 +2777,7 @@ msc += $good:is burned by acid
 
 # Non-damage combat messages
 #msc += $positive:
+msc += $positive:You feel a sudden desire to slay dragons
 msc += $positive:You feel weakened for a moment
 msc += $positive:Your stone body feels more resilient
 msc += $positive:You feel less vulnerable to hostile enchantments
@@ -2671,7 +2786,7 @@ msc += $positive:You feel very comfortable in the air
 msc += $positive:The air around you leaps into flame
 msc += $positive:is knocked back by the great wave of water
 msc += $positive:Your.*wounds heal themselves
-msc += $positive:Your.*is recalled
+msc += $positive:is recalled
 msc += $positive:You renew your shroud
 msc += $positive:One of your tentacles grows a vicious spike
 msc += $positive:A mana viper appears with a sibilant hiss
@@ -2720,7 +2835,7 @@ msc += $positive:flinches away
 msc += $positive:The.*is (repelled|deflected)
 msc += $positive:Your.*is no longer paralysed.
 msc += $positive:Your.*seems less confused
-msc += $positive:Your magical contamination has.*faded
+msc += $positive:You feel less contaminated with magical energies
 msc += $positive:Your.*breaks free
 msc += $positive:You feel momentarily confused
 msc += $positive:That potion was really gluggy
@@ -2807,7 +2922,6 @@ msc ^= $positive:Your.*(unaffected|resist[^a]|resists)
 msc += $positive:The flame cauterises the wound
 msc += $positive:You hack the.*last head off
 msc += $positive:You carefully extract the manticore spikes from your body
-msc += $positive:You feel a craving for the dungeon's cuisine
 msc += $positive:You melt the 
 msc += $positive:has finally been put to rest
 msc += $positive:begins to bleed from.*wounds
@@ -2902,6 +3016,7 @@ msc += $verypositive:is incinerated
 msc += $verypositive:is devoured by a tear in reality
 msc += $verypositive:turns neutral
 msc += $verypositive:The spatial vortex dissipates
+msc += $verypositive:Your magical contamination has.*faded
 msc += $verypositive:drowns
 msc += $verypositive:The.*falls from the air
 msc += $verypositive:The.*simulacrum vapourises
@@ -3066,6 +3181,7 @@ msc += $awesome:Your throat feels hot
 msc += $awesome:Your teeth grow very long and razor-sharp
 
 # Other rare and awesome stuff
+msc += $awesome:A monocle briefly appears
 msc += $awesome:You feel an empty sense of dread
 msc += $awesome:That felt like a moral victory
 msc += $awesome:A shaft materialises beneath you
@@ -3127,6 +3243,7 @@ msc += $awesome:You are wearing\:
 msc += $awesome:With a loud hiss the gate opens wide
 msc += $awesome:The shadows inhabiting this place fade forever
 msc += $awesome:You have identified the last
+msc += $awesome:You feel a craving for the dungeon's cuisine
 
 # Weapon brands/enchantment
 msc ^= $awesome:A searing pain shoots up your 
@@ -3251,6 +3368,7 @@ msc += $warning:resists
 
 # For the text that describes ranged attacks and spells
 #msc += $takesaction:
+msc += $takesaction:You begin recalling your allies
 msc += $takesaction:You begin to radiate toxic energy
 msc += $takesaction:The wretched star glows turbulently
 msc += $takesaction:You begin to meditate on the wall
@@ -3408,6 +3526,7 @@ msc ^= $godaction:\"You have grown too confident for your meagre worth\.\"
 msc ^= $godaction:\"Take this token of my esteem\.\"
 msc ^= $godaction:\"Take this instrument of something!\"
 msc ^= $godaction:\"See what I see\, my child!\"
+msc ^= $godaction:\"What!\? Thats's it\?!\"
 msc ^= $godaction:\"Serve the (mortal|toy)\, my (child|children)!\"
 msc ^= $godaction:Let\'s see if it\'s strong enough to survive yet
 --These don't seem to work, maybe a bug?
