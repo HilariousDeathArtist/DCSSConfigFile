@@ -36,7 +36,7 @@ Adds a function called SafeTravel which is intended as a replacement for autoexp
 * Will stop autotravel at Near Starving, forcing player interaction before Starving.
 
 ## Autofight 
-Features include throwing items, and stopping autofight at 75% health
+Features include throwing items, and stopping autofight at 60% health
 
 ## Autopickup 
 Currently overly greedy and includes many items
