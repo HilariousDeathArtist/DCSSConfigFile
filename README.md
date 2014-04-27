@@ -26,6 +26,15 @@ Adds a function which writes a message at the end of turn announcing changes in 
 * Features various color levels based on amount of current hp/mp and whether you gain or lose health.
 * Currently doesn't alert when you gain 1 hp or mp to reduce span
 
+## SafeTravel
+Adds a function called SafeTravel which is intended as a replacement for autoexplore
+* You must create a macro with the command '===safetravel' to use this feature
+* Rests up to at least 75% hp (or missing at least 30hp) and 50% mp (or missing at least 20mp)
+* Travels to the nearest corpse if we have no chunks and are at Very Hungry or Hungry or using Gourmand and not Engorged
+* Automatically chops valid corpses if we are standing on them and we have no chunks 
+** This still has issues with poisonous corpses, you must either chop or pray them away
+* Will stop autotravel at Near Starving, forcing player interaction before Starving.
+
 ## Autofight 
 Features include throwing items, and stopping autofight at 75% health
 
