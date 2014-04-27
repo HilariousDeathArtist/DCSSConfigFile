@@ -35,17 +35,17 @@ Adds a function called SafeTravel which is intended as a replacement for autoexp
 ** This still has issues with poisonous corpses, you must either chop or pray them away
 * Will stop autotravel at Near Starving, forcing player interaction before Starving.
 
-## Autofight 
+## Auto Fight 
 Features include throwing items, and stopping autofight at 60% health
 
-## Autopickup 
+## Auto Pickup 
 Currently overly greedy and includes many items
 * Useful features include autopickup secondary armour when you have none, autopickup artifacts
 
 ## Spell Slots 
 Defines which letters to assign spells to when memorizing
 
-## Autoexlude 
+## Auto Exclude 
 Adds an exlusion to dangerous monsters and uniques when you happen upon them unaware
 
 ## Autotravel 
@@ -63,7 +63,7 @@ Forces you to hit enter when any of a huge number of messages occur.
 * Prompts when dangerous or unique monsters come into view or use very dangerous abilities
 
 ## Interface 
-Changes include easy butchering, hp/mp text coloring, smaller force-more messages, and changes the turn display to player turns
+Changes include easy butchering, hp/mp text coloring, smaller force-more messages, opens skill menu on turn 1, and changes the turn display to player turns
 
 ## Message coloring 
 A huge overhaul of message text colors based on message contents
