@@ -1,4 +1,3 @@
-# TEAMCAPTAIN MoogleDan
 # Got suggestions/improvements?
 # https://github.com/HilariousDeathArtist/DCSSConfigFile
 # or find me on crawl.s-z.org
@@ -71,12 +70,8 @@ end >
 :      rest()
 :    elseif you_want_chunks and not on_chunks() then 
 :      if on_corpses() then 
-:        if restricted_corpse() then
-:          autoexplore()
-:        else
 :         chop_corpses()
-:        end
-:      elseif you_are_near_starving() then
+:      elseif you_are_near_starving()then
 :        crawl.mpr("<lightred>You should find something to eat.</lightred>")
 :      elseif should_check_for_corpse then
 :        find_corpses()
@@ -145,24 +140,12 @@ end >
 : end
 
 : function you_are_gourmand()
-:   local gourmand_race = (you.race() == "Troll" or you.race() == "Kobold" or you.race() == "Felid")
-:   local has_amulet = items.equipped_at("amulet")
-:   local gourmand_amulet = false
-:   if (has_amulet) then
-:     gourmand_amulet = string.find(has_amulet.name(), "gourmand")
-:   end 
-:   return (gourmand_race or gourmand_amulet)
+:   return you.gourmand()
 : end
 
 : function have_no_chunks()
-:   local i
-:   local it
-:   for i = 0,51 do
-:     it = items.inslot(i)
-:     if it 
-:        and string.find(it.name(),"chunk") 
-:        and not food.dangerous(it) 
-:        and (you_are_carnivore() or food.rotting(it)) then
+:   for it in inventory() do
+:     if food.ischunk(it) and food.can_eat(it) then
 :       return false
 :     end
 :   end
@@ -170,55 +153,31 @@ end >
 : end
 
 : function on_corpses()
-:   local fl = you.floor_items()
-:   for it in iter.invent_iterator:new(fl) do
-:     if (food.dangerous(it) or food.rotting(it)) and you_are_not_ghoul() then
-:       return false
-:     elseif string.find(it.name(), "corpse") then
+:   for it in floor_items() do
+:     if string.find(it.name(), "corpse") then
 :       return true
+:     else
+:       return false
 :     end
 :   end
 : end
 
 : function on_chunks()
-:   local fl = you.floor_items()
-:   for it in iter.invent_iterator:new(fl) do
-:     if (food.dangerous(it) or food.rotting(it)) and you_are_not_ghoul() then
-:       return false
-:     elseif string.find(it.name(), "chunk") then
+:   for it in floor_items() do
+:     if food.ischunk(it) and food.can_eat(it) then
 :       return true
+:     else
+:       return false
 :     end
 :   end
 : end
 
 : function you_are_carnivore()
-:   return (string.find(you.race(), "ghoul")) or  
-:          (string.find(you.race(), "kobold")) or 
-:          (string.find(you.race(), "ogre")) or 
-:          (string.find(you.race(), "hill orc")) or 
-:          (string.find(you.race(), "felid")) 
+:   return you.saprovorous()
 : end
 
 : function you_are_not_ghoul()
 :   return not (string.find(you.race(), "ghoul"))
-: end
-
-: function restricted_corpse()
-:   local fl = you.floor_items()
-:   for it in iter.invent_iterator:new(fl) do
-:     if you_are_not_ghoul() and 
-:       ((string.find(it.name(), "orc") and you.god() =="Beogh")
-:         or string.find(it.name(), "ugly")
-:         or string.find(it.name(), "death")
-:         or string.find(it.name(), "vampire")
-:         or string.find(it.name(), "sky beast")
-:         or string.find(it.name(), "mana viper")
-:         or string.find(it.name(), "shadow")
-:         or string.find(it.name(), "shapeshifter")) then
-:       return true
-:     end
-:   end
-:   return false
 : end
 
 : function chop_corpses()
@@ -236,6 +195,14 @@ end >
 :   end
 : end
 
+: function inventory()
+:   return iter.invent_iterator:new(items.inventory())
+: end
+
+: function floor_items()
+:   return iter.invent_iterator:new(you.floor_items())
+: end
+
 ##################
 # Mob Warnings   #
 # orig. ScarletJ #
@@ -249,154 +216,562 @@ end >
     --"[The] Monster_Name Warning_Message"
     --If the Monster_Name includes a capital letter, the message will be prepended with [The] 
     
-    if you.xl() < 3 then
-      mobwarnings["giant mite"] = "can poison!"
+    local xl = you.xl()
+    local no_rP = you.res_poison() == 0
+    local no_rF = you.res_fire() == 0
+    local no_rC = you.res_cold() == 0
+    local no_rN = you.res_draining() == 0
+    local no_rE = not you.res_shock()
+    local no_Cons = not you.conservation()
+    local no_Sustab = you.res_statdrain() == 0
+    local no_rMut = not you.res_mutation()
+    local you_are_flying = not you.flying()
+    local no_see_invis = not you.see_invisible()
+    local no_rCorr = not you.res_corr()
+    
+    --crawl.mpr(string.format("you.conservation() is: %s", you.conservation() and "True" or "False"))
+    --crawl.mpr(string.format("no_Cons is: %s", no_Cons and "True" or "False"))
+
+    if xl < 3 then
+      if no_rP then
+        mobwarnings["giant mite"] = "can poison!"
+      end
+     
+      mobwarnings["ball python"] = "can constrict!"
       mobwarnings["giant cockroach"] = "is fast!"
       mobwarnings["giant gecko"] = "is fast!"
       mobwarnings["jackal"] = "is fast!"
     end
-    if you.xl() < 5 then
-      mobwarnings["adder"] = "is fast and can poison!"
-      mobwarnings["worm"] = "can do moderate damage in melee!"
-      mobwarnings["scorpion"] = "can poison!"
+    
+    if xl < 5 then
+      if no_rP then
+        mobwarnings["adder"] = "is fast and can poison!"
+        mobwarnings["scorpion"] = "can poison!"
+      end
+      
+      mobwarnings["worm"] = "can hit for moderate damage in melee!"
     end
-    if you.xl() < 7 then
-      mobwarnings["worker ant"] = "is fast and can poison!"
-      mobwarnings["jelly"] = "can corrode equipment in melee!"
-      mobwarnings["phantom"] = "can blink and does moderate damage in melee!"
-      mobwarnings["mummy"] = "can do moderate damage in melee!"
-      mobwarnings["ogre"] = "can do high damage in melee!"
-      mobwarnings["gnoll"] = "can do moderate damage in melee, and throws nets!"
-      mobwarnings["Sigmund"] = "can cast Slow, Confuse, Throw Flame, and go Invisible!"
+    
+    if xl < 7 then
+      if no_rP then
+        mobwarnings["worker ant"] = "is fast and can poison!"
+      end
+      if no_see_invis then
+        if no_rP then
+          mobwarnings["Natasha"] = "can cast Slow, Mephitic Cloud, Call Imp, and go Invisible!"
+        else
+          mobwarnings["Natasha"] = "can cast Slow, Call Imp, and go Invisible!"
+        end
+        if no_Cons then
+          if no_rF and no_rC then
+            mobwarnings["Sigmund"] = "can cast Slow, Confuse, Throw Flame, go Invisible, and burn your scrolls!"
+            mobwarnings["Blork"] = "can cast Haste, Throw Frost, Throw Flame, go Invisible, break your potions, and burn your scrolls!"
+            mobwarnings["orc wizard"] = "might cast Slow, Confuse, Throw Flame, Throw Frost, go Invisible, break your potions, or burn your scrolls!"
+          elseif no_rF then
+            mobwarnings["Sigmund"] = "can cast Slow, Confuse, Throw Flame, go Invisible, and burn your scrolls!"
+            mobwarnings["Blork"] = "can cast Haste, Throw Flame, go Invisible, break your potions, and burn your scrolls!"
+            mobwarnings["orc wizard"] = "might cast Slow, Confuse, Throw Flame, go Invisible, break your potions, or burn your scrolls!"
+          elseif no_rC then
+            mobwarnings["Sigmund"] = "can cast Slow, Confuse, go Invisible, and burn your scrolls!"
+            mobwarnings["Blork"] = "can cast Haste, Throw Frost, go Invisible, break your potions, and burn your scrolls!"
+            mobwarnings["orc wizard"] = "might cast Slow, Confuse, Throw Frost, go Invisible, break your potions, or burn your scrolls!"
+          else
+            mobwarnings["Sigmund"] = "can cast Slow, Confuse, Throw Flame, go Invisible, and burn your scrolls!"
+            mobwarnings["Blork"] = "can cast Haste, Throw Flame, go Invisible, break your potions, and burn your scrolls!"
+            mobwarnings["orc wizard"] = "might cast Slow, Confuse, Throw Flame, go Invisible, break your potions, or burn your scrolls!"
+          end
+        else
+          if no_rF and no_rC then
+            mobwarnings["Sigmund"] = "can cast Slow, Confuse, Throw Flame, and go Invisible!"
+            mobwarnings["Blork"] = "can cast Haste, Throw Frost, Throw Flame, and go Invisible!"
+            mobwarnings["orc wizard"] = "might cast Slow, Confuse, Throw Flame, Throw Frost, or go Invisible!"
+          elseif no_rF then
+            mobwarnings["Sigmund"] = "can cast Slow, Confuse, Throw Flame, and go Invisible!"
+            mobwarnings["Blork"] = "can cast Haste, Throw Flame, and go Invisible!"
+            mobwarnings["orc wizard"] = "might cast Slow, Confuse, Throw Flame, or go Invisible!"
+          elseif no_rC then
+            mobwarnings["Sigmund"] = "can cast Slow, Confuse, and go Invisible!"
+            mobwarnings["Blork"] = "can cast Haste, Throw Frost, and go Invisible!"
+            mobwarnings["orc wizard"] = "might cast Slow, Confuse, Throw Frost, or go Invisible!"
+          else
+            mobwarnings["Sigmund"] = "can cast Slow, Confuse, and go Invisible!"
+            mobwarnings["Blork"] = "can cast Haste and go Invisible!"
+            mobwarnings["orc wizard"] = "might cast Slow, Confuse, or go Invisible!"
+          end
+        end
+      else
+        if no_rP then
+          mobwarnings["Natasha"] = "can cast Slow, Mephitic Cloud, and Call Imp!"
+        else
+          mobwarnings["Natasha"] = "can cast Slow and Call Imp!"
+        end
+        if no_Cons then
+          if no_rF and no_rC then
+            mobwarnings["Sigmund"] = "can cast Slow, Confuse, Throw Flame, and burn your scrolls!"
+            mobwarnings["Blork"] = "can cast Haste, Throw Frost, Throw Flame, break your potions, and burn your scrolls!"
+            mobwarnings["orc wizard"] = "might cast Slow, Confuse, Throw Flame, Throw Frost, break your potions, or burn your scrolls!"
+          elseif no_rF then
+            mobwarnings["Sigmund"] = "can cast Slow, Confuse, Throw Flame, and burn your scrolls!"
+            mobwarnings["Blork"] = "can cast Haste, Throw Flame, break your potions, and burn your scrolls!"
+            mobwarnings["orc wizard"] = "might cast Slow, Confuse, Throw Flame, break your potions, or burn your scrolls!"
+          elseif no_rC then
+            mobwarnings["Sigmund"] = "can cast Slow, Confuse, and burn your scrolls!"
+            mobwarnings["Blork"] = "can cast Haste, Throw Frost, break your potions, and burn your scrolls!"
+            mobwarnings["orc wizard"] = "might cast Slow, Confuse, Throw Frost, break your potions, or burn your scrolls!"
+          else
+            mobwarnings["Sigmund"] = "can cast Slow, Confuse, Throw Flame, and burn your scrolls!"
+            mobwarnings["Blork"] = "can cast Haste, Throw Flame, break your potions, and burn your scrolls!"
+            mobwarnings["orc wizard"] = "might cast Slow, Confuse, Throw Flame, break your potions, or burn your scrolls!"
+          end
+        else
+          if no_rF and no_rC then
+            mobwarnings["Sigmund"] = "can cast Slow, Confuse, and Throw Flame!"
+            mobwarnings["Blork"] = "can cast Haste, Throw Frost, and Throw Flame!"
+            mobwarnings["orc wizard"] = "might cast Slow, Confuse, Throw Flame, or Throw Frost!"
+          elseif no_rF then
+            mobwarnings["Sigmund"] = "can cast Slow, Confuse, and Throw Flame!"
+            mobwarnings["Blork"] = "can cast Haste, and Throw Flame!"
+            mobwarnings["orc wizard"] = "might cast Slow, Confuse, or Throw Flame!"
+          elseif no_rC then
+            mobwarnings["Sigmund"] = "can cast Slow and Confuse!"
+            mobwarnings["Blork"] = "can cast Haste and Throw Frost!"
+            mobwarnings["orc wizard"] = "might cast Slow, Confuse, or Throw Frost!"
+          else
+            mobwarnings["Sigmund"] = "can cast Slow and Confuse!"
+            mobwarnings["Blork"] = "can cast Haste!"
+            mobwarnings["orc wizard"] = "might cast Slow or Confuse!"
+          end
+        end
+      end
+    
+      mobwarnings["phantom"] = "can hit for moderate damage in melee and blinks!"
+      mobwarnings["mummy"] = "can hit for moderate damage in melee!"
+      mobwarnings["ogre"] = "can hit for high damage in melee!"
+      mobwarnings["gnoll"] = "can hit for moderate damage in melee, and throws nets!"
       mobwarnings["Eustachio"] = "can summon minor creatures and blink!"
-      mobwarnings["Blork"] = "can cast Haste, Throw Frost, Throw Flame, and go Invisible!"
       mobwarnings["Crazy Yiuf"] = "can hit for high damage!"
-      mobwarnings["Duvessa"] = "can hit for high damage, and goes Berserk when Dowan dies!"
+      mobwarnings["Duvessa"] = "can hit for moderate damage in melee, and goes Berserk when Dowan dies!"
       mobwarnings["Dowan"] = "can Haste Duvessa, and will become Hasted and cast Throw Icicle when Duvessa dies!"
       mobwarnings["Ijyb"] = "will often zap you with wands!"
-      mobwarnings["orc wizard"] = "might cast slow or confuse!"
       mobwarnings["big kobold"] = "will probably throw things at you!"
     end
-    if you.xl() < 14 then
-      mobwarnings["shadow imp"] = "can cast Pain and Animate Dead!"
-      mobwarnings["wight"] = "can drain you in melee!"
-      mobwarnings["warg"] = "if fast and can hit for moderate damage in melee!"
-      mobwarnings["white imp"] = "can cast Throw Frost and break potions!"
+    
+    if xl < 14 then
+      if no_rN then
+        mobwarnings["wight"] = "can drain you in melee!"
+        mobwarnings["shadow imp"] = "can cast Pain and Animate Dead!"
+        mobwarnings["Grinder"] = "can cast Paralyse and Pain!"
+      else
+        mobwarnings["wight"] = "can hit for moderate damage!"
+        mobwarnings["shadow imp"] = "can Animate Dead!"
+        mobwarnings["Grinder"] = "can cast Paralyse!"
+      end
+      if no_rC then
+        if no_Cons then
+          mobwarnings["white imp"] = "can cast Throw Frost and break your potions!"
+          mobwarnings["ice beast"] = "can hit for moderate damage in melee, and break your potions!"
+          mobwarnings["simulacr"] = "can do high damage in melee and break your potions!"
+        else
+          mobwarnings["white imp"] = "can cast Throw Frost!"
+          mobwarnings["ice beast"] = "can hit for moderate damage in melee!"
+          mobwarnings["simulacr"] = "can do high damage in melee!"
+        end
+      else
+        if no_Cons then
+          mobwarnings["white imp"] = "can break your potions!"
+          mobwarnings["ice beast"] = "can break your potions!"
+          mobwarnings["simulacr"] = "can break your potions!"
+        else
+          mobwarnings["simulacr"] = "can do moderate damage in melee!"
+        end
+      end
+      if no_rF then
+        if no_Cons then
+          mobwarnings["fire drake"] = "can breathe blasts of flame and burn your scrolls!"
+          mobwarnings["steam dragon"] = "breathes balls of steam!"
+          if no_see_invis and no_rP then
+            mobwarnings["Erica"] = "can do moderate fire damage in melee and can cast Venom Bolt, IMB, Confuse, Slow, and go Invisible, teleport away, and burn your scrolls!"
+          elseif no_rP then
+            mobwarnings["Erica"] = "can do moderate fire damage in melee and can cast Venom Bolt, IMB, Confuse, Slow, teleport away, and burn your scrolls!"
+          elseif no_see_invis then
+            mobwarnings["Erica"] = "can do moderate fire damage in melee and can cast IMB, Confuse, Slow, and go Invisible, teleport away, and burn your scrolls!"
+          else
+            mobwarnings["Erica"] = "can do moderate fire damage in melee and can cast IMB, Confuse, Slow, teleport away, and burn your scrolls!"
+          end
+        else
+          mobwarnings["fire drake"] = "can breathe blasts of flame!"
+          mobwarnings["steam dragon"] = "breathes balls of steam!"
+          if no_see_invis and no_rP then
+            mobwarnings["Erica"] = "can do moderate fire damage in melee and can cast Venom Bolt, IMB, Confuse, Slow, and go Invisible, and teleport away!"
+          elseif no_rP then
+            mobwarnings["Erica"] = "can do moderate fire damage in melee and can cast Venom Bolt, IMB, Confuse, Slow, and teleport away!"
+          elseif no_see_invis then
+            mobwarnings["Erica"] = "can do moderate fire damage in melee and can cast IMB, Confuse, Slow, and go Invisible, and teleport away!"
+          else
+            mobwarnings["Erica"] = "can do moderate fire damage in melee and can cast IMB, Confuse, Slow, and teleport away!"
+          end
+        end
+      else
+        if no_Cons then
+          mobwarnings["fire drake"] = "can burn your scrolls!"
+          if no_see_invis and no_rP then
+            mobwarnings["Erica"] = "can cast Venom Bolt, IMB, Confuse, Slow, and go Invisible, teleport away, and burn your scrolls!"
+          elseif no_rP then
+            mobwarnings["Erica"] = "can cast Venom Bolt, IMB, Confuse, Slow, teleport away, and burn your scrolls!"
+          elseif no_see_invis then
+            mobwarnings["Erica"] = "can cast IMB, Confuse, Slow, and go Invisible, teleport away, and burn your scrolls!"
+          else
+            mobwarnings["Erica"] = "can cast IMB, Confuse, Slow, teleport away, and burn your scrolls!"
+          end
+        else
+          mobwarnings["fire drake"] = "can breathe blasts of flame!"
+          if no_see_invis and no_rP then
+            mobwarnings["Erica"] = "can cast Venom Bolt, IMB, Confuse, Slow, and go Invisible, and teleport away!"
+          elseif no_rP then
+            mobwarnings["Erica"] = "can cast Venom Bolt, IMB, Confuse, Slow, and teleport away!"
+          elseif no_see_invis then
+            mobwarnings["Erica"] = "can cast IMB, Confuse, Slow, and go Invisible, and teleport away!"
+          else
+            mobwarnings["Erica"] = "can cast IMB, Confuse, Slow, and teleport away!"
+          end
+        end
+      end
+      if no_rP then
+        mobwarnings["soldier ant"] = "is fast and can poison!"
+        mobwarnings["water moccasin"] = "is fast and can poison!"
+        mobwarnings["killer bee"] = "is very fast and can poison!"
+        mobwarnings["black mamba"] = "is very fast and can hit for high damage in melee, and can poison!"
+        mobwarnings["spiny frog"] = "is fast and can hit for high damage in melee, and can poison!"
+        mobwarnings["queen ant"] = "can berserk other ants, and can poison!"
+        mobwarnings["naga"] = "can constrict and spit poison!"
+        mobwarnings["redback"] = "is fast and can poison!"
+        mobwarnings["swamp drake"] = "breathes Mephitic clouds!"
+      else
+        mobwarnings["soldier ant"] = "is fast!"
+        mobwarnings["redback"] = "is fast!"
+        mobwarnings["water moccasin"] = "is fast!"
+        mobwarnings["killer bee"] = "is very fast!"
+        mobwarnings["black mamba"] = "is very fast and can hit for high damage in melee!"
+        mobwarnings["spiny frog"] = "is fast and can hit for high damage in melee!"
+        mobwarnings["queen ant"] = "can berserk other ants!"
+        mobwarnings["naga"] = "cand constrict!"
+      end
+      if no_rE then
+        mobwarnings["electric eel"] = "can hit for high damage at range!"
+      end
+      if no_rCorr then
+        mobwarnings["jelly"] = "can corrode equipment in melee!"
+      end
+      mobwarnings["warg"] = "is fast and can hit for moderate damage in melee!"
       mobwarnings["slave"] = "means Pikel is nearby!"
       mobwarnings["Pikel"] = "can hit for high damage in melee!"
+      mobwarnings["draconian"] = "can hit for high damage in melee!"
       mobwarnings["gargoyle"] = "can cast Stone Arrow!"
-      mobwarnings["blink frog"] = "is fast, blinks, and can hit for moderate damage in melee!"
-      mobwarnings["soldier ant"] = "is fast and can poison!"
+      mobwarnings["blink frog"] = "is fast, can hit for moderate damage in melee, and blinks!"
       mobwarnings["wolf"] = "is very fast and can hit for moderate damage in melee!"
       mobwarnings["goliath beetle"] = "can hit for high damage in melee!"
       mobwarnings["wyvern"] = "is fast and can hit for high damage in melee!"
       mobwarnings["hippogriff"] = "can hit for high damage in melee!"
       mobwarnings["small abomination"] = "might be fast and can hit for high damage in melee!"
-      mobwarnings["water moccasin"] = "is fast and can poison!"
-      mobwarnings["queen ant"] = "can berserk other ants!"
       mobwarnings["gnoll shaman"] = "can heal itself and can heal or Haste other gnolls!"
       mobwarnings["Prince Ribbit"] = "is fast and can hit for high damage in melee!"
-      mobwarnings["spiny frog"] = "is fast and can hit for high damage in melee!"
-      mobwarnings["killer bee"] = "is very fast, and does poison damage!"
       mobwarnings["orc warrior"] = "can hit for high damage!"
       mobwarnings["hill giant"] = "can hit for high damage in melee!"
       mobwarnings["troll"] = "can hit for high damage in melee, and regenerates quickly!"
-      mobwarnings["black mamba"] = "is very fast and can hit for high damage in melee!"
-      mobwarnings["ice beast"] = "can break potions and do moderate damage in melee!"
-      mobwarnings["Grinder"] = "can cast paralyse!"
       mobwarnings["Psyche"] = "might banish you in melee!"
-      mobwarnings["two-headed ogre"] = "can do high damage in melee!"
+      mobwarnings["two-headed ogre"] = "can hit for high damage in melee!"
       mobwarnings["raven"] = "is very fast and can hit for moderate damage in melee!"
       mobwarnings["yak"] = "can hit for moderate damage in melee!"
       mobwarnings["centaur"] = "is fast and can hit for moderate damage at range!"
-      mobwarnings["electric eel"] = "can hit for high damage at range!"
       mobwarnings["slime creature"] = "can hit for high damage in melee!"
     end
     if you.xl() < 21 then
+      local tenguconjwarn = ""
+      local orcsorcwarn = ""
+      if no_rF then
+        if no_Cons then
+          mobwarnings["deep elf mage"] = "can cast fireball and slow, and burn your scrolls!"
+          mobwarnings["salamander"] = "does fire damage and burn your scrolls!"
+          mobwarnings["efreet"] = "can cast Bolt of Fire, Fireball, and burn your scrolls!"
+          mobwarnings["Harold"] = "can throw nets, cast Bolt of Fire, and burn your scrolls!"
+          mobwarnings["fire giant"] = "can cast Fireball, Bolt of Fire, and burn your scrolls!"
+          mobwarnings["fire dragon"] = "has a nasty fire breath attack and burn your scrolls!"
+          tenguconjwarn = tenguconjwarn  .. ", Bolt of Magma and burn your scrolls"
+          orcsorcwarn = orcsorcwarn .. ", Bolt of Fire and burn your scrolls"
+        else
+          mobwarnings["Harold"] = "can throw nets and cast Bolt of Fire!"
+          mobwarnings["deep elf mage"] = "can cast Fireball and Slow!"
+          mobwarnings["salamander"] = "uses fire branded attacks!"
+          mobwarnings["efreet"] = "can cast Bolt of Fire and Fireball!"
+          mobwarnings["fire giant"] = "can cast Fireball and Bolt of Fire!"
+          mobwarnings["fire dragon"] = "has a nasty fire breath attack!"
+          tenguconjwarn = tenguconjwarn  .. ", Bolt of Magma"
+          orcsorcwarn = orcsorcwarn .. ", Bolt of Fire"
+        end
+      else
+        if no_Cons then
+          mobwarnings["Harold"] = "can throw nets and burn your scrolls!"
+          mobwarnings["deep elf mage"] = "can cast slow and burn your scrolls!"
+          mobwarnings["salamander"] = "can burn your scrolls!"
+          mobwarnings["efreet"] = "can burn your scrolls!"
+          mobwarnings["fire giant"] = "can burn your scrolls!"
+          mobwarnings["fire dragon"] = "can burn your scrolls!"
+        else
+          mobwarnings["Harold"] = "can throw nets!"
+          mobwarnings["deep elf mage"] = "can cast slow!"
+          mobwarnings["fire giant"] = "can do high damage in melee!"
+          mobwarnings["fire dragon"] = "can do high damage in melee!"
+        end
+      end
+      if no_rP then
+        mobwarnings["wolf spider"] = "is fast and can hit for high damage in melee, and can poison!"
+        mobwarnings["naga warrior"] = "can constrict you and hit for high damage in melee, and spits poison!"
+        mobwarnings["naga mage"] = "can cast IMB and Poison Arrow, and spits poison!"
+        mobwarnings["naga ritualist"] = "can give poison vulnerability, and do poison damage over time with toxic radiance!"
+        mobwarnings["komodo dragon"] = "can hit for high damage and cause sickness in melee!"
+        mobwarnings["purple ugly thing"] = "is fast and can cause sickness in melee!"
+        mobwarnings["redback"] = "is fast and can poison!"
+        tenguconjwarn = tenguconjwarn  .. ", Venom Bolt"
+      else
+        mobwarnings["naga warrior"] = "can constrict you and hit for high damage in melee, and spits poison!"
+        mobwarnings["naga mage"] = "can cast IMB and Poison Arrow!"
+        mobwarnings["wolf spider"] = "is fast and can hit for high damage in melee!"
+        mobwarnings["naga ritualist"] = "can remove poison resistance, and do damage over time with toxic radiance!"
+        mobwarnings["komodo dragon"] = "can hit for high damage in melee!"
+        mobwarnings["purple ugly thing"] = "is fast!"
+      end
+      if no_rE then
+        tenguconjwarn = tenguconjwarn  .. ", Lightning Bolt"
+        mobwarnings["raiju"] = "is fast and can Lightning Bolt itself at you!"
+        mobwarnings["shock serpent"] = "is fast and can cast Lightning Bolt and has an electric aura!"
+      else
+        mobwarnings["raiju"] = "is fast and blinks around!"
+        mobwarnings["shock serpent"] = "is fast, and does damage on being hit!"
+      end
+      if no_rC then
+        if no_Cons then
+          mobwarnings["bog body"] = "can cast Slow, Bolt of Cold, and break your potions!"
+          mobwarnings["ice dragon"] = "has a nasty cold breath attack, and break your potions!"
+          mobwarnings["Fannar"] = "can cast Bolt of Cold, Ozo's Refrigeration, Summon Ice Beast, Blink, and break your potions!"
+          mobwarnings["simulacr"] = "can do high damage in melee and break your potions!"
+        else
+          mobwarnings["bog body"] = "can cast Slow and Bolt of Cold!"
+          mobwarnings["ice dragon"] = "has a nasty cold breath attack!"
+          mobwarnings["Fannar"] = "can cast Bolt of Cold, Ozo's Refrigeration, Summon Ice Beast, and Blink!"
+          mobwarnings["simulacr"] = "can do high damage in melee!"
+        end
+      else
+        if no_Cons then
+          mobwarnings["bog body"] = "can cast Slow, and break your potions!"
+          mobwarnings["ice dragon"] = "can do high damage in melee and break your potions!"
+          mobwarnings["Fannar"] = "can Blink, Summon Ice Beasts, and break your potions!"
+          mobwarnings["simulacr"] = "can break your potions!"
+        else
+          mobwarnings["bog body"] = "can cast Slow!"
+          mobwarnings["ice dragon"] = "can do high damage in melee!"
+          mobwarnings["Fannar"] = "can Blink and Summon Ice Beasts!"
+        end
+      end
+      if no_rN then
+        orcsorcwarn = orcsorcwarn .. ", Bolt of Draining"
+        mobwarnings["wraith"] = "can slow you in melee!"
+      end
+      if no_rCorr then
+        mobwarnings["brown ugly thing"] = "is fast and can cause corrosion in melee!"
+        mobwarnings["brown very ugly thing"] = "is fast and can cause corrosion in melee!"
+        mobwarnings["oklob"] = "can corrode equipment at range!"
+      else
+        mobwarnings["brown ugly thing"] = "is fast!"
+        mobwarnings["brown very ugly thing"] = "is fast!"
+      end
+      mobwarnings["tengu conjurer"] = "is fast and can cast Force Lance, IMB, and "..tenguconjwarn.."!"
+      mobwarnings["orc sorcerer"] = "can cast paralyse, Summon Demon, Animate Dead"..orcsorcwarn.."!"
       mobwarnings["minotaur"] = "can hit for very high damage!"
-      mobwarnings["wolf spider"] = "is fast andcan hit for high damage in melee!"
-      mobwarnings["Snorg"] = "can berserk!"
-      mobwarnings["manticore"] = "can hit for high damage at range, and impale you with Barbs!"
+      mobwarnings["Snorg"] = "can berserk and hit for high damage!"
+      mobwarnings["manticore"] = "can hit for high damage at range, and Barbs causes damage when you move!"
       mobwarnings["large abomination"] = "might be fast and can hit for high damage in melee!"
-      mobwarnings["raiju"] = "is fast and can Lightning Bolt itself at you!"
       mobwarnings["harpy"] = "is very fast and can hit for high damage in melee!"
-      mobwarnings["bog body"] = "can cast Bolt of Cold and Slow!"
       mobwarnings["anaconda"] = "is very fast and can constrict you!"
       mobwarnings["Kirke"] = "can summon Monstrous Menageries, go invisible, turn you into a pig, and deflects missiles!"
       mobwarnings["thorn lotus"] = "can hit for high damage at range!"
-      mobwarnings["shock serpent"] = "is fast and can cast Lightning Bolt and has an electric aura!"
-      mobwarnings["tengu conjurer"] = "is fast and can cast Force Lance, IMB, Bolt of Magma, Lightning Bolt, or Venom Bolt!"
       mobwarnings["tengu warrior"] = "is fast and can hit for high damage in melee!"
-      mobwarnings["salamander"] = "can burn your scrolls in melee and at range!"
-      mobwarnings["naga warrior"] = "can constrict you and hit for high damage in melee!"
-      mobwarnings["naga mage"] = "can cast IMB and Poison Arrow!"
-      mobwarnings["naga ritualist"] = "can remove poison resistance, and do damage over time with toxic radiance!"
       mobwarnings["kobold demonologist"] = "can summon minor demons!"
       mobwarnings["death yak"] = "can hit for high damage in melee!"
       mobwarnings["centaur warrior"] = "can hit for high damage at range!"
+      mobwarnings["skeletal warrior "] = "can hit for high damage in melee!"
       mobwarnings["large slime creature"] = "can hit for high damage in melee!"
       mobwarnings["enormous slime creature"] = "can hit for high damage in melee!"
       mobwarnings["hydra"] = "can hit for high damage in melee!"
       mobwarnings["dire elephant"] = "can hit for high damage in melee!"
+      mobwarnings["tarantella"] = "is fast and can cause confusion in melee!"
       mobwarnings["orc knight"] = "can hit for high damage!"
       mobwarnings["naga sharpshooter"] = "can shoot you with portal projectiles!"
-      mobwarnings["orc sorcerer"] = "can cast paralyse!"
-      mobwarnings["wraith"] = "can slow you in melee!"
       mobwarnings["cyclops"] = "can throw large rocks!"
-      mobwarnings["Harold"] = "can throw nets and cast bolt of fire!"
       mobwarnings["Maurice"] = "can steal items, go invisible, and teleport away!"
       mobwarnings["Sonja"] = "will probably banish you in melee!"
-      mobwarnings["komodo dragon"] = "can cause sickness in melee!"
-      mobwarnings["purple ugly thing"] = "is fast and can cause sickness in melee!"
-      mobwarnings["brown ugly thing"] = "is fast and can cause corrosion in melee!"
-      mobwarnings["brown very ugly thing"] = "is fast and can cause corrosion in melee!"
-      mobwarnings["red ugly thing"] = "is fast and can burn your scrolls in melee!"
-      mobwarnings["tarantella"] = "is fast and can cause confusion in melee!"
       mobwarnings["Erolcha"] = "might cast banishment, paralyse, or LCS!"
     end
     if you.xl() < 27 then 
+      local tengureaverwarn = ""
+      if no_rF then
+        if no_Cons then
+          mobwarnings["salamander firebrand"] = "is fast and melee attacks will surround you with flame clouds and burns your scrolls!"
+          mobwarnings["salamander mystic"] = "can haste allies, and casts Bolt of Magma, IMB, and burns your scrolls!"
+          mobwarnings["red very ugly thing"] = "is fast, can cause sticky flames in melee, and burns your scrolls!"
+          mobwarnings["flaming corpse"] = "is fast and can cause sticky flames in melee!"
+          mobwarnings["mottled draconian"] = "can spit sticky flames at range and burns your scrolls!"
+          tengureaverwarn = tengureaverwarn .. ", Bolt of Magma, Fireball, burns your scrolls"
+        else
+          mobwarnings["salamander firebrand"] = "is fast and melee attacks will surround you with flame clouds!"
+          mobwarnings["salamander mystic"] = "can haste allies, and casts Bolt of Magma and IMB!"
+          mobwarnings["red very ugly thing"] = "is fast, can cause sticky flames in melee!"
+          mobwarnings["flaming corpse"] = "is fast, can cause sticky flames in melee!"
+          mobwarnings["mottled draconian"] = "can spit sticky flames at range!"
+          tengureaverwarn = tengureaverwarn .. ", Bolt of Magma, Fireball"
+        end
+      else
+        if no_Cons then
+          mobwarnings["salamander firebrand"] = "is fast and melee attacks will surround you with flame clouds and burns your scrolls!"
+          mobwarnings["salamander mystic"] = "can haste allies, and casts IMB and and burns your scrolls!"
+          mobwarnings["red very ugly thing"] = "is fast, can cause sticky flames in melee, and burns your scrolls!"
+          mobwarnings["flaming corpse"] = "is fast, can cause sticky flames in melee, and burns your scrolls!"
+          mobwarnings["mottled draconian"] = "can spit sticky flames at range, and burns your scrolls!"
+          tengureaverwarn = tengureaverwarn .. "burns your scrolls"
+        else
+          mobwarnings["salamander mystic"] = "can haste allies and casts IMB!"
+          mobwarnings["salamander firebrand"] = "is fast and melee attacks will surround you with flame clouds!"
+          mobwarnings["red very ugly thing"] = "is fast!"
+          mobwarnings["flaming corpse"] = "is fast!"
+        end
+      end
+      if no_rC then
+        if no_Cons then
+          tengureaverwarn = tengureaverwarn .. ", Freezing Cloud, breaks your potions"
+          mobwarnings["frost giant"] = "can cast Bolt of Cold, and breaks your potions!"
+        else
+          tengureaverwarn = tengureaverwarn .. ", Freezing Cloud"
+          mobwarnings["frost giant"] = "can cast Bolt of Cold!"
+        end
+      else
+        if no_Cons then
+          tengureaverwarn = tengureaverwarn .. "breaks your potions"
+          mobwarnings["frost giant"] = "can do high damage in melee and breaks your potions!"
+        else
+          mobwarnings["frost giant"] = "can do high damage in melee!"
+        end
+      end
+      if no_rN then
+        mobwarnings["eidolon"] = "can cast Bolt of Draining and Fear!"
+      else
+        mobwarnings["eidolon"] = "can cast Fear!"
+      end
+      if no_rE then
+        tengureaverwarn = tengureaverwarn .. ", Lightning Bolt"
+        mobwarnings["storm dragon"] = "has a nasty electric breath attack!"
+      else
+        mobwarnings["storm dragon"] = "can do high damage in melee!"
+      end
+      if no_rP then
+        mobwarnings["greater naga"] = "is strong in melee, and casts Venom Bolt, Poison Arrow, IMB, and spits poison!"
+        mobwarnings["Aizul"] = "is very fast and casts Sleep, Poison Arrow, and Venom Bolt!"
+      else
+        mobwarnings["greater naga"] = "is strong in melee, and can cast Poison Arrow and IMB!"
+        mobwarnings["Aizul"] = "is very fast and casts Sleep and Poison Arrow!"
+      end
+      if no_rCorr then
+        mobwarnings["yellow draconian"] = "can corrode your equipment at range!"
+      end
+      
+      mobwarnings["tengu reaver"] = "is fast and casts"..tengureaverwarn.."!"
+      
       mobwarnings["water nymph"] = "can create water, teleport to other water, and Waterstrike you!"
-      mobwarnings["salamander firebrand"] = "is fast and melee attacks will surround you with flame clouds!"
-      mobwarnings["eidolon"] = "can cast Bolt of Draining and Fear!"
       mobwarnings["yaktaur"] = "can hit for high damage at range!"
       mobwarnings["Wiglaf"] = "can cast might and haste on himself!"
       mobwarnings["orc warlord"] = "can hit for high damage!"
       mobwarnings["titanic slime creature"] = "can hit for high damage in melee!"
       mobwarnings["Rupert"] = "can paralyse you in fear!"
-      mobwarnings["tengu reaver"] = "is fast and might cast Bolt of Magma, Fireball, Lightning Bolt, or Freezing Cloud!"
-      mobwarnings["greater naga"] = "is strong in melee, and can cast poison arrow and IMB!"
-      mobwarnings["salamander mystic"] = "can haste allies, and can cast bolt of magma and IMB!"
       mobwarnings["Vashnia"] = "can blink herself and allies away!"
-      mobwarnings["electric golem"] = "is fast and has nasty electric attacks!"
       mobwarnings["great orb of eyes"] = "can cast paralyse, disintegrate, slow, confuse, and teleport you!"
       mobwarnings["vampire knight"] = "can cast paralyse!"
       mobwarnings["vampire mage"] = "can Summon Undead and Animate Dead!"
-      mobwarnings["fire giant"] = "can cast fireball and bolt of fire!"
-      mobwarnings["frost giant"] = "can cast bolt of cold!"
-      mobwarnings["stone giant"] = "can throw large rocks and is a brute in melee!"
-      mobwarnings["ettin"] = "is a beast in melee!"
-      mobwarnings["fire dragon"] = "has a nasty fire breath attack!"
-      mobwarnings["ice dragon"] = "has a nasty cold breath attack!"
-      mobwarnings["storm dragon"] = "has a nasty electric breath attack!"
-      mobwarnings["Aizul"] = "is very fast and casts Sleep and Poison Arrow!"
+      mobwarnings["stone giant"] = "throws large rocks and can do very high damage!"
+      mobwarnings["ettin"] = "can do very high damage in melee!"
       mobwarnings["Louise"] = "can cast banishment!"
       mobwarnings["purple very ugly thing"] = "is fast and can cause rotting in melee!"
-      mobwarnings["red very ugly thing"] = "is fast and can cause sticky flames in melee!"
-      mobwarnings["flaming corpse"] = "is fast and can cause sticky flames in melee!"
       mobwarnings["deep troll earth mage"] = "can cast LRD and dig!"
       mobwarnings["wizard"] = "might cast banishment, paralyse, or LCS!"    
       mobwarnings["ogre mage"] = "might cast banishment, paralyse, or LCS!"
       mobwarnings["purple draconian"] = "can dispel your buffs!"
-      mobwarnings["yellow draconian"] = "can corrode your equipment at range!"
-      mobwarnings["mottled draconian"] = "can spit sticky flames at range!"
       mobwarnings["vault sentinel"] = "can mark you and blow a signal horn!"
       mobwarnings["vault warden"] = "can lockdown doors and staircases!"
       mobwarnings["ironheart preserver"] = "can absorb the damage of its allies and heal itself!"
     end
-    mobwarnings["shadow dragon"] = "has a nasty draining breath attack!"
-    mobwarnings["golden dragon"] = "has multiple nasty breath attacks!"
+    
+    if no_rP then
+      mobwarnings["red wasp"] = "is very fast and can Paralyse and poison in melee!"
+      mobwarnings["yellow wasp"] = "is very fast and can Paralyse, Slow, and poison in melee!"
+    end
+    
+    if no_rF then
+      mobwarnings["fire giant"] = "can cast fireball and bolt of fire!"
+      mobwarnings["fire dragon"] = "has a nasty fire breath attack!"
+      mobwarnings["deep elf mage"] = "can cast fireball and slow!"
+      if no_Cons then
+        mobwarnings["fire crab"] = "has a flaming cloud breath attack!"
+      end
+    end
+    
+    if no_rC then
+      if no_Cons then
+        mobwarnings["fire crab"] = "has a flaming cloud breath attack!"
+      end
+    end
+    
+    if no_rN then
+      mobwarnings["shadow dragon"] = "has a nasty draining breath attack!"
+    end
+    
+    local electricwarning = ""
+    if no_rE then
+      electricwarning = " You are not wearing rElec!"
+    end
+    mobwarnings["electric golem"] = "is fast, has electric attacks, and blinks!" .. electricwarning
+      
+    local statdrainwarning = ""
+    if no_Sustab then
+      statdrainwarning = ", or drain your Int"
+      mobwarnings["brain worm"] = "can drain your Int!"
+    end
+    mobwarnings["Norris"] = "can cast paralyse and smite you"..statdrainwarning.."!"
+    mobwarnings["orange crystal statue"] = "can cast confuse and Shadow Creatures"..statdrainwarning.."!"
+    mobwarnings["neqoxec"] = "can mutate you"..statdrainwarning.."!"
+    mobwarnings["giant orange brain"] = "can cast Shadow Creatures"..statdrainwarning.."!"
+    
+    local mutationwarning = ""
+    if no_rMut then
+      mutationwarning = ", and can mutate you"
+      mobwarnings["cacodemon"] = "can mutate you!"
+      mobwarnings["shining eye"] = "can mutate you!"
+      mobwarnings["pulsating lump"] = "can mutate you in melee!"
+    end
+    mobwarnings["orb of fire"] = "can cast Fireball and Bolt of Fire"..mutationwarning.."!"
+    
+    if (no_rF or no_rP or no_rC or no_rN) then
+      mobwarnings["golden dragon"] = "has multiple nasty breath attacks!"
+    end
+    
+    local flightwarning = ""
+    if you_are_flying then
+      flightwarning = " at you in flight"
+    end
+    mobwarnings["air mage"] = "can cast airstrike"..flightwarning.."!"
+    mobwarnings["titan"] = "can cast airstrike"..flightwarning.."!"
+    mobwarnings["blizzard demon"] = "can cast airstrike"..flightwarning.."!"
+    mobwarnings["wind drake"] = "can cast airstrike"..flightwarning.."!"
+    mobwarnings["Gastronok"] = "can cast airstrike"..flightwarning.."!"
+    mobwarnings["Sojobo"] = "is fast and can cast airstrike"..flightwarning.."!"
+    
     mobwarnings["phantasmal warrior"] = "can bypass armour and shields, and lowers MR!"
-    mobwarnings["fire crab"] = "has a flaming cloud breath attack!"
     mobwarnings["giant eyeball"] = "can paralyse you!"
     mobwarnings["mana viper"] = "is fast and has an antimagic bite!"
     mobwarnings["golden eyeball"] = "can confuse you!"
@@ -404,17 +779,9 @@ end >
     mobwarnings["thorn hunter"] = "can throw a nasty volley of thorns, and create brambles!"
     mobwarnings["apocalypse crab"] = "is fast and has a chaos cloud breath attack!"
     mobwarnings["tentacled monstrosity"] = "has dangerous constriction in melee!"
-    mobwarnings["red wasp"] = "is very fast and can paralyse, slow, and poison in melee!"
-    mobwarnings["yellow wasp"] = "is very fast and can paralyse and poison in melee!"
-    mobwarnings["air mage"] = "can cast airstrike!"
-    mobwarnings["titan"] = "can cast airstrike!"
     mobwarnings["jumping spider"] = "is fast and can ensnare you in webs!"
     mobwarnings["Arachne"] = "can ensnare you in her webs!"
-    mobwarnings["blizzard demon"] = "can cast airstrike!"
-    mobwarnings["wind drake"] = "can cast airstrike!"
-    mobwarnings["Gastronok"] = "can cast airstrike!"
     mobwarnings["Enchantress"] = "is very fast and can cast Dimension Anchor, Slow, Haste, Mass Confusion, and Strip Resistance!"
-    mobwarnings["Sojobo"] = "is fast and can cast airstrike!"
     mobwarnings["deep elf demonologist"] = "can cast banishment or summon Greater Demons!"
     mobwarnings["draconian caller"] = "can summon Dragons and Death Drakes!"
     mobwarnings["draconian annihilator"] = "can cast Lehudib's Crystal Spear or Iron Shot!"
@@ -427,7 +794,7 @@ end >
     mobwarnings["orb spider"] = "is fast and can cast Orb of Destruction!"
     mobwarnings["deep troll shaman"] = "can cast haste and might on allies!"
     mobwarnings["warmonger"] = "can sap your magic and summon a grand avatar!"
-    mobwarnings["chaos champion"] = "can dispel or entrap you, or other chaos effects!"
+    mobwarnings["chaos champion"] = "can dispel buffs, entrap you, and other chaotic effects!"
     mobwarnings["draconian shifter"] = "can block teleports, blink allies encircling you, or cause you to blink!"
     mobwarnings["guardian serpent"] = "can blink allies encircling you!"
     mobwarnings["Roxanne"] = "can cast LCS and Iron Shot at you, or shift your position!"
@@ -436,7 +803,6 @@ end >
     mobwarnings["hellion"] = "can cast smite-targeted Hellfire!"
     mobwarnings["Azrael"] = "can cast smite-targeted Hellfire!"
     mobwarnings["deep elf sorcerer"] = "can cast banishment or line-of-sight Hellfire!"
-    mobwarnings["deep elf mage"] = "can cast fireball and slow!"
     mobwarnings["quicksilver dragon"] = "can dispel your buffs!"
     mobwarnings["ironbrand convoker"] = "can recall allies and cast might on them!"
     mobwarnings["Hell Sentinel"] = "can cast line-of-sight Hellfire and Iron Shot!"
@@ -465,21 +831,12 @@ end >
     mobwarnings["greater mummy"] = "can cast Torment and smite you!"
     mobwarnings["Khufu"] = "can cast Torment and smite you!"
     mobwarnings["sphinx"] = "can cast paralyse, slow, confuse, and smite you!"
-    mobwarnings["Norris"] = "can cast paralyse and smite you, or drain your Int!"
     mobwarnings["catoblepas"] = "can petrify you with its breath!"
     mobwarnings["Jorgrun"] = "can cast petrify and shatter!"
-    mobwarnings["brain worm"] = "can drain your Int!"
-    mobwarnings["orange crystal statue"] = "can cast confuse and Shadow Creatures, or drain your Int!"
     mobwarnings["Jory"] = "can mesmerise, cast LCS and blink close!"
-    mobwarnings["neqoxec"] = "can mutate you or drain your Int!"
-    mobwarnings["cacodemon"] = "can mutate you!"
-    mobwarnings["shining eye"] = "can mutate you!"
-    mobwarnings["orb of fire"] = "can mutate you!"
-    mobwarnings["pulsating lump"] = "can mutate you in melee!"
     mobwarnings["Cerebov"] = "can cast Fire Storm, Iron Shot, and Summon Greater Demons!"
     mobwarnings["Mennas"] = "can cast silence and confuse!"
     mobwarnings["Ignacio"] = "can cast Agony!"
-    mobwarnings["giant orange brain"] = "can cast Shadow Creatures, or drain your Int!"
     mobwarnings["boggart"] = "can cast Shadow Creatures!"
     mobwarnings["shadow demon"] = "can cast Shadow Creatures!"
     mobwarnings["ynoxinul"] = "can cast Iron Shot!"
@@ -503,7 +860,7 @@ end >
         and not string.find(mons, "skeleton")
         and not string.find(mons, "shaped block of ice")
         and not string.find(mons, "spectral")
-        and not string.find(mons, "simulacr") 
+        and not (string.find(mons, "simulacr") and mob ~= "simulacr")
         and not (string.find(mons, "orc") and mob == "wizard") then
           --Used to format the string for Unique/Named mobs
           local is_fiend = (string.find(mons, "Fiend") ~= nil)
@@ -733,25 +1090,6 @@ autopickup += $?!:"/%}\|
 # [ = armour
 # X = corpses
 
-
-# Secondary Armour Auto-Pickup
-{
-add_autopickup_func(function(item, name)
-	if item.class(true) == "armour" then	
-		local good_slots = {cloak="Cloak", helmet="Helmet", gloves="Gloves", boots="Boots", shield="Shield"}
-		sub_type, _ = item.subtype()
-    current_item = items.equipped_at(good_slots[sub_type])
-    
-		if (good_slots[sub_type] ~= nil) and (current_item == nil) then
-			return true 
-		end
-    
-		return false
-    
-		end	
-	end)
-}
-
 # Allows easily dropping multiple items
 drop_mode += multi
 # Always show the full list of items when you pick up a stack
@@ -770,7 +1108,7 @@ ae += useless_item, dangerous_item, evil_item
 
 # Autopickup artefacts/o
 ae += <artefact
-: if you.xl() < 14 then
+: if (you.xl() < 14) or (you.god():find("Nemelex")) then
 ae += <ego
 : end
 ae += <quick blade
@@ -844,6 +1182,24 @@ ae += <quick blade
 	end
 
 	add_autopickup_func(ammo_pickup)
+}
+
+# Secondary Armour Auto-Pickup
+{
+add_autopickup_func(function(item, name)
+	if item.class(true) == "armour" then	
+		local good_slots = {cloak="Cloak", helmet="Helmet", gloves="Gloves", boots="Boots", shield="Shield"}
+		sub_type, _ = item.subtype()
+    current_item = items.equipped_at(good_slots[sub_type])
+    
+		if (good_slots[sub_type] ~= nil) and (current_item == nil) then
+			return true 
+		end
+    
+		return false
+    
+		end	
+	end)
 }
 
 ###############
@@ -986,6 +1342,10 @@ ignore += toadstools? grow
 ignore += You walk carefully through the
 ignore += grinding sound
 ignore += in your inventory.*rotted away
+# Qazlal
+ignore += The plant is engulfed
+ignore += You destroy the (plant|fungus|bush)
+ignore += You displace your
 
 # Bad things -- Stop autotravel for these events
 stop += found a zot trap
@@ -1081,6 +1441,8 @@ more += You feel sluggish
 more += You are shrouded in an aura of darkness
 more += You really shouldn't be using
 more += Mutagenic energies flood into your body
+more += You are surrounded by a storm which can block enemy attacks
+more += resistances upon receiving elemental damage
 
 # Translocations
 more += You.*teleport [^f]
@@ -1427,6 +1789,7 @@ more += Jiyva alters your body
 #############
 
 allow_self_target = prompt
+sort_menus = true
 easy_confirm = safe
 confirm_butcher = never
 easy_eat_chunks = true
@@ -1494,7 +1857,6 @@ msc += $danger:The elephant guardians awaken
 msc += $danger:slides away
 msc += $danger:A powerful magic prevents control of your teleportation
 msc += $danger:There's only.*cards? left!
-msc += $danger:Your body twists and deforms
 msc += $danger:A huge vortex of air appears
 msc += $danger:you're silenced
 msc += $danger:Your hands slow down
@@ -1509,8 +1871,7 @@ msc += $danger:(The|Your).*falls away!
 msc += $danger:The orbs collide in a blinding explosion
 msc += $danger:You feel the power of the Abyss delaying your translocation
 msc += $danger:Mara shimmers
-msc += $danger:Your spellforged servitor is blown up
-msc += $danger:Mutagenic energies flood into your body
+msc += $danger:Your.*is blown up
 msc += $danger:seems to grow more fierce
 msc += $danger:attacks!
 msc += $danger:You sense the presence of something unfriendly
@@ -1524,7 +1885,6 @@ msc += $danger:You feel your control is inadequate
 msc += $danger:A great vortex of raging winds appears
 msc += $danger:You blow up your
 msc += $danger:The sixfirhy seems to be charged up
-msc += $danger:You feel your body twist and deform
 msc += $danger:You feel your power drain away
 msc += $danger:You cannot cast spells when silenced
 msc += $danger:You feel hot and cold all over
@@ -1608,7 +1968,6 @@ msc += $danger:The power of Zot is invoked against you
 msc += $danger:you fail to dodge
 msc += $danger:Death has come for you
 msc += $danger:Your body is wracked with pain
-msc += $danger:You really shouldn't be using
 msc += $danger:You sense an overwhelmingly malignant aura
 msc += $danger:Space twists in upon itself
 msc += $danger:Strange energies course through your body
@@ -1619,7 +1978,6 @@ msc += $danger:You don't have enough magic
 msc += $danger:You haven't enough magic at the moment
 msc += $danger:You fall through a shaft
 msc += $danger:seems to grow stronger
-msc += $danger:You die.
 msc += $danger:Dowan seems to find hidden reserves of power
 msc += $danger:Oops, that.*feels deathly cold
 msc += $danger:You struggle to resist
@@ -1664,20 +2022,15 @@ msc += $danger:The walls disappear
 msc += $danger:You cannot afford.*fee
 msc += $danger:This weapon is already enchanted
 msc += $danger:You feel.*sluggish
-msc += $danger:You are engulfed in mutagenic fog
 msc += $danger:You feel extremely strange
-msc += $danger:You feel the urge to shout
 msc += $danger:This meat tastes really weird
-msc += $danger:Your vision blurs
 msc += $danger:You finish putting on your cursed
 msc += $danger:It was a potion of paralysis
-msc += $danger:You feel frail
 msc += $danger:You feel rather ponderous
 msc += $danger:That seemed strangely inert
 msc += $danger:You can't unwield your weapon to draw a new one
 msc += $danger:the volcano erupts with a roar
 msc += $danger:too hungry
-msc += $danger:the book crumbles to dust
 msc += $danger:Your guardian golem overheats
 msc += $danger:burn any scroll you tried to read
 msc += $danger:evokes.*(amulet|ring)
@@ -1707,7 +2060,6 @@ msc += $danger:You are blasted by holy energy
 msc += $danger:You feel uncertain
 msc += $danger:You are firmly grounded in the material plane once more
 msc += $danger:The writing blurs in front of your eyes
-msc += $danger:Your thinking seems confused
 msc += $danger:You cannot cast spells while unable to breathe
 msc += $danger:You feel your rage building
 msc += $danger:You feel a little less
@@ -1756,17 +2108,12 @@ msc += $danger:You're too exhausted to jump
 msc += $danger:You lose concentration completely
 msc += $danger:go into a battle-frenzy
 msc += $danger:You can't jump while in water
-msc += $danger:You are heavily infused with residual magics
 msc += $danger:staircase.*moves from beneath you
 msc += $danger:You wield
 msc += $danger:is filled with.*inner flame
 msc += $danger:You feel guilty
-msc += $danger:You no longer feel (cold|heat) resistant
-msc += $danger:You feel less (heat|cold) resistant
-msc += $danger:You feel vulnerable to (heat|cold)
-msc += $danger:You feel less resistant to poisons
-msc += $danger:You no longer feel resistant to poison
 msc += $danger:picks up.*throwing net
+msc += $danger:You feel less protected from physical attacks
 
 #msc += $item_dmg:
 msc += $item_dmg:acid corrodes
@@ -1776,7 +2123,6 @@ msc += $item_dmg:covered with spores
 msc += $item_dmg:devours some of your food
 msc += $item_dmg:rots? away
 msc += $item_dmg:It has a very clean taste
-msc += $item_dmg:It was a potion of cure mutation
 msc += $item_dmg:You feel your flesh rotting away
 msc += $item_dmg:You are engulfed in dark miasma
 msc += $item_dmg:You feel very guilty
@@ -1795,8 +2141,28 @@ msc ^= $item_dmg:picks up.*(scrolls?|potions?|wand)
 msc += $item_dmg:drinks a potion
 msc += $item_dmg:You hear a zap
 msc += $item_dmg:reads a scroll
+msc += $item_dmg:Mutagenic energies flood into your body
+msc += $item_dmg:your body twists? and deforms?
+msc += $item_dmg:You really shouldn't be using
+msc += $item_dmg:You die.
+msc += $item_dmg:You are engulfed in mutagenic fog
+msc += $item_dmg:You feel the urge to shout
+msc += $item_dmg:Your vision blurs
+msc += $item_dmg:You feel frail
+msc += $item_dmg:the book crumbles to dust
+msc += $item_dmg:Your thinking seems confused
+msc += $item_dmg:You are heavily infused with residual magics
+msc += $item_dmg:You no longer feel (cold|heat) resistant
+msc += $item_dmg:You feel less (heat|cold) resistant
+msc += $item_dmg:You feel vulnerable to (heat|cold)
+msc += $item_dmg:You feel less resistant to poisons
+msc += $item_dmg:You no longer feel resistant to poison
+
 
 #msc += $warning:
+msc += $warning:Your protection from physical attacks is fading
+msc ^= $warning:The Screaming Sword
+msc += $warning:A large net falls onto you
 msc += $warning:You stop recalling your allies
 msc += $warning:You feel a little guilty
 msc += $warning:snaps.*out of.*fear
@@ -2307,6 +2673,10 @@ msc += $warning:Your divine protection wanes
 msc += $warning:The sheep \"Baaaas\" balefully
 
 #msc += $boring:
+msc ^= $boring:You displace your
+msc ^= $boring:whispers something so quietly that you cannot hear
+msc ^= $boring:for a moment.*blends into the shadows
+msc ^= $boring:picks up a beetle and eats it
 msc += $boring:Everything looks hazy for a moment
 msc += $boring:There is a strange surge of energy around
 msc += $boring:orc priest shimmers for a moment
@@ -2320,7 +2690,7 @@ msc += $boring:briefly looks nauseous
 msc += $boring:twitches
 msc += $boring:Jessica looks very angry
 msc += $boring:You fall off the door
-msc += $boring:Sigmund flickers\, as though insubstantial
+msc += $boring:as though insubstantial
 msc += $boring:The Killer Klown sprays water
 msc += $boring:The Killer Klown honks
 msc += $boring:wriggles its tentacles
@@ -2508,7 +2878,7 @@ msc += $boring:You shiver with cold
 msc += $boring:glows (bright chartreuse|shining black|silvery red|dark black) for a moment
 msc += $boring:glows (faint lime green|pale silver|dull charcoal|brightly|shimmering blue) for a moment
 msc += $boring:glows (dull rubric|pale yellow|brilliant magenta|pale dun|mottled black|dull silver) for a moment
-msc += $boring:glows (dark umber|faint lavender|brilliant black|pale gold) for a moment
+msc += $boring:glows (dark umber|faint lavender|brilliant black|pale gold|brilliant silver) for a moment
 msc += $boring:Waves of light ripple over your body
 msc += $boring:Your skin tingles
 msc += $boring:looks braver
@@ -2777,6 +3147,9 @@ msc += $good:is burned by acid
 
 # Non-damage combat messages
 #msc += $positive:
+msc += $positive:sizzles in the rain
+msc += $positive:gets badly buffeted
+msc += $positive:Your legs become a tail as you enter the water
 msc += $positive:You feel a sudden desire to slay dragons
 msc += $positive:You feel weakened for a moment
 msc += $positive:Your stone body feels more resilient
@@ -3101,9 +3474,10 @@ msc += $verypositive:You feel more protected from negative energy
 
 #Positive mutation - or losing bad ones
 #msc += $awesome:
+msc += $awesome:You feel power flowing into your body
 msc ^= $awesome:You feel more in touch with the powers of death
-msc += $awesome:You feel resistant to poisons
-msc += $awesome:You feel.*resistant to (heat|cold)
+msc ^= $awesome:You feel resistant to poisons
+msc ^= $awesome:You feel.*resistant to (heat|cold)
 msc += $awesome:You no longer feel vulnerable to (heat|cold)
 msc += $awesome:Your urge to yell lessens
 msc += $awesome:One of your lower tentacles grows a sharp spike
@@ -3361,6 +3735,7 @@ msc += $negative:The large rock crashes through you
 msc += $negative:You are blasted!
 msc += $negative:The great icy blast engulfs you
 msc += $negative:is hit by a branch
+msc += $negative:The wandering mushroom releases spores at you
 
 #monster resists
 msc += $danger:completely resists
@@ -3464,11 +3839,22 @@ msc += $takesaction:summons
 msc += $takesaction:great orb of eyes gazes at
 msc += $takesaction:You radiate an aura of cold
 
-msc += $godaction:(Elyvilon|Igni Ipthes|Elyvilon|Ashenzari|Cheibriados|Dithmenos|Fedhas|Okawaru|Lugonu|Jiyva|Beogh)
-msc += $godaction:(Kikubaaqudgha|Makhleb|Nemelex|Sif Muna|Trog|Vehumet|Xom|Yredelemnul|Zin[^g]|The Shining One)
-msc ^= $godaction:(Elyvilon|Igni Ipthes|Elyvilon|Ashenzari|Cheibriados|Dithmenos|Fedhas|Okawaru|Lugonu|Jiyva|Beogh) says
-msc ^= $godaction:(Kikubaaqudgha|Makhleb|Nemelex|Sif Muna|Trog|Vehumet|Xom|Yredelemnul|Zin[^g]|The Shining One) says
+#msc += $godaction:
+msc += $godaction:You feel a surge of divine interest
+msc += $godaction:(Elyvilon|Igni Ipthes|Elyvilon|Ashenzari|Cheibriados|Dithmenos|Fedhas|Okawaru|Lugonu|Jiyva|Beogh|Qazlal)
+msc += $godaction:(Kikubaaqudgha|Makhleb|Nemelex|Sif Muna|Trog|Vehumet|Xom|Yredelemnul|Zin[^g]|The Shining One|Gozag)
+msc ^= $godaction:(Elyvilon|Igni Ipthes|Elyvilon|Ashenzari|Cheibriados|Dithmenos|Fedhas|Okawaru|Lugonu|Jiyva|Beogh|Qazlal) says
+msc ^= $godaction:(Kikubaaqudgha|Makhleb|Nemelex|Sif Muna|Trog|Vehumet|Xom|Yredelemnul|Zin[^g]|The Shining One|Gozag) says
 msc ^= $godaction:Your divine halo returns
+msc ^= $godaction:You feel protected from physical attacks
+msc += $godaction:You are surrounded by a storm which can block enemy attacks
+msc += $godaction:resistances upon receiving elemental damage
+msc += $godaction:A storm cloud blasts the area with cutting wind
+msc += $godaction:A blizzard blasts the area with ice
+msc += $godaction:Magma suddenly erupts from the ground
+msc += $godaction:The storm around you weakens
+msc += $godaction:The ground shakes violently
+msc += $godaction:The storm around you strengthens
 msc += $godaction:due to Igni's heat
 msc += $godaction:A mighty gale blasts forth
 msc += $godaction:A fiery fortress appears around you!
@@ -3526,7 +3912,7 @@ msc ^= $godaction:\"You have grown too confident for your meagre worth\.\"
 msc ^= $godaction:\"Take this token of my esteem\.\"
 msc ^= $godaction:\"Take this instrument of something!\"
 msc ^= $godaction:\"See what I see\, my child!\"
-msc ^= $godaction:\"What!\? Thats's it\?!\"
+msc ^= $godaction:\"What!\? Thats's it\?!\"c
 msc ^= $godaction:\"Serve the (mortal|toy)\, my (child|children)!\"
 msc ^= $godaction:Let\'s see if it\'s strong enough to survive yet
 --These don't seem to work, maybe a bug?
@@ -3664,11 +4050,11 @@ msc += mute:Firing \(i
 msc += mute:Fire\/throw which item\?
 msc += mute:You swap places
 
-msc ^= mute:is lightly (wounded|damaged)
-msc ^= mute:is moderately (wounded|damaged)
-msc ^= mute:is heavily (wounded|damaged)
-msc ^= mute:is severely (wounded|damaged)
-msc ^= mute:is almost (dead|destroyed)
+--msc ^= mute:is lightly (wounded|damaged)
+--msc ^= mute:is moderately (wounded|damaged)
+--msc ^= mute:is heavily (wounded|damaged)
+--msc ^= mute:is severely (wounded|damaged)
+--msc ^= mute:is almost (dead|destroyed)
 
 msc += mute:Was it this warm in here before
 msc += mute:The flames dance
@@ -3846,7 +4232,7 @@ ai += rod of:!a
 ai += [Mm]anual of:!d
 ai += dispersal:=f
 ai += large rock:!f
-ai += throwing net:!f, !d
+ai += throwing net:=f, !d
 ai += tome of destruction:!d
 ai += royal jell:restore abilities
 
