@@ -3608,7 +3608,6 @@ msc += $positive:You extend your transformation
 msc += $positive:Your.*turn into razor-sharp scythe blades
 msc += $positive:You conjure a globe of magical energy
 msc += $positive:You imbue your battlesphere with additional charge
-msc += $positive:Your battlesphere fires
 msc += $positive:You are no longer poisoned
 msc += $positive:You finish butchering
 msc += $positive:looks frightened
@@ -4049,6 +4048,7 @@ msc += $warning:resists
 
 # For the text that describes ranged attacks and spells
 #msc += $takesaction:
+msc += $takesaction:Your battlesphere fires
 msc += $takesaction:The giant eyeball stares at you
 msc += $takesaction:You begin recalling your allies
 msc += $takesaction:You begin to radiate toxic energy
