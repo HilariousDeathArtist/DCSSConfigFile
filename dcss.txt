@@ -1145,6 +1145,7 @@
         and not (string.find(mons, "death yak") and mob == "yak")
         and not (string.find(mons, "gnoll shaman") and mob == "gnoll")
         and not (string.find(mons, "gnoll captain") and mob == "gnoll")
+        and not (string.find(mons, "mottled draconian") and mob == "mottled")
         and not (string.find(mons, "dire elephant") and mob == "elephant")
         and not (string.find(mons, "salamander mystic") and mob == "salamander")
         and not (string.find(mons, "Josephine") and mob == "Joseph") then
@@ -3441,6 +3442,7 @@ msc += $good:is burned by acid
 
 # Non-damage combat messages
 #msc += $positive:
+msc += $positive:You recall your battlesphere and imbue it with additional charge
 msc += $positive:The shadowy forms in the deep grow still as others approach
 msc += $positive:You renew your portal
 msc += $positive:You begin teleporting projectiles to their destination
