@@ -1,4 +1,5 @@
 # Got suggestions/improvements?
+# Got suggestions/improvements?
 # https://github.com/HilariousDeathArtist/DCSSConfigFile
 # or find me on crawl.s-z.org
 
@@ -969,10 +970,10 @@
         end
         
         if no_rC and no_Cons then 
-          gdwarn = gdwarn .. ", breathe freezing clouds and break your potions"
+          gdwarn = gdwarn .. ", breathe Bolts of Cold and break your potions"
           alichwarn = alichwarn .. ", cast Bolt of Cold and break your potions"
         elseif no_Cons then 
-          gdwarn = gdwarn .. ", break your potions in freezing clouds"
+          gdwarn = gdwarn .. ", break your potions"
           alichwarn = alichwarn .. ", break your potions"
         elseif no_rC then 
           gdwarn = gdwarn .. ", breathe freezing blasts" 
@@ -1143,8 +1144,8 @@
         and not (string.find(mons, "orc") and mob == "wizard") 
         and not (string.find(mons, "ancient lich") and mob == "lich")
         and not (string.find(mons, "death yak") and mob == "yak")
-        and not (string.find(mons, "gnoll shaman") and mob == "gnoll")
-        and not (string.find(mons, "gnoll captain") and mob == "gnoll")
+        and not (string.find(mons, "gnoll ") and mob == "gnoll")
+        and not (string.find(mons, "naga ") and mob == "naga")       
         and not (string.find(mons, "dire elephant") and mob == "elephant")
         and not (string.find(mons, "salamander mystic") and mob == "salamander")
         and not (string.find(mons, "Josephine") and mob == "Joseph") then
@@ -1205,88 +1206,131 @@
 <
   local previous_hp = 0
   local previous_mp = 0
+  local previous_form = ""
+  local was_berserk_last_turn = false
  
   function AnnounceDamage()
     local current_hp, max_hp = you.hp()
     local current_mp, max_mp = you.mp()
- 
+    --Things that increase hp/mp temporarily really mess with this
+    local current_form = you.transform()
+    local you_are_berserk = you.berserk()
+    local max_hp_decreased = false
+    local even = false
+
+    if (current_form ~= previous_form) then
+      if (previous_form:find("dragon") or 
+          previous_form:find("statue") or
+          previous_form:find("tree") or
+          previous_form:find("ice")) then
+        max_hp_decreased = true
+      elseif (current_form:find("dragon") or 
+          current_form:find("statue") or
+          current_form:find("tree") or
+          current_form:find("ice")) then
+        max_hp_increased = true
+      end
+    end
+    if (was_berserk_last_turn and not you_are_berserk) then
+      max_hp_decreased = true
+    elseif (you_are_berserk and not was_berserk_last_turn) then
+      max_hp_increased = true
+    end
+    
+    --crawl.mpr(string:format("current_form is: %s", current_form and "True" or "False"))
+    --crawl.mpr(string:format("previous_form is: %s", previous_form and "True" or "False"))
+    --crawl.mpr(string:format("you_are_berserk is: %s", you_are_berserk and "True" or "False"))
+    --crawl.mpr(string:format("was_berserk_last_turn is: %s", was_berserk_last_turn and "True" or "False"))
+    --crawl.mpr(string:format("max_hp_increased is: %s", max_hp_increased and "True" or "False"))
+    --crawl.mpr(string:format("max_hp_decreased is: %s", max_hp_decreased and "True" or "False"))
+    
     --Skips message on initializing game
     if previous_hp > 0 then
       local hp_difference = previous_hp - current_hp
       local mp_difference = previous_mp - current_mp
-    
-      --On losing health
-      if (current_hp < previous_hp) then
-        if current_hp <= (max_hp * 0.30) then
-          crawl.mpr("<red>You take " .. hp_difference .. " damage,</red><lightred> and have " .. current_hp .. "/" .. max_hp .. " hp.</lightred>")
-        elseif current_hp <= (max_hp * 0.50) then
-          crawl.mpr("<red>You take " .. hp_difference .. " damage, and have " .. current_hp .. "/" .. max_hp .. " hp.</red>")
-        elseif current_hp <= (max_hp *  0.70) then
-          crawl.mpr("<red>You take " .. hp_difference .. " damage,</red><yellow> and have " .. current_hp .. "/" .. max_hp .. " hp.</yellow>")
-        elseif current_hp <= (max_hp * 0.90) then
-          crawl.mpr("<red>You take " .. hp_difference .. " damage,</red><lightgrey> and have " .. current_hp .. "/" .. max_hp .. " hp.</lightgrey>")
+      
+      if max_hp_increased or max_hp_increased then
+        if max_hp_increased then 
+          crawl.mpr("<green>You now have " .. current_hp .. "/" .. max_hp .. " hp.</green>")
         else
-          crawl.mpr("<red>You take " .. hp_difference .. " damage,</red><green> and have " .. current_hp .. "/" .. max_hp .. " hp.</green>")
+          crawl.mpr("<yellow>You now have " .. current_hp .. "/" .. max_hp .. " hp.</yellow>")
         end
-        if hp_difference > (max_hp * 0.20) then
-          crawl.mpr("<lightred>MASSIVE DAMAGE!!</lightred>")
-        end
-      end
- 
-      --On gaining more than 1 health
-      if (current_hp > previous_hp) then
-        --Removes the negative sign
-        local health_inturn = (0 - hp_difference)
-        if (health_inturn > 1) and not (current_hp == max_hp) then
+      else
+        --On losing health
+        if (current_hp < previous_hp) then
           if current_hp <= (max_hp * 0.30) then
-            crawl.mpr("<green>You regained " .. health_inturn .. " hp,</green><lightred> and now have " .. current_hp .. "/" .. max_hp .. " hp.</lightred>")
+            crawl.mpr("<red>You take " .. hp_difference .. " damage,</red><lightred> and have " .. current_hp .. "/" .. max_hp .. " hp.</lightred>")
           elseif current_hp <= (max_hp * 0.50) then
-            crawl.mpr("<green>You regained " .. health_inturn .. " hp,</green><red> and now have " .. current_hp .. "/" .. max_hp .. " hp.</red>")
+            crawl.mpr("<red>You take " .. hp_difference .. " damage, and have " .. current_hp .. "/" .. max_hp .. " hp.</red>")
           elseif current_hp <= (max_hp *  0.70) then
-            crawl.mpr("<green>You regained " .. health_inturn .. " hp,</green><yellow> and now have " .. current_hp .. "/" .. max_hp .. " hp.</yellow>")
+            crawl.mpr("<red>You take " .. hp_difference .. " damage,</red><yellow> and have " .. current_hp .. "/" .. max_hp .. " hp.</yellow>")
           elseif current_hp <= (max_hp * 0.90) then
-            crawl.mpr("<green>You regained " .. health_inturn .. " hp,</green><lightgrey> and now have " .. current_hp .. "/" .. max_hp .. " hp.</lightgrey>")
+            crawl.mpr("<red>You take " .. hp_difference .. " damage,</red><lightgrey> and have " .. current_hp .. "/" .. max_hp .. " hp.</lightgrey>")
           else
-            crawl.mpr("<green>You regained " .. health_inturn .. " hp, and now have " .. current_hp .. "/" .. max_hp .. " hp.</green>")
+            crawl.mpr("<red>You take " .. hp_difference .. " damage,</red><green> and have " .. current_hp .. "/" .. max_hp .. " hp.</green>")
+          end
+          if hp_difference > (max_hp * 0.20) then
+            crawl.mpr("<lightred>MASSIVE DAMAGE!!</lightred>")
           end
         end
-        if (current_hp == max_hp) then
-          crawl.mpr("<green>Health restored: " .. current_hp .. "</green>")
-        end
-      end
- 
-      --On gaining more than 1 magic
-      if (current_mp > previous_mp) then
-        --Removes the negative sign
-        local mp_inturn = (0 - mp_difference)
-        if (mp_inturn > 1) and not (current_mp == max_mp) then
-          if current_mp < (max_mp * 0.25) then 
-            crawl.mpr("<lightcyan>You regained " .. mp_inturn .. " mp,</lightcyan><red> and now have " .. current_mp .. "/" .. max_mp .. " mp.</red>")
-          elseif current_mp < (max_mp * 0.50) then 
-            crawl.mpr("<lightcyan>You regained " .. mp_inturn .. " mp,</lightcyan><yellow> and now have " .. current_mp .. "/" .. max_mp .. " mp.</yellow>")
-          else
-            crawl.mpr("<lightcyan>You regained " .. mp_inturn .. " mp, and now have " .. current_mp .. "/" .. max_mp .. " mp.</lightcyan>")
+  
+        --On gaining more than 1 health
+        if (current_hp > previous_hp) then
+          --Removes the negative sign
+          local health_inturn = (0 - hp_difference)
+          if (health_inturn > 1) and not (current_hp == max_hp) then
+            if current_hp <= (max_hp * 0.30) then
+              crawl.mpr("<green>You regained " .. health_inturn .. " hp,</green><lightred> and now have " .. current_hp .. "/" .. max_hp .. " hp.</lightred>")
+            elseif current_hp <= (max_hp * 0.50) then
+              crawl.mpr("<green>You regained " .. health_inturn .. " hp,</green><red> and now have " .. current_hp .. "/" .. max_hp .. " hp.</red>")
+            elseif current_hp <= (max_hp *  0.70) then
+              crawl.mpr("<green>You regained " .. health_inturn .. " hp,</green><yellow> and now have " .. current_hp .. "/" .. max_hp .. " hp.</yellow>")
+            elseif current_hp <= (max_hp * 0.90) then
+              crawl.mpr("<green>You regained " .. health_inturn .. " hp,</green><lightgrey> and now have " .. current_hp .. "/" .. max_hp .. " hp.</lightgrey>")
+            else
+              crawl.mpr("<green>You regained " .. health_inturn .. " hp, and now have " .. current_hp .. "/" .. max_hp .. " hp.</green>")
+            end
+          end
+          if (current_hp == max_hp) then
+            crawl.mpr("<green>Health restored: " .. current_hp .. "</green>")
           end
         end
-        if (current_mp == max_mp) then
-          crawl.mpr("<lightcyan>MP restored: " .. current_mp .. "</lightcyan>")
-        end
-      end
  
-      --On losing magic
-      if current_mp < previous_mp then
-        if current_mp <= (max_mp / 5) then
-          crawl.mpr("<red>Danger: You now have " .. current_mp .. "/" ..max_mp .." mp.</red>")       
-        elseif current_mp <= (max_mp / 2) then
-          crawl.mpr("<yellow>Warning: You now have " .. current_mp .. "/" ..max_mp .." mp.</yellow>")
-        else
-          crawl.mpr("<lightcyan>You now have " .. current_mp .. "/" ..max_mp .." mp.</lightcyan>")
+        --On gaining more than 1 magic
+        if (current_mp > previous_mp) then
+          --Removes the negative sign
+          local mp_inturn = (0 - mp_difference)
+          if (mp_inturn > 1) and not (current_mp == max_mp) then
+            if current_mp < (max_mp * 0.25) then 
+              crawl.mpr("<lightcyan>You regained " .. mp_inturn .. " mp,</lightcyan><red> and now have " .. current_mp .. "/" .. max_mp .. " mp.</red>")
+            elseif current_mp < (max_mp * 0.50) then 
+              crawl.mpr("<lightcyan>You regained " .. mp_inturn .. " mp,</lightcyan><yellow> and now have " .. current_mp .. "/" .. max_mp .. " mp.</yellow>")
+            else
+              crawl.mpr("<lightcyan>You regained " .. mp_inturn .. " mp, and now have " .. current_mp .. "/" .. max_mp .. " mp.</lightcyan>")
+            end
+          end
+          if (current_mp == max_mp) then
+            crawl.mpr("<lightcyan>MP restored: " .. current_mp .. "</lightcyan>")
+          end
+        end
+  
+        --On losing magic
+        if current_mp < previous_mp then
+          if current_mp <= (max_mp / 5) then
+            crawl.mpr("<red>Danger: You now have " .. current_mp .. "/" ..max_mp .." mp.</red>")       
+          elseif current_mp <= (max_mp / 2) then
+            crawl.mpr("<yellow>Warning: You now have " .. current_mp .. "/" ..max_mp .." mp.</yellow>")
+          else
+            crawl.mpr("<lightcyan>You now have " .. current_mp .. "/" ..max_mp .." mp.</lightcyan>")
+          end
         end
       end
     end
-    --Set previous hp and mp at end of turn
+    
+    --Set previous hp/mp and form at end of turn
     previous_hp = current_hp
     previous_mp = current_mp
+    previous_form = current_form
   end  
 >
 
@@ -1306,6 +1350,12 @@
 #############
 # Autofight #
 #############
+
+# Attempt to cast spell 'a' when using tab
+automagic_enabled = true
+automagic_stop = 50
+# If we can't use magic, then do a non-magical attack
+automagic_fight = true
 
 # Do/don't throw stuff when autofighting
 autofight_throw = true
@@ -1368,7 +1418,7 @@ ae += useless_item, dangerous_item, evil_item
 
 # Autopickup artefacts/o
 ae += <artefact
-: if (you.xl() < 14) or (you.god():find("Nemelex")) then
+: if (you.xl() < 12) or (you.god():find("Nemelex")) then
 ae += <ego
 : end
 ae += <quick blade
@@ -1451,6 +1501,9 @@ add_autopickup_func(function(it, name)
     local good_slots = {cloak="Cloak", helmet="Helmet", gloves="Gloves", boots="Boots"}
     st, _ = it.subtype()
     if good_slots[st] ~= nil and items.equipped_at(good_slots[st]) == nil then
+      return true
+    end
+    if it.name():find("curare") then
       return true
     end
   end
@@ -1675,7 +1728,8 @@ more += Found a frozen archway
 more += Found a labyrinth entrance
 more += You have a vision of.*gates?
 more += Nemelex gives you another card to finish dealing
-
+more += Fedhas invokes the elements against you
+more += You have no means to grasp a wand firmly enough
 more += Done waiting
 more += (The|Your).*falls away!
 more += acid corrodes
@@ -1699,6 +1753,8 @@ more += You.*teleport [^f]
 more += You blink
 more += Your surroundings suddenly seem different
 more += You feel strangely (unstable|stable)
+more += You cannot teleport right now
+more += You cannot blink right now
 
 # Wands/Potions/Scrolls/evokes used by monsters
 more += zaps a (wand|rod)
@@ -1880,7 +1936,7 @@ more += You are mesmerised
 more += The barbed spikes become lodged in your body
 more += mark forms upon you
 more += blows on a signal horn
-more += The silver sears you
+more += silver sears you
 more += The.*seems to speed up
 more += steals.*your
 more += infuriates you
@@ -2129,6 +2185,11 @@ msc =
 msc += white:You feel blessed for a moment
 
 #msc += $danger:
+msc += $danger:Your body is bloodless
+msc += $danger:Your unliving flesh cannot be transformed in this way
+msc += $danger:You feel less resistant to cold
+msc += $danger:You can't disarm
+msc += $danger:You feel strangely static
 msc += $danger:A powerful magic interferes with your control of the blink
 msc += $danger:burns you terribly
 msc += $danger:You are no longer teleporting projectiles to their destination
@@ -2403,6 +2464,7 @@ msc += $danger:staircase.*moves from beneath you
 msc += $danger:You wield
 msc += $danger:is filled with.*inner flame
 msc += $danger:You feel guilty
+msc += $danger:You feel extremely guilty
 msc += $danger:picks up.*throwing net
 msc += $danger:You feel less protected from physical attacks
 
@@ -2450,6 +2512,8 @@ msc += $item_dmg:You feel less resistant to poisons
 msc += $item_dmg:You no longer feel resistant to poison
 
 #msc += $warning:
+msc += $warning:Your aim is not that steady anymore
+msc += $warning:You feel strangely alone
 msc += $warning:You feel the tide rushing in
 msc += $warning:Failed to move towards target
 msc += $warning:Your protection from physical attacks is fading
@@ -2848,9 +2912,7 @@ msc += $warning:You are caught in a violent explosion
 msc += $warning:pulses with an eldritch light
 msc += $warning:the glow from your magical contamination prevents you from becoming completely invisible
 msc += $warning:appears from out of your range of vision
-msc += $warning:You feel controlled for a moment
 msc += $warning:You stop putting on your armour
-msc += $warning:You feel buoyant
 msc += $warning:We have you now
 msc += $warning:You do not belong in this place
 msc += $warning:before it is too late
@@ -2964,6 +3026,10 @@ msc += $warning:Your divine protection wanes
 msc += $warning:The sheep \"Baaaas\" balefully
 
 #msc += $boring:
+msc += $boring:You feel woody for a moment
+msc += $boring:Your vision is briefly tinged with green
+msc ^= $boring:Sigmund is suddenly surrounded by pale red light
+msc += $boring:has a weird expression for a moment
 msc += $boring:You feel roots moving beneath the ground
 msc += $boring:This spell is already in effect
 msc ^= $boring:You displace your
@@ -2996,7 +3062,6 @@ msc += $boring:Your.*stops glowing
 msc += $boring:Your.*briefly vibrates
 msc += $boring:You feel gritty
 msc += $boring:Your elbows glow momentarily
-msc += $boring:You feel odd
 msc += $boring:You briefly become tangled in your
 msc += $boring:Your eyebrows wriggle
 msc += $boring:You detect nothing
@@ -3169,7 +3234,7 @@ msc += $boring:The drowned soul returns to the deep
 msc += $boring:Your.*stays? behind
 msc += $boring:You prostrate yourself
 msc += $boring:You shiver with cold
-msc += $boring:glows (bright chartreuse|shining black|silvery red|dark black) for a moment
+msc += $boring:glows (bright chartreuse|shining black|silvery red|dark black|shimmering rubric) for a moment
 msc += $boring:glows (faint lime green|pale silver|dull charcoal|brightly|shimmering blue) for a moment
 msc += $boring:glows (dull rubric|pale yellow|brilliant magenta|pale dun|mottled black|dull silver) for a moment
 msc += $boring:glows (dark umber|faint lavender|brilliant black|pale gold|brilliant silver|shimmering brown) for a moment
@@ -3192,6 +3257,7 @@ msc += $boring:Wisps of smoke drift from your
 msc += $boring:You smell salt
 msc += $boring:tries to hide in the shadows
 msc += $boring:stops crackling
+
 msc += $boring:You momentarily stiffen
 msc += $boring:waves its rhizomes
 msc += $boring:You smell (smoke|something weird)
@@ -3438,9 +3504,12 @@ msc += $good:You feel life coursing into your body
 msc += $good:is struck by lightning
 msc += $good:A sheep catches fire
 msc += $good:is burned by acid
+msc += $good:seems to burn from within
 
 # Non-damage combat messages
 #msc += $positive:
+msc += $positive:Your attacks no longer feel as feeble
+msc += $positive:You feel odd
 msc += $positive:The shadowy forms in the deep grow still as others approach
 msc += $positive:You renew your portal
 msc += $positive:You begin teleporting projectiles to their destination
@@ -3587,6 +3656,7 @@ msc += $positive:the hog turns into a human
 msc += $positive:the hogs revert to their human forms
 msc += $positive:Your new body merges with your icy armour
 msc += $positive:You feel the strange sensation of being on two planes at once
+msc += $positive:A flood of magical energy pours into your mind
 msc += $positive:You feel the material plane grow further away
 msc += $positive:You momentarily phase out as.*passes through you
 msc += $positive:You feel less exhausted
@@ -3606,7 +3676,6 @@ msc += $positive:You extend your transformation
 msc += $positive:Your.*turn into razor-sharp scythe blades
 msc += $positive:You conjure a globe of magical energy
 msc += $positive:You imbue your battlesphere with additional charge
-msc += $positive:Your battlesphere fires
 msc += $positive:You are no longer poisoned
 msc += $positive:You finish butchering
 msc += $positive:looks frightened
@@ -3660,6 +3729,9 @@ msc += $positive:Malign forces permeate your being\, awaiting release
 msc += $positive:A glowing mist starts to gather
 
 #msc += $verypositive:
+msc += $verypositive:You feel buoyant
+msc ^= $verypositive:You feel very safe from missiles
+msc ^= $verypositive:You are no longer firmly anchored in space
 msc += $verypositive:Magical energy flows into your mind!
 msc ^= $verypositive:The terrible wounds on your body vanish
 --amulet of stasis
@@ -3780,8 +3852,9 @@ msc ^= $awesome:You feel resistant to hostile enchantments
 msc += $awesome:You feel power flowing into your body
 msc ^= $awesome:You feel more in touch with the powers of death
 msc ^= $awesome:You feel resistant to poisons
-msc ^= $awesome:You feel.*resistant to (heat|cold)
-msc += $awesome:You no longer feel vulnerable to (heat|cold)
+msc ^= $awesome:You feel resistant to (fire|cold)
+msc ^= $awesome:You feel very resistant to (fire|cold)
+msc += $awesome:You no longer feel vulnerable to (fire|cold)
 msc += $awesome:Your urge to yell lessens
 msc += $awesome:One of your lower tentacles grows a sharp spike
 msc += $awesome:You regain control of your magic
@@ -3858,6 +3931,8 @@ msc += $awesome:Your throat feels hot
 msc += $awesome:Your teeth grow very long and razor-sharp
 
 # Other rare and awesome stuff
+msc += $awesome:You feel controlled for a moment
+msc ^= $awesome:There is a gate to the Realm of Zot here
 msc += $awesome:A monocle briefly appears
 msc += $awesome:You feel an empty sense of dread
 msc += $awesome:That felt like a moral victory
@@ -3932,6 +4007,7 @@ msc += $awesome:Your.*briefly pass through it before you manage to get a firm gr
 
 # You or an ally takes damage
 #msc += $negative:
+msc += $negative:silver sears you
 msc += $negative:You draw magical energy from your own body
 msc += $negative:Rocks fall onto you out of nowhere
 msc += $negative:You are engulfed in raging winds
@@ -3975,7 +4051,7 @@ msc += $negative:constricts your?
 msc += $negative:(bites|hits|headbutts|punches|shocks|tentacle-slaps|claws|smites|stings|freezes|slaps|pecks|gores) your?
 msc += $negative:(tail-slaps|tramples|burns|poisons|gores|pecks|touches|kicks|trunk-slaps|skewers) your?
 # Thanks killer klowns
-msc += $negative:(flogs|trip-wires|defenestrates|headlocks|strangle-hugs|pokes|pounds|squeezes) your?
+msc += $negative:(flogs|trip-wires|defenestrates|headlocks|strangle-hugs|pokes|pounds|squeezes|pinches|elbows) your?
 msc += $negative:Your.*burned by acid
 msc += $negative:Your.*appears confused
 msc += $negative:Your?.*is struck by the.*spines
@@ -4039,7 +4115,7 @@ msc += $negative:The large rock crashes through you
 msc += $negative:You are blasted!
 msc += $negative:The great icy blast engulfs you
 msc += $negative:is hit by a branch
-msc += $negative:The wandering mushroom releases spores at you
+msc += $negative:The wandering mushroom releases spores at your?
 
 #monster resists
 msc += $danger:completely resists
@@ -4047,6 +4123,7 @@ msc += $warning:resists
 
 # For the text that describes ranged attacks and spells
 #msc += $takesaction:
+msc += $takesaction:wandering mushroom releases spores
 msc += $takesaction:The giant eyeball stares at you
 msc += $takesaction:You begin recalling your allies
 msc += $takesaction:You begin to radiate toxic energy
@@ -4077,6 +4154,7 @@ msc += $takesaction:You jump-attack
 msc += $takesaction:The injured rakshasa weaves a defensive illusion
 msc += $takesaction:Mara seems to draw the.*out of itself
 msc += $takesaction:Mara shimmers
+msc += $takesaction:Your battlesphere fires
 msc += $takesaction:begins to recite a word of recall
 msc += $takesaction:curse skull calls on the powers of darkness
 msc += $takesaction:curse skull rattles its jaw
@@ -4091,6 +4169,8 @@ msc += $takesaction:You breathe a
 msc ^= $takesaction:You draw life from your surroundings
 msc += $takesaction:You step out of the flow of time
 msc += $takesaction:You can feel time thicken for a moment
+msc += $takesaction:The chunk of flesh you are holding crumbles to dust
+msc += $takesaction:flesh is ripped from the corpse
 msc += $takesaction:The flow of time bends around you
 msc += $takesaction:You start singing a song of slaying
 msc += $takesaction:The disc erupts in an explosion of electricity!
@@ -4537,12 +4617,21 @@ ai += (bad|dangerous)_item.*scroll:!r
 ai += rod of [^s][^t]:!a
 ai += [Mm]anual of:!d
 ai += dispersal:=f
-ai += large rock:!f
+ai += large rock:=f
 ai += throwing net:=f, !d
 ai += tome of destruction:!d
-ai += royal jell:restore abilities
+ai += royal jell:!restore
 
-ai += ambrosia:+MP, and confuses
+ai += pearl dragon (armour|hide):rN+
+ai += fire dragon (armour|hide):rF++, rC-
+ai += ice dragon (armour|hide):rC++, rF-
+ai += swamp dragon (armour|hide):rP+
+ai += mottled dragon (armour|hide):rSticky
+ai += storm dragon (armour|hide):rElec
+ai += gold dragon (armour|hide):rN+
+ai += steam dragon (armour|hide):rSteam
+
+ai += ambrosia:!magic, !confuse
 ai += scrolls? of vulnerability:!r
 ai += scrolls? of holy word:!r
 ai += scrolls? of magic mapping:!r
