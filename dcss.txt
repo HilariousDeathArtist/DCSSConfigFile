@@ -35,49 +35,46 @@
 :   local mp, max_mp = you.mp()
 :   local hp, max_hp = you.hp()
 :   local first_monster = next(getMonsterList())
-:   local should_check_for_corpse = not (no_results() or dont_know_how_to_get_there())
+:   local already_checked = (no_results() or dont_know_how_to_get_there())
 :   local is_safe = (first_monster == nil)
 :   local missing_mp = (mp < max_mp)
 :   local missing_hp = (hp < max_hp)
 :   local have_no_chunks = have_no_chunks()
 :   local you_are_sif = string.find(you.god(), "Sif")
 :   local you_are_mummy = string.find(you.race(), "Mummy")
+:   local lichform = string.find(you.transform(), "lich")
 :   local you_are_sifmummy = you_are_sif and you_are_mummy
-:   local gourmand_and_hungry = you_are_gourmand() and not you_are_engorged()
-:   local you_want_chunks = have_no_chunks and (you_are_hungry() or gourmand_and_hungry)
-:   local staff_of_energy_is_equipped = staff_of_energy_is_equipped()
-:   local have_spare_chunks = not have_no_chunks and not you_are_hungry()
 :   local you_are_regen = you.regenerating()
 :   local you_know_regen = known_spells["Regeneration"]
-:   local lichform = string.find(you.transform(), "lich")
+:   local gourmand_and_hungry = you_are_gourmand() and not you_are_engorged()
+:   local have_spare_chunks = not have_no_chunks and not you_are_hungry()
+:   local you_have_staff_of_energy = have_staff_of_energy()
+:   local you_want_spare_chunks = (not have_spare_chunks) and (you_know_regen or you_have_staff_of_energy or (you_are_sif and not you_are_mummy))
+:   local you_want_chunks = have_no_chunks and (you_are_hungry() or gourmand_and_hungry or you_want_spare_chunks)
+:   local staff_of_energy_is_equipped = staff_of_energy_is_equipped()
 :   local you_are_hungerless = you_are_mummy or lichform
-:
+:   --crawl.mpr(string.format("you_want_chunks is: %s", you_want_chunks and "True" or "False"))
 :   if (is_safe) then 
-:     if (missing_mp and you_are_sifmummy) then
-:       crawl.mpr("<green>Autochanneling.</green>")
+:     if (missing_mp and you_are_sifmummy) or (have_spare_chunks and you_are_sif) then
+:       crawl.mpr("<green>Autochanneling using Sif.</green>")
 :       sendkeys('aa')
 :     elseif (missing_hp and you_know_regen and have_spare_chunks and not you_are_regen) then
 :       crawl.mpr("<green>Autocasting Regen.</green>")
 :       --This assumes casting regen is bound to zr
 :       sendkeys('zr')
 :     elseif (missing_mp and staff_of_energy_is_equipped and (have_spare_chunks or you_are_hungerless)) then
-:       crawl.mpr("<green>Autochanneling.</green>")
+:       crawl.mpr("<green>Autochanneling using staff of energy.</green>")
 :       sendkeys('v')
-:     elseif ((missing_hp or missing_mp) and you_are_mummy) then
-:       rest()
+:     elseif you_want_chunks and on_corpses() and not on_chunks() then 
+:       crawl.mpr("<green>Autochopping corpse.</green>")
+:       sendkeys('c')
+:     elseif you_are_near_starving() then
+:       crawl.mpr("<lightred>You should find something to eat.</lightred>")      
 :     elseif should_rest(hp, mp, max_hp, max_mp) then
 :       rest()
-:     elseif you_want_chunks and not on_chunks() then 
-:       if on_corpses() then 
-:         chop_corpses()
-:       elseif you_are_near_starving()then
-:         crawl.mpr("<lightred>You should find something to eat.</lightred>")
-:       elseif should_check_for_corpse then
-:         find_corpses()
-:       else
-:         --Keep looking for things to kill
-:        autoexplore()
-:       end
+:     elseif you_want_chunks and (not (on_chunks() or already_checked)) then
+:       crawl.mpr("<yellow>You may need something to eat soon, looking for food.</yellow>")
+:       find_corpses()
 :     else
 :       --This does the general travelling
 :       autoexplore()
@@ -97,7 +94,8 @@
             or (you.slowed()) 
             or (you.poisoned()) 
             or (you.confused())
-            or (you.exhausted()))
+            or (you.exhausted())
+            or (((hp < max_hp) or (mp < max_mp)) and you_are_mummy))
   end
 
   -- Hungry, Very Hungry, Near Starving, Starving
@@ -144,13 +142,22 @@
 
   function have_no_chunks()
     for it in inventory() do
-       if string.find(it.name(), "chunk") then
+       if string.find(it.name(), "chunk") and not string.find(it.name(), "rotting") then
         return false
       end
     end
     return true
   end
-
+  
+  function have_staff_of_energy()
+    for it in inventory() do
+       if string.find(it.name(), "staff of energy") then
+        return true
+      end
+    end
+    return false
+  end
+  
   function on_corpses()
     for it in floor_items() do
       if string.find(it.name(), "corpse") then
@@ -179,18 +186,8 @@
     return not (string.find(you.race(), "ghoul"))
   end
 
-  function chop_corpses()
-    crawl.mpr("<green>Autochopping corpse.</green>")
-    sendkeys('c')
-  end
-
   function find_corpses()
-    crawl.mpr("<yellow>You may need something to eat soon, looking for food.</yellow>")
     sendkeys(string.char(6) .. "@corpse&&!!rott&&!!skel&&!!sky&&!!vampire&&!!corpse rot" .. "\ra\r")
-    if ((no_results() or dont_know_how_to_get_there())) then
-      crawl.mpr("<yellow>No corpses around.</yellow>")     
-      autoexplore()
-    end
   end
 
   function inventory()
@@ -643,10 +640,8 @@
       if no_rE then
         tenguconjwarn = tenguconjwarn  .. ", Lightning Bolt"
         mobwarnings["raiju"] = "is fast and can Lightning Bolt itself at you!"
-        mobwarnings["shock serpent"] = "is fast and can cast Lightning Bolt and has an electric aura!"
       else
         mobwarnings["raiju"] = "is fast and blinks around!"
-        mobwarnings["shock serpent"] = "is fast, and does damage on being hit!"
       end
       if no_rC then
         if no_Cons then
@@ -938,7 +933,8 @@
     mobwarnings["electric golem"] = "is fast, has electric attacks, and blinks!" .. electricwarning
     mobwarnings["Nikola"] = "casts Lightning Bolt, Chain Lightning and blinks!" .. electricwarning
     mobwarnings["storm dragon"] = "can do high damage in melee and has a nasty electric breath attack!" .. electricwarning
-      
+    mobwarnings["shock serpent"] = "is fast, casts Bolt of Lighning, does electric damage, and causes electric damage when injured!" .. electricwarning
+    
     local statdrainwarning = ""
     if no_Sustab then
       statdrainwarning = ", or drain your Int"
@@ -2203,7 +2199,7 @@ ai += staff of cold:rC+
 ai += staff of death:rN+
 ai += staff of fire:rF+
 ai += staff of poison:rP+
-ai += staff of energy:+MP, hungerless spells, !d!a
+ai += staff of energy:+MP, hungerless spells, !d!a, @w1
 ai += staff of wizardry:wiz+, !a
 ai += staff of power:MP+17, !a
 ai += staff of conjuration:!a

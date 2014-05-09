@@ -7,7 +7,7 @@ It's still being updated regularly, and since it's started getting spread around
 
 There are a few ways to use this in your own game, the simplest being to add the following line to your config:
 
-    include = HilariousDeathArtist.rc
+    include += HilariousDeathArtist.rc
     
 This will ensure you get updates regularly without having to check back.
 

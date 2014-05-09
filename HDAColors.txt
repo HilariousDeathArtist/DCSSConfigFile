@@ -1887,7 +1887,8 @@ msc += $awesome:You feel a craving for the dungeon's cuisine
 # Weapon brands/enchantment
 msc ^= $awesome:A searing pain shoots up your 
 msc += $awesome:You hear the crackle of electricity
-msc += $awesome:Your.*tingle!
+msc += $awesome:Your hands tingle
+msc += $awesome:Your claws tingle
 msc += $awesome:You feel a dreadful hunger
 msc ^= $awesome:Your.*glows (red|green|.*yellow|purple)
 msc += $awesome:Your.*briefly pass through it before you manage to get a firm grip on it
