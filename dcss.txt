@@ -39,36 +39,28 @@
 :   local is_safe = (first_monster == nil)
 :   local missing_mp = (mp < max_mp)
 :   local missing_hp = (hp < max_hp)
+:   local have_no_chunks = have_no_chunks()
 :   local you_are_sif = string.find(you.god(), "Sif")
 :   local you_are_mummy = string.find(you.race(), "Mummy")
 :   local you_are_sifmummy = you_are_sif and you_are_mummy
 :   local gourmand_and_hungry = you_are_gourmand() and not you_are_engorged()
-:   local you_want_chunks = have_no_chunks() and (you_are_hungry() or gourmand_and_hungry)
-:   if (false) then
-:     crawl.mpr(string.format("is_safe is: %s", is_safe and "True" or "False"))
-:     crawl.mpr(string.format("should_rest is: %s", should_rest(hp, mp, max_hp, max_mp) and "True" or "False"))
-:     crawl.mpr(string.format("hungername is: %s", you.hunger_name()))
-:     crawl.mpr(string.format("you_are_engorged is: %s", you_are_engorged() and "True" or "False"))
-:     crawl.mpr(string.format("you_are_hungry is: %s", you_are_hungry() and "True" or "False"))
-:     crawl.mpr(string.format("you_are_near_starving is: %s", you_are_near_starving() and "True" or "False"))
-:     crawl.mpr(string.format("you_are_carnivore is: %s", you_are_carnivore() and "True" or "False"))
-:     crawl.mpr(string.format("you_are_gourmand is: %s", you_are_gourmand() and "True" or "False"))
-:     crawl.mpr(string.format("have_no_chunks is: %s", have_no_chunks() and "True" or "False"))
-:     crawl.mpr(string.format("on_corpses is: %s", on_corpses() and "True" or "False"))
-:     crawl.mpr(string.format("no_results is: %s", no_results() and "True" or "False"))
-:     crawl.mpr(string.format("dont_know_how_to_get_there is: %s", dont_know_how_to_get_there() and "True" or "False"))
-:     crawl.mpr(string.format("should_check_for_corpse is: %s", should_check_for_corpse and "True" or "False"))
-:     crawl.mpr(string.format("missing_mp is: %s", missing_mp and "True" or "False"))
-:     crawl.mpr(string.format("you_are_sif is: %s", you_are_sif and "True" or "False"))
-:     crawl.mpr(string.format("you_are_sifmummy is: %s", you_are_sifmummy and "True" or "False"))
-:     crawl.mpr(string.format("gourmand_and_hungry is: %s", gourmand_and_hungry and "True" or "False"))
-:     crawl.mpr(string.format("you_want_chunks is: %s", you_want_chunks and "True" or "False"))
-:   end
+:   local you_want_chunks = have_no_chunks and (you_are_hungry() or gourmand_and_hungry)
+:   local staff_of_energy_is_equipped = staff_of_energy_is_equipped()
+:   local have_spare_chunks = not have_no_chunks and not you_are_hungry()
+:   local you_are_regen = you.regenerating()
+:   local you_know_regen = known_spells["Regeneration"]
+:   local lichform = string.find(you.transform(), "lich")
+:   local you_are_hungerless = you_are_mummy or lichform
+:
 :   if (is_safe) then 
 :     if (missing_mp and you_are_sifmummy) then
 :       crawl.mpr("<green>Autochanneling.</green>")
 :       sendkeys('aa')
-:     elseif (missing_mp and you_are_mummy and staff_of_energy_is_equipped) then
+:     elseif (missing_hp and you_know_regen and have_spare_chunks and not you_are_regen) then
+:       crawl.mpr("<green>Autocasting Regen.</green>")
+:       --This assumes casting regen is bound to zr
+:       sendkeys('zr')
+:     elseif (missing_mp and staff_of_energy_is_equipped and (have_spare_chunks or you_are_hungerless)) then
 :       crawl.mpr("<green>Autochanneling.</green>")
 :       sendkeys('v')
 :     elseif ((missing_hp or missing_mp) and you_are_mummy) then
@@ -108,7 +100,7 @@
             or (you.exhausted()))
   end
 
-  -- Hungry, Very Hungry, Near Starving
+  -- Hungry, Very Hungry, Near Starving, Starving
   function you_are_hungry()
     return not you_are_not_hungry() and ((string.find(you.hunger_name(), "hungry")) or you_are_near_starving())
   end
@@ -133,7 +125,8 @@
   end
 
   function no_results()
-    return string.find(crawl.messages(10), escape("Can't find anything matching that"))   
+    return string.find(crawl.messages(10), escape("Can't find anything matching that")) 
+        or string.find(crawl.messages(10), escape("You may need something to eat soon"))   
   end
 
   function dont_know_how_to_get_there()
@@ -151,7 +144,7 @@
 
   function have_no_chunks()
     for it in inventory() do
-      if food.ischunk(it) and food.can_eat(it) then
+       if string.find(it.name(), "chunk") then
         return false
       end
     end
@@ -170,7 +163,7 @@
 
   function on_chunks()
     for it in floor_items() do
-      if food.ischunk(it) and food.can_eat(it) then
+      if string.find(it.name(), "chunk") then
         return true
       else
         return false
@@ -193,7 +186,7 @@
 
   function find_corpses()
     crawl.mpr("<yellow>You may need something to eat soon, looking for food.</yellow>")
-    sendkeys(string.char(6) .. "@corpse&&!!rott&&!!skel&&!!sky&&!!vampire" .. "\ra\r")
+    sendkeys(string.char(6) .. "@corpse&&!!rott&&!!skel&&!!sky&&!!vampire&&!!corpse rot" .. "\ra\r")
     if ((no_results() or dont_know_how_to_get_there())) then
       crawl.mpr("<yellow>No corpses around.</yellow>")     
       autoexplore()
@@ -209,9 +202,9 @@
   end
   
   function staff_of_energy_is_equipped()
-    local weapon =  items.eqiupped_at("weapon")
+    local weapon =  items.equipped_at("Weapon")
     if weapon then
-      return weapon.name():find("staff of energy")
+      return string.find(weapon.name(), "staff of energy")
     else
       return false
     end
@@ -244,6 +237,18 @@
     --Removes any coloration parts of the string
     return (escaped:gsub('<[^<]*>',''))
   end
+  
+  local function init_spells()
+		local spell_list = {}
+		
+		for _, spell_name in ipairs(you.spells()) do
+			spell_list[spell_name] = true
+		end
+	
+		return spell_list
+	end
+
+	known_spells = init_spells()	
 >
 
 ##################
@@ -268,7 +273,7 @@
     local no_rE = you.res_shock() == 0
     local no_Cons = not you.conservation()
     local no_Sustab = you.res_statdrain() == 0
-    local no_rMut = not you.res_mutation()
+    local no_rMut = you.res_mutation() == 0
     local you_are_flying = you.flying()
     local no_see_invis = not you.see_invisible()
     local no_rCorr = not you.res_corr()    
@@ -277,8 +282,8 @@
     --local demonspawn_cons_scroll = you.mutation("conserve scroll")
     local you_are_undead = (race:find("ghoul") or race:find("vampire") or race:find("mummy") or form:find("lich"))
     
-    --crawl.mpr(string.format("you_are_undead is: %s", you_are_undead and "True" or "False"))
-    --crawl.mpr(string.format("no_rN is: %s", no_rN and "True" or "False"))
+    --crawl.mpr(string.format("you.res_mutation() is: %s", you.res_mutation()))
+    --crawl.mpr(string.format("no_rMut is: %s", no_rMut and "True" or "False"))
     
     if xl < 3 then
       if no_rP then
@@ -1016,7 +1021,7 @@
     end
     
     mobwarnings["air mage"] = "can cast Airstrike! "..flightwarning
-    mobwarnings["titan"] = "can cast Airstrike! "..flightwarning
+    mobwarnings["titan"] = "can cast Lightning Bolt and Airstrike! "..flightwarning .. electricwarning
     mobwarnings["blizzard demon"] = "can cast Airstrike! "..flightwarning
     mobwarnings["wind drake"] = "can cast Airstrike! "..flightwarning
     mobwarnings["Gastronok"] = "can cast Airstrike! "..flightwarning
@@ -1216,8 +1221,8 @@
     --Things that increase hp/mp temporarily really mess with this
     local current_form = you.transform()
     local you_are_berserk = you.berserk()
+    local max_hp_increased = false
     local max_hp_decreased = false
-    local even = false
 
     if (current_form ~= previous_form) then
       if (previous_form:find("dragon") or 
@@ -1238,19 +1243,21 @@
       max_hp_increased = true
     end
     
-    --crawl.mpr(string:format("current_form is: %s", current_form and "True" or "False"))
-    --crawl.mpr(string:format("previous_form is: %s", previous_form and "True" or "False"))
+    --crawl.mpr(string.format("previous_form is: %s", previous_form))
+    --crawl.mpr(string.format("current_form is: %s", current_form))
+    --crawl.mpr(string.format("max_hp_increased is: %s", max_hp_increased and "True" or "False"))
+    --crawl.mpr(string.format("max_hp_decreased is: %s", max_hp_decreased and "True" or "False"))
+    
     --crawl.mpr(string:format("you_are_berserk is: %s", you_are_berserk and "True" or "False"))
     --crawl.mpr(string:format("was_berserk_last_turn is: %s", was_berserk_last_turn and "True" or "False"))
-    --crawl.mpr(string:format("max_hp_increased is: %s", max_hp_increased and "True" or "False"))
-    --crawl.mpr(string:format("max_hp_decreased is: %s", max_hp_decreased and "True" or "False"))
+    
     
     --Skips message on initializing game
     if previous_hp > 0 then
       local hp_difference = previous_hp - current_hp
       local mp_difference = previous_mp - current_mp
       
-      if max_hp_increased or max_hp_increased then
+      if max_hp_increased or max_hp_decreased then
         if max_hp_increased then 
           crawl.mpr("<green>You now have " .. current_hp .. "/" .. max_hp .. " hp.</green>")
         else
@@ -1435,18 +1442,6 @@ ae += <quick blade
   local pickup_tomahawk = true
   local pickup_javelin = true
   local pickup_nets = true
-  
-	local function init_spells()
-		local spell_list = {}
-		
-		for _, spell_name in ipairs(you.spells()) do
-			spell_list[spell_name] = true
-		end
-	
-		return spell_list
-	end
-
-	local known_spells = init_spells()	
 	
 	local function ammo_pickup(item, name)
 		if pickup_arrows or known_spells["Sticks to Snakes"] then
@@ -1716,6 +1711,9 @@ more := force_more_message
 
 # Important dungeon features
 more += interdimensional caravan
+more += You hear.*crackling.*archway
+more += One of the plants suddenly grows acid sacs
+more += Another plant grows acid sacs
 more += distant snort
 more += Found a gateway leading out of the Abyss
 more += Found a staircase to the Ecumenical Temple
@@ -2028,6 +2026,7 @@ more += Ignacio.*(comes? into view|opens the)
 more += Ijyb.*(comes? into view|opens the)
 more += Ilsuiw.*(comes? into view|opens the)
 more += Jessica.*(comes? into view|opens the)
+more += Jorgrun.*(comes? into view|opens the)
 more += Jory.*(comes? into view|opens the)
 more += Joseph.*(comes? into view|opens the)
 more += Josephine.*(comes? into view|opens the)
