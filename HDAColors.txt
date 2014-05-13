@@ -62,6 +62,10 @@ msc =
 msc += white:You feel blessed for a moment
 
 #msc += $danger:
+msc += $danger:begins to accept
+msc += $danger:begins to recite a word of recall
+msc += $danger:begins to radiate toxic energy
+msc += $danger:The shadow imp is revulsed by your support of nature
 msc += $danger:Careful! You are starting to lose your buoyancy
 msc ^= $danger:plants?.*suddenly grows? acid sacs
 msc ^= $danger:Your.*is devoured by a tear in reality
@@ -223,7 +227,7 @@ msc += $danger:You feel a build-up of mutagenic energy
 msc += $danger:You cannot pacify this monster 
 msc += $danger:You feel a (horrible|terrible) chill
 msc += $danger:You are burned terribly
-msc += $danger:The moth of wrath goads
+msc += $danger:moth of wrath (goads|infuriates) the
 msc += $danger:you trip and fall back down the stairs
 msc += $danger:the glow from your corona prevents you from becoming completely invisible
 msc += $danger:A red film seems to cover your vision as you go berserk
@@ -348,7 +352,16 @@ msc += $danger:You feel extremely guilty
 msc += $danger:picks up.*throwing net
 msc += $danger:You feel less protected from physical attacks
 
+# Item Destrucion, gaining bad mutions, or losing good ones, pennance, and gong
 #msc += $item_dmg:
+msc += $item_dmg:You feel a little hungry
+msc += $item_dmg:You feel clumsy
+msc += $item_dmg:A piece of fruit is consumed
+msc += $item_dmg:pieces of fruit are consumed
+msc += $item_dmg:You feel slightly disoriented
+msc += $item_dmg:Your system partially rejects artificial healing
+msc += $item_dmg:You feel even more weirdly uncertain
+msc += $item_dmg:You feel weirdly uncertain
 msc += $item_dmg:acid corrodes
 msc += $item_dmg:catch(es)? fire
 msc ^= $item_dmg:freezes? and shatters?
@@ -907,6 +920,7 @@ msc += $warning:Your divine protection wanes
 msc += $warning:The sheep \"Baaaas\" balefully
 
 #msc += $boring:
+msc += $boring:The shadows disperse without effect
 msc += $boring:You feel woody for a moment
 msc += $boring:Your vision is briefly tinged with green
 msc ^= $boring:Sigmund is suddenly surrounded by pale red light
@@ -1279,7 +1293,6 @@ msc += $boring:avoid triggering a
 msc += $boring:A net swings high above you
 msc += $boring:Natasha extends her claws
 msc += $boring:The shadow imp breathes steam at you
-msc += $boring:You feel weak for a moment
 msc += $boring:You can't see any susceptible monsters within range
 msc += $boring:You are momentarily dazzled by a brilliant light
 msc += $boring:You feel momentarily weightless
@@ -1342,6 +1355,7 @@ msc += $boring:becomes larger for a moment
 msc += $boring:falls out of your pack
 msc += $boring:leaps into the air
 msc += $boring:body glows momentarily
+msc += $boring:shimmers violently
 
 # Enemies taking damage
 msc += $good:You (hit|bite|slice|spit|open|slash|puncture|carve|perforate|stick|cut|trample|maul|pierce)
@@ -1361,7 +1375,6 @@ msc += $good:is struck by lightning
 msc += $good:A guardian golem appears
 msc += $good:is covered in liquid flames
 msc += $good:is engulfed in
-msc += $good:A fierce wind blows from the fan
 msc += $good:Your.*tramples the
 msc += $good:The orb of electricity engulfs the
 msc += $good:The (fireball|burst of hellfire|blast of hellfire|ghostly fireball|explosion|stinking cloud) engulfs [^your?]
@@ -1385,12 +1398,15 @@ msc += $good:(convulses|writhes in agony)
 msc += $good:is splashed with acid
 msc += $good:You feel life coursing into your body
 msc += $good:is struck by lightning
-msc += $good:A sheep catches fire
 msc += $good:is burned by acid
 msc += $good:seems to burn from within
 
 # Non-damage combat messages
 #msc += $positive:
+msc += $positive:moth of wrath (goads|infuriates) your
+msc += $positive:Some water evaporates in the bright sunlight
+msc += $positive:You become one with your weapon
+msc += $positive:Your bond becomes stronger
 msc += $positive:A magical shield forms in front of you
 msc += $positive:Your attacks no longer feel as feeble
 msc += $positive:You feel odd
@@ -1730,6 +1746,7 @@ msc += $verypositive:You feel more protected from negative energy
 
 #Positive mutation - or losing bad ones
 #msc += $awesome:
+msc ^= $awesome:You feel resistant to heat
 msc += $awesome:You feel saturated with power
 msc += $awesome:You feel power rushing into your body
 msc += $awesome:Your blood runs red-hot
@@ -1817,6 +1834,8 @@ msc += $awesome:Your throat feels hot
 msc += $awesome:Your teeth grow very long and razor-sharp
 
 # Other rare and awesome stuff
+msc ^= $awesome:A sheep catches fire
+msc += $awesome:plants?.*grows? in the rain
 msc += $awesome:You feel controlled for a moment
 msc ^= $awesome:There is a gate to the Realm of Zot here
 msc += $awesome:A monocle briefly appears
@@ -1842,6 +1861,7 @@ msc += $awesome:There is a gate to the Realm of Zot here
 msc += $awesome:A terribly searing pain shoots up your
 msc += $awesome:Your strength has recovered
 msc += $awesome:A flood of memories washes over you
+msc ^= $awesome:Vehumet offers you knowledge of
 msc ^= $awesome:With a loud hiss the gate opens wide
 msc += $awesome:You have collected all the runes
 msc += $awesome:a hidden mimic gets squished
@@ -1895,7 +1915,11 @@ msc += $awesome:Your.*briefly pass through it before you manage to get a firm gr
 
 # You or an ally takes damage
 #msc += $negative:
-msc += $negative:silver sears you
+msc ^= $negative:Your.*is blasted
+msc += $negative:Electricity courses through your body
+msc ^= $negative:Your.*is struck by lightning
+msc += $negative:You are struck by lightning
+msc += $negative:silver sears your?
 msc += $negative:You draw magical energy from your own body
 msc += $negative:Rocks fall onto you out of nowhere
 msc += $negative:You are engulfed in raging winds
@@ -1939,7 +1963,7 @@ msc += $negative:constricts your?
 msc += $negative:(bites|hits|headbutts|punches|shocks|tentacle-slaps|claws|smites|stings|freezes|slaps|pecks|gores) your?
 msc += $negative:(tail-slaps|tramples|burns|poisons|gores|pecks|touches|kicks|trunk-slaps|skewers) your?
 # Thanks killer klowns
-msc += $negative:(flogs|trip-wires|defenestrates|headlocks|strangle-hugs|pokes|pounds|squeezes|pinches|elbows|wrestles) your?
+msc += $negative:(prods|flogs|trip-wires|defenestrates|headlocks|strangle-hugs|pokes|pounds|squeezes|pinches|elbows|wrestles) your?
 msc += $negative:Your.*burned by acid
 msc += $negative:Your.*appears confused
 msc += $negative:Your?.*is struck by the.*spines
@@ -2011,9 +2035,11 @@ msc += $warning:resists
 
 # For the text that describes ranged attacks and spells
 #msc += $takesaction:
+msc += $takesaction:A fierce wind blows from the fan
+msc ^= $takesaction:Rupert roars wildly at you
 msc += $takesaction:A fierce wind blows
 msc += $takesaction:The wizard shimmers violently
-msc += $takesaction:wandering mushroom releases spores
+msc += $takesaction:releases spores
 msc += $takesaction:The giant eyeball stares at you
 msc += $takesaction:You begin recalling your allies
 msc += $takesaction:You begin to radiate toxic energy
@@ -2028,6 +2054,7 @@ msc += $takesaction:spins a strand of pure energy
 msc += $takesaction:Aizul coils himself and waves his upper body at you
 msc ^= $takesaction:The royal jelly spits out
 msc ^= $takesaction:calls upon Beogh to heal
+msc ^= $takesaction:prays to Beogh
 msc ^= $takesaction:calls down the wrath of Beogh
 msc ^= $takesaction:invokes the aid of Beogh
 msc += $takesaction:utters an invocation to Beogh
@@ -2045,14 +2072,12 @@ msc += $takesaction:The injured rakshasa weaves a defensive illusion
 msc += $takesaction:Mara seems to draw the.*out of itself
 msc += $takesaction:Mara shimmers
 msc += $takesaction:Your battlesphere fires
-msc += $takesaction:begins to recite a word of recall
 msc += $takesaction:curse skull calls on the powers of darkness
 msc += $takesaction:curse skull rattles its jaw
 msc += $takesaction:Your shadow mimicks your spell
 msc += $takesaction:calls down the wrath of its god upon you
 msc += $takesaction:invokes the aid of its god against you
 msc += $takesaction:rakshasa weaves an illusion
-msc += $takesaction:begins to accept
 msc += $takesaction:coils itself and waves its upper body at you
 msc += $takesaction:casts a spell
 msc += $takesaction:You breathe a
@@ -2207,6 +2232,11 @@ msc += boring:Multicoloured lights dance around
 
 # Interface Messages
 #msc += $interface:
+msc += $interface:Choose an unidentified item
+msc += $interface:There is nothing here that can be animated
+msc += $interface:No.*are visible
+msc += $interface:No evolvable flora in sight
+msc += $interface:You must target a plant or fungus
 msc += $interface:No target in range
 msc += $interface:This is a.*deck
 msc += $interface:No exploration algorithm can help you here
