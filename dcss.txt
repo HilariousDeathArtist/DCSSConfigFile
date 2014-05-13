@@ -1,5 +1,4 @@
 # Got suggestions/improvements?
-# Got suggestions/improvements?
 # https://github.com/HilariousDeathArtist/DCSSConfigFile
 # or find me on crawl.s-z.org
 
@@ -28,6 +27,8 @@
 -- Travels to the nearest corpse if we have no chunks and are at Very Hungry or Hungry or using Gourmand and at Full
 -- Automatically chops valid corpses if we are standing on them and we have no chunks
 -- Will stop autotravel at Near Starving
+-- Channels MP if you have staff of enery or worship Sif when you have extra chunks
+-- Casts regen out of combat if you have spare chunks and are missing hp
 -- TODO: better detection of non-edible corpses before standing on them
 -- NOTE: If you don't have rP you will still chop poisonous corpses, but not pick up their chunks
 
@@ -41,40 +42,61 @@
 :   local missing_hp = (hp < max_hp)
 :   local have_no_chunks = have_no_chunks()
 :   local you_are_sif = string.find(you.god(), "Sif")
+:   local sacrifice_god = you_worship_sacrifice_god()
 :   local you_are_mummy = string.find(you.race(), "Mummy")
+:   local you_do_not_eat = string.find(you.race(), "Spriggan") or you_are_mummy
 :   local lichform = string.find(you.transform(), "lich")
-:   local you_are_sifmummy = you_are_sif and you_are_mummy
 :   local you_are_regen = you.regenerating()
 :   local you_know_regen = known_spells["Regeneration"]
-:   local gourmand_and_hungry = you_are_gourmand() and not you_are_engorged()
+:   local you_know_simulacrum = known_spells["Simulacrum"]
+:   local you_know_sublimation = known_spells["Sublimation of Blood"]
+:   local you_know_animate_skeleton = known_spells["Animate Skeleton"]
+:   local chunks_are_equipped = is_weapon("chunk")
+:   local gourmand_and_hungry = you_are_gourmand() and not (you_are_very_full() or you_are_engorged())
 :   local have_spare_chunks = not have_no_chunks and not you_are_hungry()
+:   local no_food_issues = (you_are_hungerless or have_spare_chunks)
 :   local you_have_staff_of_energy = have_staff_of_energy()
-:   local you_want_spare_chunks = (not have_spare_chunks) and (you_know_regen or you_have_staff_of_energy or (you_are_sif and not you_are_mummy))
-:   local you_want_chunks = have_no_chunks and (you_are_hungry() or gourmand_and_hungry or you_want_spare_chunks)
-:   local staff_of_energy_is_equipped = staff_of_energy_is_equipped()
+:   local you_want_spare_chunks = (not have_spare_chunks) and (you_know_regen or you_know_sublimation or you_know_simulacrum or you_have_staff_of_energy or (you_are_sif and not you_are_mummy))
+:   local you_want_chunks = have_no_chunks and (you_are_hungry() or gourmand_and_hungry or you_want_spare_chunks) and not you_do_not_eat
+:   local staff_of_energy_is_equipped = is_weapon("staff of energy")
 :   local you_are_hungerless = you_are_mummy or lichform
-:   --crawl.mpr(string.format("you_want_chunks is: %s", you_want_chunks and "True" or "False"))
+:   --crawl.mpr(string.format("can_not_animate is: %s", can_not_animate() and "True" or "False"))
 :   if (is_safe) then 
-:     if (missing_mp and you_are_sifmummy) or (have_spare_chunks and you_are_sif) then
+:     if missing_mp and you_know_sublimation and chunks_are_equipped then
+:       crawl.mpr("<green>Autocasting Sublimation of Blood.</green>")
+:       sendkeys('zm')
+:     elseif missing_mp and you_are_sif and no_food_issues then
 :       crawl.mpr("<green>Autochanneling using Sif.</green>")
 :       sendkeys('aa')
-:     elseif (missing_hp and you_know_regen and have_spare_chunks and not you_are_regen) then
+:     elseif (missing_hp and you_know_regen and no_food_issues and not you_are_regen and (mp>9)) then
 :       crawl.mpr("<green>Autocasting Regen.</green>")
 :       --This assumes casting regen is bound to zr
 :       sendkeys('zr')
-:     elseif (missing_mp and staff_of_energy_is_equipped and (have_spare_chunks or you_are_hungerless)) then
+:     elseif (missing_mp and staff_of_energy_is_equipped and no_food_issues) then
 :       crawl.mpr("<green>Autochanneling using staff of energy.</green>")
 :       sendkeys('v')
+:     elseif not have_no_chunks and (you_are_hungry() or gourmand_and_hungry) then
+:       sendkeys('e')
 :     elseif you_want_chunks and on_corpses() and not on_chunks() then 
-:       crawl.mpr("<green>Autochopping corpse.</green>")
-:       sendkeys('c')
-:     elseif you_are_near_starving() then
+:       if you_know_animate_skeleton and mp>1 and (not can_not_animate()) then
+:         crawl.mpr("<green>Autocasting Animate Skeleton for chunks.</green>")
+:         sendkeys('zA')
+:       else
+:         crawl.mpr("<green>Autochopping corpse.</green>")
+:         sendkeys('c')
+:       end
+:     elseif you_are_near_starving() and have_no_chunks then
 :       crawl.mpr("<lightred>You should find something to eat.</lightred>")      
 :     elseif should_rest(hp, mp, max_hp, max_mp) then
 :       rest()
-:     elseif you_want_chunks and (not (on_chunks() or already_checked)) then
+:     elseif you_want_chunks and (not (on_chunks() or on_corpses() or already_checked)) then
 :       crawl.mpr("<yellow>You may need something to eat soon, looking for food.</yellow>")
 :       find_corpses()
+:     elseif sacrifice_god then 
+:       sendkeys('zA')
+:     elseif (on_corpses() and you_know_animate_skeleton and mp>1 and (not can_not_animate())) then
+:       crawl.mpr("<green>Autocasting Animate Skeleton</green>")
+:       sendkeys('zA')
 :     else
 :       --This does the general travelling
 :       autoexplore()
@@ -112,6 +134,11 @@
   function you_are_engorged()
     return (string.find(you.hunger_name(), "completely stuffed"))
   end
+  
+  -- Very full
+  function you_are_very_full()
+    return (string.find(you.hunger_name(), "very full"))
+  end
 
   -- Near Starving, Starving
   function you_are_near_starving()
@@ -132,6 +159,10 @@
         or string.find(crawl.messages(10), escape("Have to go through"))
   end
 
+  function can_not_animate()
+    return string.find(crawl.messages(10), escape("There is nothing here that can be animated")) 
+  end
+  
   function rest()
     sendkeys('5')
   end
@@ -158,15 +189,23 @@
     return false
   end
   
+  function you_worship_sacrifice_god()
+    return string.find(you.god(), "Trog") or string.find(you.god(), "Oka") 
+        or string.find(you.god(), "Makhleb")  or string.find(you.god(), "Beogh") 
+        or string.find(you.god(), "Lugonu") or string.find(you.god(), "Nemelex")
+  end
+  
   function on_corpses()
-    for it in floor_items() do
-      if string.find(it.name(), "corpse") then
+    local fl = you.floor_items()
+    for it in iter.invent_iterator:new(fl) do
+      if string.find(it.name(), "corpse")
+          and not string.find(it.name(), "rotting")
+          and not string.find(it.name(), "plague") then
         return true
-      else
-        return false
       end
     end
-  end 
+    return false
+  end
 
   function on_chunks()
     for it in floor_items() do
@@ -198,10 +237,10 @@
     return iter.invent_iterator:new(you.floor_items())
   end
   
-  function staff_of_energy_is_equipped()
+  function is_weapon(str)
     local weapon =  items.equipped_at("Weapon")
     if weapon then
-      return string.find(weapon.name(), "staff of energy")
+      return string.find(weapon.name(), str)
     else
       return false
     end
@@ -236,16 +275,16 @@
   end
   
   local function init_spells()
-		local spell_list = {}
-		
-		for _, spell_name in ipairs(you.spells()) do
-			spell_list[spell_name] = true
-		end
-	
-		return spell_list
-	end
-
-	known_spells = init_spells()	
+    local spell_list = {}
+    
+    for _, spell_name in ipairs(you.spells()) do
+      spell_list[spell_name] = true
+    end
+    
+    return spell_list
+  end
+  
+  known_spells = init_spells()
 >
 
 ##################
@@ -1149,6 +1188,7 @@
         and not (string.find(mons, "gnoll captain") and mob == "gnoll")
         and not (string.find(mons, "mottled draconian") and mob == "mottled")
         and not (string.find(mons, "dire elephant") and mob == "elephant")
+        and not (string.find(mons, "elephant slug") and mob == "elephant")
         and not (string.find(mons, "salamander mystic") and mob == "salamander")
         and not (string.find(mons, "Josephine") and mob == "Joseph") then
           --Used to format the string for Unique/Named mobs
@@ -1335,6 +1375,7 @@
     previous_hp = current_hp
     previous_mp = current_mp
     previous_form = current_form
+    was_berserk_last_turn = you_are_berserk
   end  
 >
 
@@ -1528,6 +1569,7 @@ slot += Fireball:f
 slot += Fire Brand:f
 slot += Apportation:g
 slot += Haste:h
+slot += Sublimation of Blood:m
 slot += Abjuration:q
 slot += Regeneration:r
 slot += Recall:r
@@ -1701,13 +1743,15 @@ stop += You are no longer firmly anchored in space
 #################
 # Force Prompts #
 #################
-
+small_more = true
 # Set Alias
 more := force_more_message
 
 # Important dungeon features
 more += interdimensional caravan
+more += You hear.*creaking.*oriflamme
 more += You hear.*crackling.*archway
+more += You hear.*rumble.*avalanche
 more += One of the plants suddenly grows acid sacs
 more += Another plant grows acid sacs
 more += distant snort
@@ -1782,6 +1826,7 @@ more += Mara seems to draw the.*out of itself
 
 # Interrupts for unexpected situations
 more += The.*shudders
+more += The shadow imp is revulsed by your support of nature
 more += Something interferes with your magic
 more += You feel a genetic drift
 more += You don't.* that spell
@@ -1982,7 +2027,6 @@ more += life is in your own
 more += is no longer charmed
 more += Your shroud falls apart
 more += Your extra speed is starting to run out
-more += Your skin stops crawling
 more += You are firmly grounded in the material plane once more
 
 # Uniques
@@ -2156,7 +2200,7 @@ ai += ice dragon (armour|hide):rC++, rF-
 ai += swamp dragon (armour|hide):rP+
 ai += mottled dragon (armour|hide):rSticky
 ai += storm dragon (armour|hide):rElec
-ai += gold dragon (armour|hide):rN+
+ai += gold dragon (armour|hide):rC+, rF+, rP+
 ai += steam dragon (armour|hide):rSteam
 
 ai += ambrosia:!magic, !confuse
