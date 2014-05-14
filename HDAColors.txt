@@ -62,6 +62,7 @@ msc =
 msc += white:You feel blessed for a moment
 
 #msc += $danger:
+msc += $danger:An iron grate slams shut
 msc += $danger:begins to accept
 msc += $danger:begins to recite a word of recall
 msc += $danger:begins to radiate toxic energy
@@ -351,11 +352,13 @@ msc += $danger:You feel guilty
 msc += $danger:You feel extremely guilty
 msc += $danger:picks up.*throwing net
 msc += $danger:You feel less protected from physical attacks
+msc ^= $danger:Your.*falters for a moment
 
 # Item Destrucion, gaining bad mutions, or losing good ones, pennance, and gong
 #msc += $item_dmg:
+msc += $item_dmg:You feel a little pissed off
+msc += $item_dmg:Your hooves look more like feet
 msc += $item_dmg:You feel a little hungry
-msc += $item_dmg:You feel clumsy
 msc += $item_dmg:A piece of fruit is consumed
 msc += $item_dmg:pieces of fruit are consumed
 msc += $item_dmg:You feel slightly disoriented
@@ -383,6 +386,7 @@ msc += $item_dmg:SHROANNG
 msc += $item_dmg:BONNNG
 msc ^= $item_dmg:This attack would place you under penance
 msc += $item_dmg:You will pay for your transgression\, mortal
+msc += $item_dmg:You hear a distant slurping noise
 msc ^= $item_dmg:picks up.*(scrolls?|potions?|wand)
 msc += $item_dmg:drinks a potion
 msc += $item_dmg:You hear a zap
@@ -403,9 +407,11 @@ msc += $item_dmg:You feel less (heat|cold) resistant
 msc += $item_dmg:You feel vulnerable to (heat|cold)
 msc += $item_dmg:You feel less resistant to poisons
 msc += $item_dmg:You no longer feel resistant to poison
+msc += $item_dmg:Your vision seems duller
 msc += $item_dmg:You feel less energetic
 
 #msc += $warning:
+msc += $warning:Something blocks
 msc += $warning:You feel jittery
 msc += $warning:Your aim is not that steady anymore
 msc += $warning:You feel strangely alone
@@ -1915,6 +1921,7 @@ msc += $awesome:Your.*briefly pass through it before you manage to get a firm gr
 
 # You or an ally takes damage
 #msc += $negative:
+msc += $negative:You are constricted
 msc ^= $negative:Your.*is blasted
 msc += $negative:Electricity courses through your body
 msc ^= $negative:Your.*is struck by lightning
@@ -2232,6 +2239,8 @@ msc += boring:Multicoloured lights dance around
 
 # Interface Messages
 #msc += $interface:
+msc += $interface:You're in a travel-excluded area
+msc += $interface:You are unable to make a sound
 msc += $interface:Choose an unidentified item
 msc += $interface:There is nothing here that can be animated
 msc += $interface:No.*are visible
@@ -2395,6 +2404,7 @@ menu =
 
 # Variables
 $decent := white
+$mp := lightcyan
 #interface := cyan
 #danger := lightred
 #item_dmg := red
@@ -2423,8 +2433,8 @@ menu += $good:^unidentified .*armour.*(runed|glowing|embroidered)
 menu += $good:^unidentified .*armour.*(shiny|dyed)
 
 # Staffs
-menu += $verypositive:staff of energy
-menu += $positive:[^r] staff of
+menu += $mp:staff of energy
+menu += $positive:[^r]staff of
 # rod
 menu += $verypositive:rod
 
@@ -2444,7 +2454,7 @@ menu += magenta:mutagenic
 menu += $warning:poisonous
 menu += $boring:inedible
 menu += $positive:royal jell
-menu += $warning:ambrosia
+menu += $mp:ambrosia
 menu += $good:meat ration
 menu += $good:bread ration
 menu += $good:preferred
@@ -2467,7 +2477,8 @@ menu += $danger:potions? of berserk
 menu += magenta:potions? of mutation
 menu += $decent:potions? of (restore|flight|lignification)
 menu += $good:potions? of (might|agility|brilliance|resistance|invisibility)
-menu += $positive:potions? of (curing|magic)
+menu += $positive:potions? of curing
+menu += $mp:potions? of magic
 menu += $verypositive:potions? of (haste|speed|heal wounds)
 menu += $awesome:potions? of (experience|cure mutation|gain|beneficial)
 
@@ -2502,8 +2513,8 @@ menu += $decent:stone of tremors
 menu += $decent:lantern of shadows
 menu += $decent:box of beasts
 menu += $warning:disc of storms
-menu += $positive:crystal ball of energy
-menu += $verypositive:Staff of Wucad Mu
+menu += $mp:crystal ball of energy
+menu += $mp:Staff of Wucad Mu
 
 # Deck colouring
 menu += $awesome:deck of wonders
