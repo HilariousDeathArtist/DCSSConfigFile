@@ -734,7 +734,7 @@
     mobwarnings["neqoxec"] = "can mutate you, and drain your Int!"
     mobwarnings["giant orange brain"] = "can cast Shadow Creatures, and drain your Int!"
     if no_Sustab then
-      local statdrainwarning = "<red>You are not wearing SustAb!</red>"
+      local statdrainwarning = "<red> You are not wearing SustAb!</red>"
       mobwarnings["brain worm"] = "can drain your Int!" .. statdrainwarning 
       mobwarnings["Norris"] = mobwarnings["Norris"] .. statdrainwarning
       mobwarnings["orange crystal statue"] = mobwarnings["orange crystal statue"] .. statdrainwarning

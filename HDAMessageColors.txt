@@ -1141,10 +1141,10 @@ msc += $boring:The drowned soul returns to the deep
 msc += $boring:Your.*stays? behind
 msc += $boring:You prostrate yourself
 msc += $boring:You shiver with cold
-msc += $boring:glows (bright chartreuse|shining black|silvery red|dark black|shimmering rubric) for a moment
-msc += $boring:glows (faint lime green|pale silver|dull charcoal|brightly|shimmering blue|bright red) for a moment
-msc += $boring:glows (dull rubric|pale yellow|brilliant magenta|pale dun|mottled black|dull silver) for a moment
-msc += $boring:glows (dark umber|faint lavender|brilliant black|pale gold|brilliant silver|shimmering brown) for a moment
+msc += $boring:glows? (bright chartreuse|shining black|silvery red|dark black|shimmering rubric) for a moment
+msc += $boring:glows? (faint lime green|pale silver|dull charcoal|brightly|shimmering blue|bright red) for a moment
+msc += $boring:glows? (dull rubric|pale yellow|brilliant magenta|pale dun|mottled black|dull silver) for a moment
+msc += $boring:glows? (dark umber|faint lavender|brilliant black|pale gold|brilliant silver|shimmering brown) for a moment
 msc += $boring:Waves of light ripple over your body
 msc += $boring:Your skin tingles
 msc += $boring:looks braver
@@ -1413,6 +1413,8 @@ msc += $good:seems to burn from within
 
 # Non-damage combat messages
 #msc += $positive:
+msc += $positive:It gets dark
+msc += $positive:is outlined in light
 msc += $positive:A mana viper appears with a sibilant hiss
 msc += $positive:moth of wrath (goads|infuriates) your
 msc += $positive:Some water evaporates in the bright sunlight
@@ -2255,6 +2257,7 @@ msc += boring:Multicoloured lights dance around
 
 # Interface Messages
 #msc += $interface:
+msc += $interface: Choose some type of armour to enchant
 msc += $interface:You can't place the prism on a creature
 msc += $interface:You are too depleted to cast spells recklessly
 msc += $interface:It's stuck to you

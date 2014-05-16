@@ -4,26 +4,27 @@
 
 --SUCH EXCITEMENT!!!
 language = !!!
-<
-  function ready()
-    AnnounceDamage()
-    SpoilerAlert()
-    OpenSkills()
-  end
->
 
+# The damage annoucement messages
+include += HDamage.rc
 # The ===HDAtravel autotravel replacement macro
 include += HDAtravel.rc
-# The Damage annoucement messages
-include += HDamage.rc
-# The Monster warning messages
-include += SpoilerAlerts.rc
+--# The monster warning messages
+--include += SpoilerAlerts.rc
 # Message colors
 include += HDAMessageColors.rc
 # Item colors
 include += HDAItemColors.rc
 # Force More prompts
 include += HDAForceMore.rc
+
+<
+  function ready()
+    AnnounceDamage()
+    --SpoilerAlert()
+    OpenSkills()
+  end
+>
 
 ####################
 # Opens skill menu #
