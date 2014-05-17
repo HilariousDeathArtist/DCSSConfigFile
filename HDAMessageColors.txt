@@ -62,6 +62,7 @@ msc =
 msc += white:You feel blessed for a moment
 
 #msc += $danger:
+msc += $danger:The ambient light returns to normal
 msc += $danger:An iron grate slams shut
 msc += $danger:begins to accept
 msc += $danger:begins to recite a word of recall
@@ -417,6 +418,7 @@ msc += $item_dmg:Your vision seems duller
 msc += $item_dmg:You feel less energetic
 
 #msc += $warning:
+msc += $warning:is no longer weakened
 msc += $warning:Something blocks
 msc += $warning:You feel jittery
 msc += $warning:Your aim is not that steady anymore
@@ -1144,7 +1146,7 @@ msc += $boring:You shiver with cold
 msc += $boring:glows? (bright chartreuse|shining black|silvery red|dark black|shimmering rubric) for a moment
 msc += $boring:glows? (faint lime green|pale silver|dull charcoal|brightly|shimmering blue|bright red) for a moment
 msc += $boring:glows? (dull rubric|pale yellow|brilliant magenta|pale dun|mottled black|dull silver) for a moment
-msc += $boring:glows? (dark umber|faint lavender|brilliant black|pale gold|brilliant silver|shimmering brown) for a moment
+msc += $boring:glows? (brilliant cobalt blue|dark umber|faint lavender|brilliant black|pale gold|brilliant silver|shimmering brown) for a moment
 msc += $boring:Waves of light ripple over your body
 msc += $boring:Your skin tingles
 msc += $boring:looks braver
@@ -1368,8 +1370,8 @@ msc += $boring:body glows momentarily
 msc += $boring:shimmers violently
 
 # Enemies taking damage
-msc += $good:You (hit|bite|slice|spit|open|slash|puncture|carve|perforate|stick|cut|trample|maul|pierce|punish)
-msc += $good:You (chop|strike|skewer|impale|dice|headbutt|fracture|peck|touch|kick|freeze|smack|shred|scratch) 
+msc += $good:You (hit|bite|slice|spit|open|slash|puncture|carve|perforate|stick|cut|trample|maul|pierce|punish|electrocute)
+msc += $good:You (chop|strike|skewer|impale|dice|headbutt|fracture|peck|touch|kick|freeze|smack|shred|scratch|devastate) 
 msc += $good:You (pummel|squash|pulverise|grab|squeeze|constrict|sock|thump|thrash|flatten|tail-slap|tentacle-slap)
 msc += $good:You (burn|claw|mangle|punch|drain|bludgeon|whack|shatter|hammer|sears|beat|pound|crush|eviscerate) 
 msc += $good:(hits|bites|slices|spits|opens|slashes|punctures|carves|perforates|sticks|tramples|trunk-slaps) [^y]
@@ -1760,6 +1762,7 @@ msc += $verypositive:You feel more protected from negative energy
 
 #Positive mutation - or losing bad ones
 #msc += $awesome:
+msc += $awesome:An ominous black mark forms on your body
 msc += $awesome:You feel a strange anaesthesia
 msc ^= $awesome:You feel resistant to heat
 msc += $awesome:You feel saturated with power
@@ -1908,7 +1911,7 @@ msc ^= $awesome:There is a frozen archway here
 msc ^= $awesome:There is a dark tunnel here
 msc ^= $awesome:There is a flagged portal here
 msc ^= $awesome:There is a portal to a secret trove of treasure here
-msc += $awesome:There is a flickering gateway to a bazaar here
+msc ^= $awesome:There is a flickering gateway to a bazaar here
 msc ^= $awesome:There is an entrance to.*on this level
 msc += $awesome:3 runes! That's enough to enter the realm of Zot
 msc += $awesome:The lock glows eerily
@@ -1983,7 +1986,7 @@ msc += $negative:constricts your?
 msc += $negative:(bites|hits|headbutts|punches|shocks|tentacle-slaps|claws|smites|stings|freezes|slaps|pecks|gores) your?
 msc += $negative:(tail-slaps|tramples|burns|poisons|gores|pecks|touches|kicks|trunk-slaps|skewers) your?
 # Thanks killer klowns
-msc += $negative:(prods|flogs|trip-wires|defenestrates|headlocks|strangle-hugs|pokes|pounds|squeezes|pinches|elbows|wrestles) your?
+msc += $negative:(tickles|prods|flogs|trip-wires|defenestrates|headlocks|strangle-hugs|pokes|pounds|squeezes|pinches|elbows|wrestles) your?
 msc += $negative:Your.*burned by acid
 msc += $negative:Your.*appears confused
 msc += $negative:Your?.*is struck by the.*spines
@@ -2257,7 +2260,8 @@ msc += boring:Multicoloured lights dance around
 
 # Interface Messages
 #msc += $interface:
-msc += $interface: Choose some type of armour to enchant
+msc += $interface:There isn't anything that you can close there
+msc += $interface:Choose some type of armour to enchant
 msc += $interface:You can't place the prism on a creature
 msc += $interface:You are too depleted to cast spells recklessly
 msc += $interface:It's stuck to you
