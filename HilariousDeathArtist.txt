@@ -124,6 +124,7 @@ add_autopickup_func(function(it, name)
   end
   
   if name:find("curare") then return true end
+  if name:find("dart") and name:find("dispersal") then return true end
   if name:find("throwing net") then return true end
   if you.skill("Short Blades") > 4 then
     if name:find("quick blade") then return true end
@@ -131,10 +132,18 @@ add_autopickup_func(function(it, name)
   if you.skill("Long Blades") > 8 then
     if name:find("demon blade") then return true end
     if name:find("bastard sword") then return true end
+  end
+  if you.skill("Long Blades") > 14 then
     if name:find("claymore") then return true end
   end
   if you.skill("Axes") > 4 then
     if name:find("axe") then return true end
+  end
+  if you.skill("Axes") > 8 then
+    if name:find("battleaxe") then return true end
+    if name:find("broad axe") then return true end
+    if name:find("war axe") then return true end
+    if name:find("executioner") then return true end
   end
   if you.skill("Axes") > 16 then
     if name:find("executioner") then return true end
@@ -145,12 +154,15 @@ add_autopickup_func(function(it, name)
     if name:find("sacred scourge") then return true end
     if name:find("dire flail") then return true end
   end
+  if you.skill("Maces & Flails") > 14 then
+    if name:find("great mace") then return true end
+  end
   if you.skill("Polearms") > 4 then
     if name:find("trident") then return true end
-    if name:find("Trishula") then return true end
-  end
-  if you.skill("Polearms") > 12 then
     if name:find("demon trident") then return true end
+    if name:find("trishula") then return true end
+  end
+  if you.skill("Polearms") > 14 then
     if name:find("glaive") then return true end   
     if name:find("bardiche") then return true end    
   end
@@ -252,8 +264,8 @@ auto_exclude += Crazy Yiuf, Asterion, Joseph, Terence, Grum, Donald, Natasha
 travel_delay = -1
 
 explore_stop = glowing_items,artefacts,greedy_pickup_smart
-explore_stop += corpses,stairs,shops,altars,portals,branches,runed_doors
-explore_stop += greedy_sacrificeable
+explore_stop += greedy_visited_item_stack,stairs,shops
+explore_stop += altars,portals,branches,runed_doors,greedy_sacrificeable
 
 # Adjusts how much autoexplore favours attempting to discover room perimeters and corners. 
 # At values higer than 0, autoexplore will more heavily favour visiting squares that are next to walls
