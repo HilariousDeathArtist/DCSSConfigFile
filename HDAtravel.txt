@@ -115,7 +115,7 @@ autoinscribe += staff of energy:!d!a, @w1
 :         crawl.mpr("<cyan>Switching to main weapon.</cyan>")
 :         sendkeys('wa')
 :       end
-:     elseif want_to_eat and (on_chunks() or not have_no_chunks) then
+:     elseif want_to_eat and not have_no_chunks then
 :       crawl.mpr("<cyan>Autoeating chunks.</cyan>")
 :       sendkeys('e')
 :     elseif you_want_chunks and on_corpses() and not on_chunks() then 
@@ -359,7 +359,7 @@ autoinscribe += staff of energy:!d!a, @w1
         or not you_are_not_troll() 
         or not you_are_not_felid() 
         or not you_are_not_octopode()
-        or (you.skill("Unarmed Combat") > 4)
+        or (you.skill("Unarmed Combat") >= 3)
   end
   
   function is_weapon(str)
