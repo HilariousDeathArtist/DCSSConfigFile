@@ -7,7 +7,9 @@ more := force_more_message
 
 # Important dungeon features
 more += interdimensional caravan
-
+more += You hear.*rusting.*drain
+more += You hear the drain falling apart
+more += The drain falls to bits
 more += You hear.*ticking.*clock
 more += You hear.*crackle.*magical portal
 more += You hear.*creaking.*oriflamme
@@ -67,6 +69,7 @@ more += Found .* abyssal rune of Zot
 
 # Dangerous Monsters
 more += giant eyeball.*comes? into view
+more += giant spore.*comes? into view
 more += silver statue.*comes? into view
 more += ironbrand convoker.*comes? into view
 more += Lich.*comes? into view
