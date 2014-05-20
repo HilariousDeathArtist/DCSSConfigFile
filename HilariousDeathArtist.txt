@@ -249,7 +249,7 @@ auto_exclude += vampire knight, orc sorcerer, Grinder, Rupert, Ereshkigal, Erolc
 
 ## uniques or dangerous ##
 auto_exclude += Roxanne, Sigmund, Hydra, Pikel, slave, Prince Ribbit, Snorg, Ijyb
-auto_exclude += Menkaure, Duvessa, Dowan, Blork, jelly, Gastronok, Edmund
+auto_exclude += Menkaure, Duvessa, Dowan, Blork, jelly, Gastronok, Edmund, Psyche
 auto_exclude += Urug, Harold, Aizul, Erica, Jorgrun, ancienct lich, orb of fire
 auto_exclude += Saint Roka, Boris, Mennas, Nessos, Sonja, Agnes, Wiglaf, Fannar, Louise
 auto_exclude += Mara, Arachne, Xtahua, Frances, Frederick, ice statue, Polyphemus
@@ -259,6 +259,11 @@ auto_exclude += Crazy Yiuf, Asterion, Joseph, Terence, Grum, Donald, Natasha
 ###############
 # Auto Travel #
 ###############
+
+# Avoids shallow water and deep water
+: if not ((you.race() == "Octopode") or (you.race() == "Merfolk")) then
+  travel_avoid_terrain = shallow water, deep water
+: end
 
 # Set travel delay to -1 for instant-travel, set to 1 to see travel paths
 travel_delay = -1
