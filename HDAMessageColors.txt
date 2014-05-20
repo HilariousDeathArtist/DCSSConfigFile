@@ -62,6 +62,7 @@ msc =
 msc += white:You feel blessed for a moment
 
 #msc += $danger:
+msc += $danger:You are no longer magically infusing your attacks
 msc += $danger:The ambient light returns to normal
 msc += $danger:An iron grate slams shut
 msc += $danger:begins to accept
@@ -359,6 +360,7 @@ msc += $danger:You feel extremely guilty
 msc += $danger:picks up.*throwing net
 msc += $danger:You feel less protected from physical attacks
 msc ^= $danger:Your.*falters for a moment
+msc += $danger:Mutagenic energy flows through the plutonium sword
 
 # Item Destrucion, gaining bad mutions, or losing good ones, pennance, and gong
 #msc += $item_dmg:
@@ -372,6 +374,7 @@ msc += $item_dmg:You feel slightly disoriented
 msc += $item_dmg:Your system partially rejects artificial healing
 msc += $item_dmg:You feel even more weirdly uncertain
 msc += $item_dmg:You feel weirdly uncertain
+msc += $item_dmg:The drain falls to bits
 msc += $item_dmg:acid corrodes
 msc += $item_dmg:catch(es)? fire
 msc ^= $item_dmg:freezes? and shatters?
@@ -1379,6 +1382,7 @@ msc += $good:(freezes|poisons|engulfs|draws|tail-slaps|kicks|smacks|shreds|melts
 msc += $good:(pummels|squashes|pulverises|cuts|chops|strikes|skewers|attacks|hits|constricts|burns) [^y]
 msc += $good:(grabs|claws|shocks|drains|sears|pecks|gores|stings|tentacle-slaps|headbutts|eviscerates|punches) [^y]
 msc += $good:You smite
+msc += $good:is flooded with distortional energies
 msc += $good:You draw life from 
 msc += $good:is struck by the twisting air
 msc += $good:burns!
@@ -1415,6 +1419,8 @@ msc += $good:seems to burn from within
 
 # Non-damage combat messages
 #msc += $positive:
+msc += $positive:You shrug off the repeated paralysis
+msc += $positive:You begin infusing your attacks with magical energy
 msc += $positive:It gets dark
 msc += $positive:is outlined in light
 msc += $positive:A mana viper appears with a sibilant hiss
@@ -1852,6 +1858,7 @@ msc += $awesome:Your throat feels hot
 msc += $awesome:Your teeth grow very long and razor-sharp
 
 # Other rare and awesome stuff
+msc += $awesome:There is a labyrinth entrance here
 msc += $awesome:You adapt resistances upon receiving elemental damage
 msc += $awesome:The storm surrounding you grows powerful enough to repel missiles
 msc += $awesome:There is a magical portal here
@@ -1937,6 +1944,7 @@ msc += $awesome:Your.*briefly pass through it before you manage to get a firm gr
 
 # You or an ally takes damage
 #msc += $negative:
+msc += $negative:starcursed mass engulfs you
 msc += $negative:You are constricted
 msc ^= $negative:Your.*is blasted
 msc += $negative:Electricity courses through your body
@@ -2171,6 +2179,7 @@ msc += $godaction:(Kikubaaqudgha|Makhleb|Nemelex|Sif Muna|Trog|Vehumet|Xom|Yrede
 msc ^= $godaction:(Elyvilon|Igni Ipthes|Elyvilon|Ashenzari|Cheibriados|Dithmenos|Fedhas|Okawaru|Lugonu|Jiyva|Beogh|Qazlal) says
 msc ^= $godaction:(Kikubaaqudgha|Makhleb|Nemelex Xobeh|Sif Muna|Trog|Vehumet|Xom|Yredelemnul|Zin[^g]|The Shining One|Gozag) says
 msc ^= $godaction:Your divine halo returns
+msc += $godaction:is distracted by the nearby gold
 msc ^= $godaction:You feel protected from physical attacks
 msc ^= $godaction:You feel protected from cold
 msc ^= $godaction:You feel protected from fire
@@ -2375,6 +2384,9 @@ msc += $interface:Your reserves of magic are already full
 msc += $interface:There are no corpses nearby
 msc += $interface:No target in view
 msc += $interface:It (is|was) a (potion|scroll)
+msc += $interface:Aborting
+msc += $interface:Created macro
+msc += $interface:Saving macro
 
 # Muted - unnecessary 
 #msc += mute:
