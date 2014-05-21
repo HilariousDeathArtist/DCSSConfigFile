@@ -108,7 +108,7 @@ ae += useless_item, dangerous_item, evil_item
 
 # Autopickup artefacts/ego
 ae += <artefact
-: if (you.xl() < 12) or (you.god():find("Nemelex")) then
+: if (you.xl() < 12) or (you.god():find("Nemelex")) or (you.god():find("Yred")) then
 ae += <ego
 : end
 
@@ -261,7 +261,7 @@ auto_exclude += Crazy Yiuf, Asterion, Joseph, Terence, Grum, Donald, Natasha
 ###############
 
 # Avoids shallow water and deep water
-: if not ((you.race() == "Octopode") or (you.race() == "Merfolk")) then
+: if not ((you.race() == "Octopode") or (you.race() == "Merfolk") or (you.branch() == "Shoals")) then
   travel_avoid_terrain = shallow water, deep water
 : end
 
