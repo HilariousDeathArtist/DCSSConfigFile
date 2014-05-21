@@ -231,6 +231,7 @@ autoinscribe += staff of energy:!d!a, @w1
   
   function removed_barbs()
     return string.find(crawl.messages(10), escape("You carefully extract the manticore spikes from your body")) 
+        or string.find(crawl.messages(10), escape("The manticore spikes snap loose"))
   end
   
   function no_results()
