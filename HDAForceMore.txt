@@ -6,6 +6,7 @@
 more := force_more_message
 
 # Important dungeon features
+more += invites you to visit
 more += interdimensional caravan
 more += You hear.*rusting.*drain
 more += You hear the drain falling apart
@@ -73,7 +74,7 @@ more += giant spore.*comes? into view
 more += silver statue.*comes? into view
 more += ironbrand convoker.*comes? into view
 more += Lich.*comes? into view
-more += The blast of calcifying dust hits you
+more += The blast of calcifying dust hits you[^r]
 more += You are engulfed in calcifying dust
 more += begins to recite a word of recall
 more += You are engulfed in dark miasma
@@ -228,7 +229,7 @@ more += The power of Zot is invoked against you
 more += The acid corrodes your
 more += You feel (dopey|clumsy|weak)
 more += The air around.*erupts in flames
-more += Terrible wounds (open|spread)
+more += Terrible wounds (open|spread) all over you
 more += You are encased in ice
 more += Your.*suddenly stops moving
 more += You suddenly stop moving
