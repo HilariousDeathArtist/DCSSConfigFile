@@ -421,6 +421,7 @@ msc += $item_dmg:Your vision seems duller
 msc += $item_dmg:You feel less energetic
 
 #msc += $warning:
+msc += $warning:Your passage of Golubria closes with a snap
 msc += $warning:is no longer weakened
 msc += $warning:Something blocks
 msc += $warning:You feel jittery
@@ -934,6 +935,8 @@ msc += $warning:Your divine protection wanes
 msc += $warning:The sheep \"Baaaas\" balefully
 
 #msc += $boring:
+msc += $boring:Your ghoul eats
+msc += $boring:seems to dim momentarily
 msc += $boring:The net is caught on your fulminant prism
 msc += $boring:The shadows disperse without effect
 msc += $boring:You feel woody for a moment
@@ -1169,7 +1172,7 @@ msc += $boring:Wisps of smoke drift from your
 msc += $boring:You smell salt
 msc += $boring:tries to hide in the shadows
 msc += $boring:stops crackling
-
+msc ^= $boring:Your.*is no longer covered in acid
 msc += $boring:You momentarily stiffen
 msc += $boring:waves its rhizomes
 msc += $boring:You smell (smoke|something weird)
@@ -1470,7 +1473,7 @@ msc += $positive:You begin to abjure the creatures around you
 msc += $positive:You extend your aura of abjuration
 msc += $positive:A divine shield forms around you
 msc += $positive:Your attacks no longer feel as feeble
-msc += $positive:Your shroud bends the
+msc += $positive:Your shroud bends.*attack away
 msc += $positive:illusion disappears in a puff of smoke
 msc += $positive:A beastly little devil appears in a puff
 msc += $positive:Your.*is no longer encased in ice
@@ -1768,6 +1771,7 @@ msc += $verypositive:You feel more protected from negative energy
 
 #Positive mutation - or losing bad ones
 #msc += $awesome:
+msc += $awesome:You feel completely energised by your suffering
 msc += $awesome:An ominous black mark forms on your body
 msc += $awesome:You feel a strange anaesthesia
 msc ^= $awesome:You feel resistant to heat
@@ -1940,7 +1944,7 @@ msc += $awesome:Your hands tingle
 msc += $awesome:Your claws tingle
 msc += $awesome:You feel a dreadful hunger
 msc ^= $awesome:Your.*glows (red|green|.*yellow|purple)
-msc += $awesome:Your.*briefly pass through it before you manage to get a firm grip on it
+msc += $awesome:briefly pass through it before
 
 # You or an ally takes damage
 #msc += $negative:
@@ -2066,6 +2070,7 @@ msc += $warning:resists
 
 # For the text that describes ranged attacks and spells
 #msc += $takesaction:
+msc += $takesaction:You enter the passage of Golubria
 msc += $takesaction:You conjure a prism of explosive energy
 msc += $takesaction:A raging storm of fire appears
 msc += $takesaction:Sojobo summons a great blast of wind
@@ -2180,6 +2185,7 @@ msc ^= $godaction:(Elyvilon|Igni Ipthes|Elyvilon|Ashenzari|Cheibriados|Dithmenos
 msc ^= $godaction:(Kikubaaqudgha|Makhleb|Nemelex Xobeh|Sif Muna|Trog|Vehumet|Xom|Yredelemnul|Zin[^g]|The Shining One|Gozag) says
 msc ^= $godaction:Your divine halo returns
 msc += $godaction:is distracted by the nearby gold
+msc += $godaction:sets up shop in the Dungeon
 msc ^= $godaction:You feel protected from physical attacks
 msc ^= $godaction:You feel protected from cold
 msc ^= $godaction:You feel protected from fire
