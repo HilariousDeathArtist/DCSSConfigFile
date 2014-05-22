@@ -20,6 +20,7 @@ include += HDAForceMore.rc
 
 <
   function ready()
+    crawl.mpr("you.weapon() is :" .. you.weapon())
     AnnounceDamage()
     --SpoilerAlert()
     OpenSkills()
@@ -123,56 +124,64 @@ add_autopickup_func(function(it, name)
     end
   end
   
-  if name:find("curare") then return true end
-  if name:find("dart") and name:find("dispersal") then return true end
-  if name:find("throwing net") then return true end
-  if you.skill("Short Blades") > 4 then
-    if name:find("quick blade") then return true end
+  local weapon = items.equipped_at("Weapon")
+  if weapon then
+    local weapon_name = weapon.name()
+  
+    if name:find("curare") then return true end
+    if name:find("dart") and name:find("dispersal") then return true end
+    if name:find("throwing net") then return true end
+    if you.skill("Short Blades") > 4 then
+      if name:find("quick blade") then return true end
+    end
+    if you.skill("Long Blades") > 8 then
+      if name:find("demon blade") then return true end
+      if name:find("bastard sword") then return true end
+    end
+    if you.skill("Long Blades") > 14 then
+      if name:find("claymore") then return true end
+    end
+    if you.skill("Axes") > 4 then
+      if name:find("axe") then return true end
+    end
+    if you.skill("Axes") > 8 then
+      if name:find("battleaxe") then return true end
+      if name:find("broad axe") then return true end
+      if name:find("war axe") then return true end
+      if name:find("executioner") then return true end
+    end
+    if you.skill("Axes") > 16 then
+      if name:find("executioner") then return true end
+    end
+    if you.skill("Maces & Flails") > 4 then
+      if name:find("eveningstar") then return true end
+      if name:find("demon whip") then return true end
+      if name:find("sacred scourge") then return true end
+      if name:find("dire flail") then return true end
+    end
+    if you.skill("Maces & Flails") > 14 then
+      if name:find("great mace") then return true end
+    end
+    if you.skill("Polearms") > 4 then
+      if name:find("trident") then return true end
+      if name:find("demon trident") then return true end
+      if name:find("trishula") then return true end
+    end
+    if you.skill("Polearms") > 14 then
+      if name:find("glaive") then return true end   
+      if name:find("bardiche") then return true end    
+    end
+    if you.skill("Staves") > 4 then
+      if name:find("lajatang") then return true end
+    end
+
+    return false
+    
+  else
+    if (you.skill("Unarmed Combat") < 5) and (items.equipped_at("Weapon") == nil) then
+      if it.class(true) == "weapon" then return true end
+    end
   end
-  if you.skill("Long Blades") > 8 then
-    if name:find("demon blade") then return true end
-    if name:find("bastard sword") then return true end
-  end
-  if you.skill("Long Blades") > 14 then
-    if name:find("claymore") then return true end
-  end
-  if you.skill("Axes") > 4 then
-    if name:find("axe") then return true end
-  end
-  if you.skill("Axes") > 8 then
-    if name:find("battleaxe") then return true end
-    if name:find("broad axe") then return true end
-    if name:find("war axe") then return true end
-    if name:find("executioner") then return true end
-  end
-  if you.skill("Axes") > 16 then
-    if name:find("executioner") then return true end
-  end
-  if you.skill("Maces & Flails") > 4 then
-    if name:find("eveningstar") then return true end
-    if name:find("demon whip") then return true end
-    if name:find("sacred scourge") then return true end
-    if name:find("dire flail") then return true end
-  end
-  if you.skill("Maces & Flails") > 14 then
-    if name:find("great mace") then return true end
-  end
-  if you.skill("Polearms") > 4 then
-    if name:find("trident") then return true end
-    if name:find("demon trident") then return true end
-    if name:find("trishula") then return true end
-  end
-  if you.skill("Polearms") > 14 then
-    if name:find("glaive") then return true end   
-    if name:find("bardiche") then return true end    
-  end
-  if you.skill("Staves") > 4 then
-    if name:find("lajatang") then return true end
-  end
-  if (you.skill("Unarmed Combat") < 5) and (items.equipped_at("Weapon") == nil) then
-    if it.class(true) == "weapon" then return true end
-  end
-  return false
 end)
 }
   
@@ -248,22 +257,17 @@ auto_exclude += [^c] wizard, eyeball, orb of eyes, sphinx, lich, ancient lich, o
 auto_exclude += vampire knight, orc sorcerer, Grinder, Rupert, Ereshkigal, Erolcha, Jory
 
 ## uniques or dangerous ##
-auto_exclude += Roxanne, Sigmund, Hydra, Pikel, slave, Prince Ribbit, Snorg, Ijyb
+auto_exclude += Roxanne, Sigmund, Hydra, Pikel, slave, Prince Ribbit, Snorg, Ijyb, Jessica
 auto_exclude += Menkaure, Duvessa, Dowan, Blork, jelly, Gastronok, Edmund, Psyche
 auto_exclude += Urug, Harold, Aizul, Erica, Jorgrun, ancienct lich, orb of fire
 auto_exclude += Saint Roka, Boris, Mennas, Nessos, Sonja, Agnes, Wiglaf, Fannar, Louise
 auto_exclude += Mara, Arachne, Xtahua, Frances, Frederick, ice statue, Polyphemus
 auto_exclude += Death drake, Kirke, Hog, Jorgrun, Sojobo, Nergalle, Maud, Eustachio
-auto_exclude += Crazy Yiuf, Asterion, Joseph, Terence, Grum, Donald, Natasha
+auto_exclude += Crazy Yiuf, Asterion, Joseph, Terence, Grum, Donald, Natasha, Nikola
 
 ###############
 # Auto Travel #
 ###############
-
-# Avoids shallow water and deep water
-: if not ((you.race() == "Octopode") or (you.race() == "Merfolk") or (you.branch() == "Shoals")) then
-  travel_avoid_terrain = shallow water, deep water
-: end
 
 # Set travel delay to -1 for instant-travel, set to 1 to see travel paths
 travel_delay = -1

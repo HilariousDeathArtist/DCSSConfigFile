@@ -1,458 +1,515 @@
--- To use this create a macro with the following function call in game
--- ===HDAtravel
--- This file can be included in your rcfile with the following line:
--- include += HDAtravel.rc
-
-# This still has plenty of bugs, submit them at: 
+# Got suggestions/improvements?
 # https://github.com/HilariousDeathArtist/DCSSConfigFile
 # or find me on crawl.s-z.org
 
+--SUCH EXCITEMENT!!!
+language = !!!
+
+# The damage annoucement messages
+include += HDamage.rc
+# The ===HDAtravel autotravel replacement macro
+include += HDAtravel.rc
+--# The monster warning messages
+--include += SpoilerAlerts.rc
+# Message colors
+include += HDAMessageColors.rc
+# Item colors
+include += HDAItemColors.rc
+# Force More prompts
+include += HDAForceMore.rc
+
+<
+  function ready()
+    AnnounceDamage()
+    --SpoilerAlert()
+    OpenSkills()
+  end
+>
+
+####################
+# Opens skill menu #
+####################
+<
+  local need_skills_opened = true
+  function OpenSkills()
+    if you.turns() == 0 and need_skills_opened then
+      need_skills_opened = false
+      sendkeys("m")
+    end
+  end
+>
+
+#############
+# Autofight #
+#############
+
+# Do/don't throw stuff when autofighting
+autofight_throw = true
+autofight_throw_nomove = true
+# If true. items are autofired stopping at the monsters feet (same as firing using .)
+autofight_fire_stop = true
+
+fire_order  = launcher, return
+fire_order += large rock, javelin, tomahawk, dart, stone
+
+# Prevent me from tab-fighting to death by keeping this high
+autofight_stop = 60
+
+# Enables automagic attacks
+automagic_enable = false
+automagic_slot = a
+# Percentage of MP to stop automagic at
+automagic_stop = 50
+# If set to true, resort to melee when automagic_stop is active
+automagic_fight = true
+
+##############
+# Autopickup #
+##############
+
+# Used
+# $ = gold
+# ? = scroll
+# ! = potion
+# : = book
+# " = jewellery
+# / = wand
+# % = food
+# } = miscellaneous
+# \ = rods
+# | = staves
+: if (you.god():find("Trog")) then
+  autopickup += $?!:"/%}\
+: else
+  autopickup += $?!:"/%}\|
+: end
+
+# Unused
+# ) = weapon
+# ( = missiles
+# [ = armour
+# X = corpses
+
+# Allows easily dropping multiple items
+drop_mode += multi
+# Always show the full list of items when you pick up a stack
+pickup_mode += multi
+# Allows followers to pick up ANYTHING (take care not to lose artifacts)
+default_friendly_pickup += all
+
+# Set Alias for Autopickup Exceptions
+ae := autopickup_exceptions
+ae += useless_item, dangerous_item, evil_item
+
+# Dont pickup potion(s) of [coagulated] blood if you are not a vampire
+: if you.race() ~= "Vampire" then
+	ae += potions? of.*blood
+: end
+
+# Autopickup artefacts/ego
+ae += <artefact
+: if (you.xl() < 12) or (you.god():find("Nemelex")) or (you.god():find("Yred")) then
+ae += <ego
+: end
+
+# Armour autopickup by rwbarton, Weapon by HDA
+{
+add_autopickup_func(function(it, name)
+  if it.class(true) == "armour" then
+    local good_slots = {cloak="Cloak", helmet="Helmet", gloves="Gloves", boots="Boots"}
+    st, _ = it.subtype()
+    if good_slots[st] ~= nil and items.equipped_at(good_slots[st]) == nil then
+      return true
+    end
+  end
+  
+  if name:find("curare") then return true end
+  if name:find("dart") and name:find("dispersal") then return true end
+  if name:find("throwing net") then return true end
+  if you.skill("Short Blades") > 4 then
+    if name:find("quick blade") then return true end
+  end
+  if you.skill("Long Blades") > 8 then
+    if name:find("demon blade") then return true end
+    if name:find("bastard sword") then return true end
+  end
+  if you.skill("Long Blades") > 14 then
+    if name:find("claymore") then return true end
+  end
+  if you.skill("Axes") > 4 then
+    if name:find("axe") then return true end
+  end
+  if you.skill("Axes") > 8 then
+    if name:find("battleaxe") then return true end
+    if name:find("broad axe") then return true end
+    if name:find("war axe") then return true end
+    if name:find("executioner") then return true end
+  end
+  if you.skill("Axes") > 16 then
+    if name:find("executioner") then return true end
+  end
+  if you.skill("Maces & Flails") > 4 then
+    if name:find("eveningstar") then return true end
+    if name:find("demon whip") then return true end
+    if name:find("sacred scourge") then return true end
+    if name:find("dire flail") then return true end
+  end
+  if you.skill("Maces & Flails") > 14 then
+    if name:find("great mace") then return true end
+  end
+  if you.skill("Polearms") > 4 then
+    if name:find("trident") then return true end
+    if name:find("demon trident") then return true end
+    if name:find("trishula") then return true end
+  end
+  if you.skill("Polearms") > 14 then
+    if name:find("glaive") then return true end   
+    if name:find("bardiche") then return true end    
+  end
+  if you.skill("Staves") > 4 then
+    if name:find("lajatang") then return true end
+  end
+  if (you.skill("Unarmed Combat") < 5) and (items.equipped_at("Weapon") == nil) then
+    if it.class(true) == "weapon" then return true end
+  end
+  return false
+end)
+}
+  
+###############
+# Spell slots #
+###############
+
+# Set Alias for Spell Slots
+slot := spell_slot
+
+# Try to keep in aplhabetic order
+slot += Shroud:a
+slot += Freeze:a
+slot += Blink:b
+slot += Call Imp:c
+slot += Petrify:c
+slot += Confuse:c
+slot += Control Undead:c
+slot += Spider Form:c
+slot += Conjure Flame:c
+slot += Freezing Aura:c
+slot += Repel Missiles:d
+slot += Deflect Missiles:d
+slot += Lethal Infusion:d
+slot += Fireball:f
+slot += Fire Brand:f
+slot += Apportation:g
+slot += Haste:h
+slot += Sublimation of Blood:m
+slot += Abjuration:q
+slot += Regeneration:r
+slot += Recall:r
+slot += Swiftness:s
+slot += Sticky Flame:s
+slot += Sticks to Snakes:s
+slot += Condensation Shield:s
+slot += Slow:s
+slot += Song of Slaying:s
+slot += Passwall:w
+slot += Corona:v
+slot += Iskenderun's Mystic Blast:x
+slot += Call Canine Familiar:c
+slot += Blade Hands:x
+slot += Mephitic Cloud:x
+slot += Lightning Bolt:x
+slot += Stone Arrow:x
+slot += Vampiric Draining:x
+slot += Throw Icicle:x
+slot += Throw Flame:x
+slot += Throw Frost:x
+slot += Lee's Rapid Deconstruction:z
+slot += Iskenderun's Battlesphere:z
+slot += Spectral Weapon:z
+slot += Ozocubu's Armour:A
+slot += Animate Skeleton:A
+slot += Animate Dead:A
+slot += Stoneskin:A
+slot += Summon Butterflies:B
+slot += Controlled Blink:B
+slot += Control Teleport:C
+slot += Death's Door:D
+slot += Flight:F
+slot += Cure Poison:P
+slot += Borgnjor's Revivification:R
+slot += Phase Shift:S
+
+################
+# Auto Exclude #
+################
+
+## paralyzing monsters ##
+auto_exclude += [^c] wizard, eyeball, orb of eyes, sphinx, lich, ancient lich, ogre-mage, Norris
+auto_exclude += vampire knight, orc sorcerer, Grinder, Rupert, Ereshkigal, Erolcha, Jory
+
+## uniques or dangerous ##
+auto_exclude += Roxanne, Sigmund, Hydra, Pikel, slave, Prince Ribbit, Snorg, Ijyb
+auto_exclude += Menkaure, Duvessa, Dowan, Blork, jelly, Gastronok, Edmund, Psyche
+auto_exclude += Urug, Harold, Aizul, Erica, Jorgrun, ancienct lich, orb of fire
+auto_exclude += Saint Roka, Boris, Mennas, Nessos, Sonja, Agnes, Wiglaf, Fannar, Louise
+auto_exclude += Mara, Arachne, Xtahua, Frances, Frederick, ice statue, Polyphemus
+auto_exclude += Death drake, Kirke, Hog, Jorgrun, Sojobo, Nergalle, Maud, Eustachio
+auto_exclude += Crazy Yiuf, Asterion, Joseph, Terence, Grum, Donald, Natasha
+
+###############
+# Auto Travel #
+###############
+
+# Set travel delay to -1 for instant-travel, set to 1 to see travel paths
+travel_delay = -1
+
+explore_stop = glowing_items,artefacts,greedy_pickup_smart
+explore_stop += greedy_visited_item_stack,stairs,shops
+explore_stop += altars,portals,branches,runed_doors,greedy_sacrificeable
+
+# Adjusts how much autoexplore favours attempting to discover room perimeters and corners. 
+# At values higer than 0, autoexplore will more heavily favour visiting squares that are next to walls
+# reasonable values range from 0 to 10 maybe?
+explore_wall_bias = 3
+
+# Make auto travel sacrifice corpses
+sacrifice_before_explore = true
+auto_sacrifice = true
+
+# Disables key press from stopping autoexplore
+travel_key_stop = false
+
+runrest_ignore_poison = 3:30
+runrest_ignore_monster += butterfly:1
+
+trapwalk_safe_hp = dart:15,needle:25,arrow:25,bolt:30,spear:20,axe:40,blade:50
+
+# Only stop resting when both HP/MP are full
+rest_wait_both = true
+
+# Set Alias'
+stop := runrest_stop_message
+ignore := runrest_ignore_message
+
+# Jiyva Messages
+: if you.god() == "Jiyva" then
+	ignore += Jiyva gurgles merrily
+	ignore += Jiyva appreciates your sacrifice
+	ignore += Jiyva says: Divide and consume
+	ignore += You hear.*splatter
+: end
+
+# Annoyances  -- Don't stop autotravel for these events
+ignore += You feel.*sick
+ignore += disappears in a puff of smoke
+ignore += engulfed in a cloud of smoke
+ignore += standing in the rain
+ignore += engulfed in white fluffiness
+ignore += safely over a trap
+ignore += A.*toadstool withers and dies
+ignore += toadstools? grow
+ignore += You walk carefully through the
+ignore += grinding sound
+ignore += in your inventory.*rotted away
+# Qazlal
+ignore += The plant is engulfed
+ignore += You destroy the (plant|fungus|bush)
+ignore += You displace your
+
+# Bad things -- Stop autotravel for these events
+stop += found a zot trap
+stop += Wait a moment
+stop += You fall through a shaft
+stop += An alarm trap emits a blaring wail
+stop += (blundered into a|invokes the power of) Zot
+stop += hear a soft click
+stop += A huge blade swings out and slices into you[^r]
+stop += sense of stasis
+stop += flesh start
+stop += (starving|devoid of blood)
+stop += wrath finds you
+stop += lose consciousness
+
+# Expiring effects -- Stop autotravel for spells beginning to expire (to allow recasts)
+# Haste
+stop += You feel yourself slow down
+# Flight
+stop += You are starting to lose your buoyancy
+stop += You lose control over your flight
+# Necromutation
+stop += Your transformation is almost over
+stop += You have a feeling this form
+stop += You feel yourself come back to life
+# Control Teleport
+stop += uncertain
+# Deaths Door
+stop += time is quickly running out
+stop += life is in your own
+# Enslavement
+stop += is no longer charmed
+# Shroud
+stop += shroud begins to fray
+stop += shroud unravels
+# Swiftness
+stop += start to feel a little slower
+# Repel/Deflect
+stop += missiles spell is about to expire
+
+# Ghouls
+: if you.race() == "Ghoul" then
+	stop += smell.*(rott(ing|en)|decay)
+	stop += something tasty in your inventory
+: end
+
+# Good things - Bad things wearing off
+stop += contamination has completely
+stop += You are no longer firmly anchored in space
+
+#Ally actions?
+#ignore += pray:
+#ignore += friend_spell:
+#ignore += friend_enchant:
+#ignore += friend_action:
+#ignore += sound:
+
+#############
+# Interface #
+#############
+
+allow_self_target = prompt
+sort_menus = true
+#WARNING TO KEYPAD USERS: The number 7 is mapped to the letter 'y'
+easy_confirm = all
 confirm_butcher = never
 easy_eat_chunks = true
 auto_eat_chunks = true
 auto_drop_chunks = yes
 easy_eat_contaminated = true
-message_colour = mute:you're not good enough to have a special ability
-message_colour = mute:@corpse
+equip_unequip = true
 
-autoinscribe += bread ration:@e1
-autoinscribe += meat ration:@e2
-autoinscribe += chunk:@w0
-autoinscribe += staff of energy:!d!a, @w1
+#hp_warning = 25 -- Damage Calc overrides these
+#mp_warning = 25 -- Damage Calc overrides these
+hp_colour = 100:green, 99:lightgray, 75:yellow, 50:lightred, 25:red
+mp_colour = 100:green, 99:lightgray, 75:yellow, 50:lightred, 25:red
+stat_colour = 3:red, 7:lightred
+# Removes the more prompts when outputting more than one screen of messages
+show_more = false
+small_more = true
+# Settting this to false changes the turn display to show player turns (used for scoring)
+show_game_turns = true
 
-##################
-#    HDAtravel   #
-##################
+msg_min_height=7
+msg_max_height=10
 
--- Rests up to at least 75% hp (or missing at least 30hp) and 50% mp (or missing at least 20mp)
--- Eats chunks automatically, handled by auto_eat_chunks interface option
--- Travels to the nearest corpse if we have no chunks and are at Very Hungry or Hungry or using Gourmand and at Full
--- Automatically chops valid corpses if we are standing on them and we have no chunks
--- Will stop autotravel at Near Starving
--- Channels MP if you have staff of enery or worship Sif when you have extra chunks
--- Casts regen out of combat if you have spare chunks and are missing hp
--- TODO: better detection of non-edible corpses before standing on them
--- TODO: Fix up for Vampire, Ghoul, and possibly Spriggan/Mummy
--- NOTE: If you don't have rP you will still chop poisonous corpses, but not pick up their chunks
+default_manual_training = true
 
-: function HDAtravel()
-:   local mp, max_mp = you.mp()
-:   local hp, max_hp = you.hp()
-:   local first_monster = next(getMonsterList())
-:   local already_checked = (no_results() or dont_know_how_to_get_there())
-:   local you_are_barbed = (have_barbs() and not removed_barbs())
-:   local is_safe = (first_monster == nil)
-:   local missing_mp = (mp < max_mp)
-:   local missing_hp = (hp < max_hp)
-:   local need_to_recover = should_rest(hp, mp, max_hp, max_mp)
-:   local have_no_chunks = have_no_chunks()
-:   local you_are_sif = string.find(you.god(), "Sif")
-:   local sacrifice_god = you_worship_sacrifice_god()
-:   local you_are_mummy = string.find(you.race(), "Mummy")
-:   local you_do_not_eat = string.find(you.race(), "Spriggan") or you_are_mummy
-:   local lichform = string.find(you.transform(), "lich")
-:   local bladehands = string.find(you.transform(), "blade")
-:   local you_are_regen = you.regenerating()
-:   local you_know_simulacrum = known_spells["Simulacrum"] and (you.skill("Necromancy") >= 10)
-:   local you_know_sublimation = known_spells["Sublimation of Blood"] and (you.skill("Necromancy") >= 5)
-:   local you_know_animate_skeleton = known_spells["Animate Skeleton"]
-:   local chunks_are_equipped = is_weapon("chunk")
-:   local distort_weapon = is_weapon("distort")
-:   local vamp_weapon = is_weapon("vamp")
-:   local have_a_weapon = weapon_in_inventory()
-:   local gourmand_and_hungry = you_are_gourmand() and not (you_are_very_full() or you_are_engorged())
-:   local want_to_eat = (you_are_hungry() or gourmand_and_hungry) and not you_do_not_eat
-:   local have_spare_chunks = not have_no_chunks and not you_are_hungry()
-:   local you_have_staff_of_energy = is_in_inventory("staff of energy")
-:   local staff_of_energy_is_equipped = is_weapon("staff of energy")
-:   local staff_of_energy_letter = find_item_letter("staff of energy")
-:   local chunks_letter = find_item_letter("chunk")
-:   local you_are_hungerless = you_are_mummy or lichform
-:   local no_food_issues = (you_are_hungerless or have_spare_chunks)
-:   local should_channel_mp = ((max_mp - mp) > 5) and no_food_issues
-:   local you_know_regen = known_spells["Regeneration"]
-:   local you_have_regen_ring = is_in_inventory("regeneration")
-:   local regen_ring_letter = find_item_letter("regeneration")
-:   local regen_ring_is_equipped = is_ring("regeneration")
-:   local should_regen_hp = ((max_hp - hp) > 10) and no_food_issues and (not you_are_regen)
-:   local you_want_spare_chunks = (not have_spare_chunks) and (you_know_regen or you_know_sublimation or you_know_simulacrum or you_have_staff_of_energy or (you_are_sif and not you_are_mummy))
-:   local you_want_chunks = have_no_chunks and (want_to_eat or you_want_spare_chunks)
-:   --crawl.mpr(string.format("have_barbs is: %s", have_barbs() and "True" or "False"))
-:   --crawl.mpr(string.format("removed_barbs is: %s", removed_barbs() and "True" or "False"))
-:   --crawl.mpr(string.format("you_are_barbed is: %s", you_are_barbed and "True" or "False"))
-:   if (is_safe) then 
-:     if you_are_barbed then
-:       rest()
-:     elseif (not bladehands) and should_channel_mp and you_know_sublimation and have_spare_chunks and mp>2 and (not (distort_weapon or vamp_weapon)) and you_are_not_felid() then
-:       if not chunks_are_equipped then
-:         crawl.mpr("<cyan>Wielding chunks to sublimate.</cyan>")
-:         sendkeys('w0')
-:       end
-:       crawl.mpr("<lightcyan>Autocasting Sublimation of Blood.</lightcyan>")
-:       sendkeys('zm')
-:     elseif should_channel_mp and you_are_sif then
-:       crawl.mpr("<lightcyan>Autochanneling using Sif.</lightcyan>")
-:       sendkeys('aa')
-:     elseif should_regen_hp and ((you_know_regen and (mp>3)) or (you_have_regen_ring and not regen_ring_is_equipped)) then
-:       if (you_know_regen ) then
-:         crawl.mpr("<green>Autocasting Regen.</green>")
-:         --This assumes casting regen is bound to zr
-:         sendkeys('zr')
-:       else 
-:         crawl.mpr("<yellow>You should equip your regen ring.</yellow>")
-:         sendkeys('P' .. regen_ring_letter)
-:       end  
-:     elseif (not bladehands) and (should_channel_mp and you_have_staff_of_energy and no_food_issues) and (not (distort_weapon or vamp_weapon)) and you_are_not_felid() then
-:       if not staff_of_energy_is_equipped then
-:         crawl.mpr("<cyan>Switching to staff of energy.</cyan>")
-:         sendkeys('w1')
-:       end
-:       crawl.mpr("<lightcyan>Autochanneling using staff of energy.</lightcyan>")
-:       sendkeys('v')
-:     elseif (no_weapon() and have_a_weapon) or (staff_of_energy_is_equipped and (not (staff_of_energy_letter == 'a')) or (chunks_are_equipped and (not (chunks_letter == 'a')))) then
-:       if uses_unarmed() then
-:         crawl.mpr("<cyan>Switching to unarmed.</cyan>")
-:         sendkeys('w-')
-:       else
-:         crawl.mpr("<cyan>Switching to main weapon.</cyan>")
-:         sendkeys('wa')
-:       end
-:     elseif want_to_eat and not have_no_chunks then
-:       crawl.mpr("<cyan>Autoeating chunks.</cyan>")
-:       sendkeys('e')
-:     elseif you_want_chunks and on_corpses() and not on_chunks() then 
-:       if you_know_animate_skeleton and mp>1 and (not can_not_animate()) then
-:         crawl.mpr("<cyan>Autocasting Animate Skeleton for chunks.</cyan>")
-:         sendkeys('zA')
-:       else
-:         crawl.mpr("<cyan>Autochopping corpse.</cyan>")
-:         sendkeys('c')
-:       end
-:     elseif (not need_to_recover) and you_want_chunks and (not (on_chunks() or on_corpses() or already_checked)) then
-:       crawl.mpr("<yellow>You may need something to eat soon, looking for food.</yellow>")
-:       find_corpses()
-:     elseif you_are_starving_or_near() and have_no_chunks and not (on_chunks() or on_corpses()) then
-:       local have_bread = is_in_inventory("bread ration")
-:       local have_meat = is_in_inventory("meat ration")
-:       if have_bread or have_meat then
-:         local result = crawl.yesnoquit("<cyan>Eat a ration?</cyan>", true, 'e')
-:         if result == 1 and have_bread then
-:           sendkeys('e1')
-:         elseif result == 1 then
-:           sendkeys('e2')
-:         elseif result == 0 then
-:           autoexplore()
-:         end
-:         if not (is_in_inventory("bread ration") or is_in_inventory("meat ration")) then
-:           crawl.mpr("<lightred>That was your last ration! You should go get more.</lightred>")
-:         end
-:       else
-:         crawl.mpr("<red>No rations left! You should look for food.</red>")
-:       end
-:     elseif need_to_recover and not you_are_starving() then
-:       rest()
-:     elseif ((not sacrifice_god) and on_corpses() and you_know_animate_skeleton and mp>1 and (not can_not_animate())) then
-:       crawl.mpr("<cyan>Autocasting Animate Skeleton</cyan>")
-:       sendkeys('zA')
-:     else
-:       --This does the general travelling
-:       autoexplore()
-:     end
-:   else 
-:     --This will provide the "foo is nearby" message 
-:     autoexplore()
-:   end
+####################
+# Autoinscriptions #
+####################
+
+# Set Alias
+ai := autoinscribe
+
+# Overwrite annoying inscriptions with your own
+
+# Inscribe vampiric weapons if you are not a vampire
+: if you.race() ~= "Vampire" then
+	ai += vampiric:!w
 : end
-  
-<
-  
-  function sendkeys(command)
-    crawl.flush_input()
-    crawl.sendkeys(command)
-    coroutine.yield(true)
-    crawl.flush_input()
-  end 
 
-  function should_rest(hp, mp, max_hp, max_mp)
-    return (mp < (max_mp*0.50) 
-            or (hp < (max_hp*0.75)) 
-            or ((max_hp-hp) > 30) 
-            or ((max_mp-mp) > 20) 
-            or (you.slowed()) 
-            or (you.poisoned()) 
-            or (you.confused())
-            or (you.exhausted())
-            or (((hp < max_hp) or (mp < max_mp)) and you_are_mummy))
-  end
+ai += distortion:!w
+ai += (Sonja|Psyche):!w
+ai += (bad|dangerous)_item.*potion:!q
+ai += potion of beserk rage:!q
+ai += (bad|dangerous)_item.*scroll:!r
+ai += rod of [^s][^t]:!a
+ai += [Mm]anual of:!d
+ai += dispersal:=f
+ai += large rock:=f
+ai += throwing net:=f, !d
+ai += tome of destruction:!d
+ai += royal jell:!restore
 
-  -- Hungry, Very Hungry, Near Starving, Starving
-  function you_are_hungry()
-    return not you_are_not_hungry() and ((string.find(you.hunger_name(), "hungry")) or you_are_starving_or_near())
-  end
+ai += pearl dragon (armour|hide):rN+
+ai += fire dragon (armour|hide):rF++, rC-
+ai += ice dragon (armour|hide):rC++, rF-
+ai += swamp dragon (armour|hide):rP+
+ai += mottled dragon (armour|hide):rSticky
+ai += storm dragon (armour|hide):rElec
+ai += gold dragon (armour|hide):rC+, rF+, rP+
+ai += steam dragon (armour|hide):rSteam
 
-  -- Normal Satiation
-  function you_are_not_hungry()
-    return (string.find(you.hunger_name(), "not hungry"))
-  end
+ai += ambrosia:!magic, !confuse
+ai += scrolls? of vulnerability:!r
+ai += scrolls? of holy word:!r
+ai += scrolls? of magic mapping:!r
+ai += scrolls? of blinking:!r
 
-  -- Engorged
-  function you_are_engorged()
-    return (string.find(you.hunger_name(), "completely stuffed"))
-  end
-  
-  -- Very full
-  function you_are_very_full()
-    return (string.find(you.hunger_name(), "very full"))
-  end
+ai += amulet of clarity:Clarity, !d
+ai += amulet of conservation:Cons, !d
+ai += amulet of faith:Faith, !P
+ai += amulet of guardian spirit:Spirit
+ai += amulet of rage:+Rage, !d
+ai += amulet of resist corrosion:rCorr, !d
+ai += amulet of resist mutation:rMut, !d
+ai += amulet of stasis:Stasis, !d
+ai += amulet of the gourmand:Gourmand, !d
+ai += amulet of warding:Ward, rN+, !d
 
-  -- Near Starving
-  function you_are_near_starving()
-    return (string.find(you.hunger_name(), "near starving"))
-  end
-  
-  -- Near Starving, Starving
-  function you_are_starving_or_near()
-    return (string.find(you.hunger_name(), "starving"))
-  end
-  
-  -- Starving
-  function you_are_starving()
-    return you_are_starving_or_near() and not you_are_near_starving()
-  end
+ai += ring of fire:rF+, rC-
+ai += ring of flight:+Fly, !d
+ai += ring of ice:rC+, rF-
+ai += ring of invisibility:+Inv, !d
+ai += ring of magical power:MP+9
+ai += ring of positive energy:rN+
+ai += ring of poison resistance:rP+, !d
+ai += ring of protection from cold:rC+, !d
+ai += ring of protection from fire:rF+, !d
+ai += ring of protection from magic:MR+, !d
+ai += ring of regeneration:regen, !d
+ai += ring of see invisible:sInv, !d
+ai += ring of sustain abilities:sustAb
+ai += ring of sustenance:Hunger-
+ai += ring of teleport control:cTele, !d
+ai += ring of teleportation:+/*tele, !d
+ai += ring of wizardry:wiz+, !d
 
-  function autoexplore()
-    sendkeys('o')
-  end
-  
-  function have_barbs()
-    return string.find(crawl.messages(10), escape("The barbed spikes become lodged in your body"))
-        or string.find(crawl.messages(10), escape("The barbed spikes dig painfully into your body as you move"))
-  end
-  
-  function removed_barbs()
-    return string.find(crawl.messages(10), escape("You carefully extract the manticore spikes from your body")) 
-        or string.find(crawl.messages(10), escape("The manticore spikes snap loose"))
-  end
-  
-  function no_results()
-    return string.find(crawl.messages(10), escape("Can't find anything matching that")) 
-        or string.find(crawl.messages(10), escape("You may need something to eat soon"))   
-  end
+ai += staff of air:rElec
+ai += staff of cold:rC+
+ai += staff of death:rN+
+ai += staff of fire:rF+
+ai += staff of poison:rP+
+ai += staff of energy:+MP, hungerless spells, !d!a, @w1
+ai += staff of wizardry:wiz+, !a
+ai += staff of power:MP+17, !a
+ai += staff of conjuration:!a
+ai += staff of summoning:!a
 
-  function dont_know_how_to_get_there()
-    return string.find(crawl.messages(10), escape("know how to get there"))
-        or string.find(crawl.messages(10), escape("Have to go through"))
-  end
-  
-  function can_not_animate()
-    return string.find(crawl.messages(10), escape("There is nothing here that can be animated")) 
-  end
-  
-  function can_not_eat_that()
-    return string.find(crawl.messages(10), escape("You can't eat that"))
-        --These strings don't seem to show up in messages
-        --or string.find(crawl.messages(10), escape("Not only inedible but also greatly harmful"))
-        --or string.find(crawl.messages(10), escape("It is caustic"))
-  end
-  
-  function rest()
-    sendkeys('5')
-  end
+: if you.god() == "Fedhas" then
+	ai += fruit:!e
+: end
 
-  function you_are_gourmand()
-    return you.gourmand() or (not you_are_not_troll()) or (string.find(you.race(), "Kobold"))
-  end
+autoinscribe_cursed = false
+show_god_gift = unident
 
-  function have_no_chunks()
-    for it in inventory() do
-      if string.find(it.name(), "chunk") and food.can_eat(it) then
-        return false
-      end
-    end
-    return true
-  end
-  
-  function is_in_inventory(str)
-    for it in inventory() do
-      if string.find(it.name(), str) then
-        return true
-      end
-    end
-    return false
-  end
-  
-  function weapon_in_inventory()
-    for it in inventory() do
-      if string.find(it.class(true), "weapon") then
-        return true
-      end
-    end
-    return false
-  end
-  
-  function find_item_letter(str)
-    for i = 0,51 do
-      it = items.inslot(i)
-      if it then
-        if string.find(it.name(), str) then
-          return items.index_to_letter(i)
-        end
-      end
-    end
-    return false
-  end
-  
-  function you_worship_sacrifice_god()
-    return string.find(you.god(), "Trog") or string.find(you.god(), "Oka") 
-        or string.find(you.god(), "Makhleb")  or string.find(you.god(), "Beogh") 
-        or string.find(you.god(), "Lugonu") or string.find(you.god(), "Nemelex")
-  end
-  
-  function on_corpses()
-    local fl = you.floor_items()
-    for it in iter.invent_iterator:new(fl) do
-      if string.find(it.name(), "corpse")
-          and not string.find(it.name(), "rotting")
-          and not string.find(it.name(), "plague") then
-        return true
-      end
-    end
-    return false
-  end
+##################
+# Character Dump #
+##################
 
-  function on_chunks()
-    for it in floor_items() do
-      if string.find(it.name(), "chunk") then
-        return true
-      else
-        return false
-      end
-    end
-  end
-
-  function you_are_carnivore()
-    return you.saprovorous()
-  end
-  
-  function you_are_not_ghoul()
-    return not (string.find(you.race(), "Ghoul"))
-  end
-  
-  function you_are_not_troll()
-    return not (string.find(you.race(), "Troll"))
-  end
-  
-  function you_are_not_felid()
-    return not (string.find(you.race(), "Felid"))
-  end
-  
-  function you_are_not_octopode()
-    return not (string.find(you.race(), "Octopode"))
-  end
-
-  function find_corpses()
-    sendkeys(string.char(6) .. "@corpse&&!!rott&&!!skel&&!!sky&&!!vampire&&!!corpse rot" .. "\ra\r")
-  end
-
-  function inventory()
-    return iter.invent_iterator:new(items.inventory())
-  end
-
-  function floor_items()
-    return iter.invent_iterator:new(you.floor_items())
-  end
-  
-  function no_weapon()
-    return (items.equipped_at("Weapon") == nil) and not uses_unarmed()
-  end
-  
-  function uses_unarmed()
-    return not you_are_not_ghoul() 
-        or not you_are_not_troll() 
-        or not you_are_not_felid() 
-        or not you_are_not_octopode()
-        or (you.skill("Unarmed Combat") >= 3)
-  end
-  
-  function is_weapon(str)
-    local weapon =  items.equipped_at("Weapon")
-    if weapon then
-      return string.find(weapon.name(), str)
-    else
-      return false
-    end
-  end
-  
-  function is_ring(str)
-    local ring1 = items.equipped_at("Left Ring")
-    local ring2 = items.equipped_at("Right Ring")
-    if ring1 and ring2 then
-      return string.find(ring1.name(), str) or string.find(ring2.name(), str)
-    elseif ring1 then
-      return string.find(ring1.name(), str)
-    elseif ring2 then
-      return string.find(ring2.name(), str)
-    else
-      return false
-    end
-  end
-  
-  function item_in_view(str)
-    local x,y    
-    for x = -8,8 do
-      for y = -8,8 do
-        if not (x == 0 and y == 0) then
-          local pile = items.get_items_at(x,y)
-          if pile ~= nil then
-            for it in iter.invent_iterator:new(pile) do
-              if string.find(it.name(), str) and you.see_cell_no_trans(x,y) then
-                return true
-              end
-            end
-          end
-        end
-      end
-    end
-    return false
-  end
-  
-  -- Returns a table where the key is the monster description and value is the total number of that mob in your vision
-  function getMonsterList()
-    local monsters = {}
-    for x = -8,8 do
-      for y = -8,8 do
-        m = monster.get_monster_at(x, y)
-        local attitude_hostile = 0
-        if m and (m:attitude() == attitude_hostile) and not (m:is_firewood()) then
-          desc = m:desc()
-          if (monsters[desc] == nil) then
-            monsters[desc] = 1
-          else
-            monsters[desc] = monsters[desc] + 1
-          end
-        end
-      end
-    end
-    return monsters   
-  end
-
-  --Escapes the special characters in a string for pattern matching
-  function escape(str)
-    --Escapes parens and dash "()-"
-    local escaped = str:gsub('[%(%)%-]','%\%1')
-    --Removes any coloration parts of the string
-    return (escaped:gsub('<[^<]*>',''))
-  end
-  
-  local function init_spells()
-    local spell_list = {}
-    
-    for _, spell_name in ipairs(you.spells()) do
-      spell_list[spell_name] = true
-    end
-    
-    return spell_list
-  end
-  
-  known_spells = init_spells()
->
+dump_item_origins = all
+dump_item_origin_price = 100
+dump_message_count = 100
+#dump_order = header,hiscore,stats,misc,mutations,skills,spells,overview,inventory
+#dump_order += screenshot,monlist,messages,action_counts,vaults,notes,kills
+dump_order += vaults, turns_by_place, kills_by_place
+dump_book_spells = false
+ood_interesting = 6
+note_hp_percent = 25
+note_all_skill_levels = true
+note_xom_effects = true
+note_items += of Zot,rod,acquirement
+note_messages += Your scales start
+note_messages += protects you from harm
+note_messages += You fall through a shaft
+note_messages += [bB]anish.*Abyss
+note_monsters += orb of fire,silver star,pearl dragon,ancient lich
