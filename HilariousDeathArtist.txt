@@ -20,7 +20,6 @@ include += HDAForceMore.rc
 
 <
   function ready()
-    crawl.mpr("you.weapon() is :" .. you.weapon())
     AnnounceDamage()
     --SpoilerAlert()
     OpenSkills()
@@ -437,7 +436,7 @@ ai += dispersal:=f
 ai += large rock:=f
 ai += throwing net:=f, !d
 ai += tome of destruction:!d
-ai += royal jell:!restore
+#ai += royal jell:!restore
 
 ai += pearl dragon (armour|hide):rN+
 ai += fire dragon (armour|hide):rF++, rC-
