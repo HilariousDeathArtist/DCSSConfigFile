@@ -820,6 +820,7 @@
       mobwarnings["air mage"] = mobwarnings["air mage"] .. flightwarning
       mobwarnings["blizzard demon"] = mobwarnings["blizzard demon"]..flightwarning
       mobwarnings["wind drake"] = mobwarnings["wind drake"]..flightwarning
+      mobwarnings["titan"] = mobwarnings["titan"]..flightwarning
       mobwarnings["Gastronok"] = mobwarnings["Gastronok"]..flightwarning
       mobwarnings["Sojobo"] = mobwarnings["Sojobo"]..flightwarning
     end
