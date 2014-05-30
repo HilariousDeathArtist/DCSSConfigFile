@@ -116,7 +116,7 @@
             elseif current_mp < (max_mp * 0.50) then 
               crawl.mpr("<lightcyan>You regained " .. mp_inturn .. " mp,</lightcyan><yellow> and now have " .. current_mp .. "/" .. max_mp .. " mp.</yellow>")
             else
-              crawl.mpr("<lightcyan>You regained " .. mp_inturn .. " mp, and now have " .. current_mp .. "/" .. max_mp .. " mp.</lightcyan>")
+              crawl.mpr("<lightcyan>You regained " .. mp_inturn .. " mp,</lightcyan><green> and now have " .. current_mp .. "/" .. max_mp .. " mp.</green>")
             end
           end
           if (current_mp == max_mp) then
@@ -127,11 +127,11 @@
         --On losing magic
         if current_mp < previous_mp then
           if current_mp <= (max_mp / 5) then
-            crawl.mpr("<red>Danger: You now have " .. current_mp .. "/" ..max_mp .." mp.</red>")       
+            crawl.mpr("<lightcyan>You now have </lightcyan><red>" .. current_mp .. "/" ..max_mp .." mp.</red>")      
           elseif current_mp <= (max_mp / 2) then
-            crawl.mpr("<yellow>Warning: You now have " .. current_mp .. "/" ..max_mp .." mp.</yellow>")
+            crawl.mpr("<lightcyan>You now have </lightcyan><yellow>" .. current_mp .. "/" ..max_mp .." mp.</yellow>")
           else
-            crawl.mpr("<lightcyan>You now have " .. current_mp .. "/" ..max_mp .." mp.</lightcyan>")
+            crawl.mpr("<lightcyan>You now have </lightcyan><green>" .. current_mp .. "/" ..max_mp .." mp.</green>")
           end
         end
       end
