@@ -52,6 +52,8 @@ autoinscribe += staff of energy:!d!a, @w1
 :   local you_do_not_eat = string.find(you.race(), "Spriggan") or you_are_mummy
 :   local lichform = string.find(you.transform(), "lich")
 :   local bladehands = string.find(you.transform(), "blade")
+:   local dragonform = string.find(you.transform(), "dragon")
+:   local melded_weapon = (bladehands or dragonform)
 :   local you_are_regen = you.regenerating()
 :   local you_know_simulacrum = known_spells["Simulacrum"] and (you.skill("Necromancy") >= 10)
 :   local you_know_sublimation = known_spells["Sublimation of Blood"] and (you.skill("Necromancy") >= 5)
@@ -76,14 +78,22 @@ autoinscribe += staff of energy:!d!a, @w1
 :   local regen_ring_is_equipped = is_ring("regeneration")
 :   local should_regen_hp = ((max_hp - hp) > 10) and no_food_issues and (not you_are_regen)
 :   local you_want_spare_chunks = (not have_spare_chunks) and (you_know_regen or you_know_sublimation or you_know_simulacrum or you_have_staff_of_energy or (you_are_sif and not you_are_mummy))
-:   local you_want_chunks = have_no_chunks and (want_to_eat or you_want_spare_chunks)
-:   --crawl.mpr(string.format("have_barbs is: %s", have_barbs() and "True" or "False"))
-:   --crawl.mpr(string.format("removed_barbs is: %s", removed_barbs() and "True" or "False"))
-:   --crawl.mpr(string.format("you_are_barbed is: %s", you_are_barbed and "True" or "False"))
+:   local you_want_chunks = (not have_edible_chunks()) and (want_to_eat or you_want_spare_chunks)
+:   --crawl.mpr(string.format("you_want_chunks is: %s", you_want_chunks and "True" or "False"))
+:   --crawl.mpr(string.format("have_no_chunks is: %s", have_no_chunks and "True" or "False"))
+:   --crawl.mpr(string.format("want_to_eat is: %s", want_to_eat and "True" or "False"))
+:   --crawl.mpr(string.format("you_want_spare_chunks is: %s", you_want_spare_chunks and "True" or "False"))
+:   --crawl.mpr(string.format("have_spare_chunks is: %s", have_spare_chunks and "True" or "False"))
+:   --crawl.mpr(string.format("you_know_regen is: %s", you_know_regen and "True" or "False"))
+:   --crawl.mpr(string.format("you_know_sublimation is: %s", you_know_sublimation and "True" or "False"))
+:   --crawl.mpr(string.format("you_know_simulacrum is: %s", you_know_simulacrum and "True" or "False"))
+:   --crawl.mpr(string.format("you_have_staff_of_energy is: %s", you_know_simulacrum and "True" or "False"))
+:   --crawl.mpr(string.format("have_no_chunks is: %s", have_no_chunks and "True" or "False"))
+:   --crawl.mpr(string.format("you_are_hungry is: %s", you_are_hungry() and "True" or "False"))
 :   if (is_safe) then 
 :     if you_are_barbed then
 :       rest()
-:     elseif (not bladehands) and should_channel_mp and you_know_sublimation and have_spare_chunks and mp>2 and (not (distort_weapon or vamp_weapon)) and you_are_not_felid() then
+:     elseif (not melded_weapon) and should_channel_mp and you_know_sublimation and have_spare_chunks and mp>2 and (not (distort_weapon or vamp_weapon)) and you_are_not_felid() then
 :       if not chunks_are_equipped then
 :         crawl.mpr("<cyan>Wielding chunks to sublimate.</cyan>")
 :         sendkeys('w0')
@@ -102,7 +112,7 @@ autoinscribe += staff of energy:!d!a, @w1
 :         crawl.mpr("<yellow>You should equip your regen ring.</yellow>")
 :         sendkeys('P' .. regen_ring_letter)
 :       end  
-:     elseif (not bladehands) and (should_channel_mp and you_have_staff_of_energy and no_food_issues) and (not (distort_weapon or vamp_weapon)) and you_are_not_felid() then
+:     elseif (not melded_weapon) and (should_channel_mp and you_have_staff_of_energy and no_food_issues) and (not (distort_weapon or vamp_weapon)) and you_are_not_felid() then
 :       if not staff_of_energy_is_equipped then
 :         crawl.mpr("<cyan>Switching to staff of energy.</cyan>")
 :         sendkeys('w1')
@@ -117,7 +127,7 @@ autoinscribe += staff of energy:!d!a, @w1
 :         crawl.mpr("<cyan>Switching to main weapon.</cyan>")
 :         sendkeys('wa')
 :       end
-:     elseif want_to_eat and not have_no_chunks then
+:     elseif want_to_eat and have_edible_chunks() then
 :       crawl.mpr("<cyan>Autoeating chunks.</cyan>")
 :       sendkeys('e')
 :     elseif you_want_chunks and on_corpses() and not on_chunks() then 
@@ -128,10 +138,10 @@ autoinscribe += staff of energy:!d!a, @w1
 :         crawl.mpr("<cyan>Autochopping corpse.</cyan>")
 :         sendkeys('c')
 :       end
-:     elseif (not need_to_recover) and you_want_chunks and (not (on_chunks() or on_corpses() or already_checked)) then
+:     elseif (not need_to_recover) and you_want_chunks and (not on_chunks()) and (not on_corpses()) and (not already_checked) then
 :       crawl.mpr("<yellow>You may need something to eat soon, looking for food.</yellow>")
 :       find_corpses()
-:     elseif you_are_starving_or_near() and have_no_chunks and not (on_chunks() or on_corpses()) then
+:     elseif you_are_starving_or_near() and (not have_edible_chunks()) and (not (on_chunks() or on_corpses())) then
 :       local have_bread = is_in_inventory("bread ration")
 :       local have_meat = is_in_inventory("meat ration")
 :       if have_bread or have_meat then
@@ -265,11 +275,29 @@ autoinscribe += staff of energy:!d!a, @w1
 
   function have_no_chunks()
     for it in inventory() do
-      if string.find(it.name(), "chunk") and food.can_eat(it) then
+      if string.find(it.name(), "chunk") then
         return false
       end
     end
     return true
+  end
+  
+  function have_rotten_chunks()
+    for it in inventory() do
+      if string.find(it.name(), "chunk") and string.find(it.name(), "rott") then
+        return false
+      end
+    end
+    return true
+  end
+  
+  function have_edible_chunks()
+    for it in inventory() do
+      if string.find(it.name(), "chunk") and food.can_eat(it) then
+        return true
+      end
+    end
+    return false
   end
   
   function is_in_inventory(str)
