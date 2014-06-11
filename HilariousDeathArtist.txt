@@ -2,8 +2,19 @@
 # https://github.com/HilariousDeathArtist/DCSSConfigFile
 # or find me on crawl.s-z.org
 
---SUCH EXCITEMENT!!!
+# I will try to keep my rcfiles up to date on CSZO and CAO
+# If you are playing on these servers you can include this file in your config with the following line
+# include += HilariousDeathArtist.rc
+
+# SUCH EXCITEMENT!!!
 language = !!!
+# To override this setting, add the following line after include += HilariousDeathArtist.rc
+# language = en
+
+# Logs chat messages into the notes
+note_chat_messages = true
+
+# To override other settings you don't like, you may redefine them after the include like the language setting
 
 # The damage annoucement messages
 include += HDamage.rc
@@ -17,6 +28,9 @@ include += HDAMessageColors.rc
 include += HDAItemColors.rc
 # Force More prompts
 include += HDAForceMore.rc
+# Monster warning messages -- disabled by default
+# Uncomment the next line and the call to SpoilerAlert() in the ready function to use it
+#include += SpoilerAlert.rc
 
 <
   function ready()
@@ -25,6 +39,8 @@ include += HDAForceMore.rc
     OpenSkills()
   end
 >
+
+
 
 ####################
 # Opens skill menu #
@@ -115,70 +131,89 @@ ae += <ego
 # Armour autopickup by rwbarton, Weapon by HDA
 {
 add_autopickup_func(function(it, name)
-  if it.class(true) == "armour" then
-    local good_slots = {cloak="Cloak", helmet="Helmet", gloves="Gloves", boots="Boots"}
+  local class = it.class(true)
+  local good_slots = {cloak="Cloak", helmet="Helmet", gloves="Gloves", boots="Boots"}
+  
+  if class == "armour" then
     st, _ = it.subtype()
-    if good_slots[st] ~= nil and items.equipped_at(good_slots[st]) == nil then
+    equipped_item = items.equipped_at(good_slots[st])
+    if good_slots[st] ~= nil and equipped_item == nil then
       return true
+    elseif equipped_item then
+      if (equipped_item.plus < 2) and not (equipped_item.branded or equipped_item.artefact) then
+        return true
+      end
     end
+  elseif class == "weapon" then
+    equipped_item = items.equipped_at("Weapon")
+  elseif class == "jewellery" and name:find("amulet") then
+    equipped_item = items.equipped_at("Amulet")
   end
   
-  local weapon = items.equipped_at("Weapon")
-  if weapon then
-    local weapon_name = weapon.name()
+  if name:find("curare") then return true end
+  if name:find("dispersal") and (name:find("dart") or name:find("tomahawk")) then return true end
+  if name:find("throwing net") then return true end
   
-    if name:find("curare") then return true end
-    if name:find("dart") and name:find("dispersal") then return true end
-    if name:find("throwing net") then return true end
-    if you.skill("Short Blades") > 4 then
-      if name:find("quick blade") then return true end
+  if (class == "weapon") then
+    if (you.xl() < 12) or (you.god():find("Nemelex") 
+                           or (you.god():find("Yred"))
+                           or (you.god():find("Beogh"))) then
+      if it.branded then return true end
     end
-    if you.skill("Long Blades") > 8 then
-      if name:find("demon blade") then return true end
-      if name:find("bastard sword") then return true end
-    end
-    if you.skill("Long Blades") > 14 then
-      if name:find("claymore") then return true end
-    end
-    if you.skill("Axes") > 4 then
-      if name:find("axe") then return true end
-    end
-    if you.skill("Axes") > 8 then
-      if name:find("battleaxe") then return true end
-      if name:find("broad axe") then return true end
-      if name:find("war axe") then return true end
-      if name:find("executioner") then return true end
-    end
-    if you.skill("Axes") > 16 then
-      if name:find("executioner") then return true end
-    end
-    if you.skill("Maces & Flails") > 4 then
-      if name:find("eveningstar") then return true end
-      if name:find("demon whip") then return true end
-      if name:find("sacred scourge") then return true end
-      if name:find("dire flail") then return true end
-    end
-    if you.skill("Maces & Flails") > 14 then
-      if name:find("great mace") then return true end
-    end
-    if you.skill("Polearms") > 4 then
-      if name:find("trident") then return true end
-      if name:find("demon trident") then return true end
-      if name:find("trishula") then return true end
-    end
-    if you.skill("Polearms") > 14 then
-      if name:find("glaive") then return true end   
-      if name:find("bardiche") then return true end    
-    end
-    if you.skill("Staves") > 4 then
-      if name:find("lajatang") then return true end
-    end
-
-    return false
-    
-  else
-    if (you.skill("Unarmed Combat") < 5) and (items.equipped_at("Weapon") == nil) then
-      if it.class(true) == "weapon" then return true end
+    local weapon = items.equipped_at("Weapon")
+    if weapon then
+      if (weapon.branded or weapon.artefact) then return false
+      else
+        local weapon_name = weapon.name()
+  
+        if you.skill("Short Blades") > 4 then
+          if name:find("quick blade") then return true end
+        end
+        if you.skill("Long Blades") > 8 then
+          if name:find("demon blade") then return true end
+          if name:find("bastard sword") then return true end
+        end
+        if you.skill("Long Blades") > 14 then
+          if name:find("claymore") then return true end
+        end
+        if you.skill("Axes") > 4 then
+          if name:find("axe") then return true end
+        end
+        if you.skill("Axes") > 8 then
+          if name:find("battleaxe") then return true end
+          if name:find("broad axe") then return true end
+          if name:find("war axe") then return true end
+          if name:find("executioner") then return true end
+        end
+        if you.skill("Axes") > 18 then
+          if name:find("executioner") then return true end
+        end
+        if you.skill("Maces & Flails") > 4 then
+          if name:find("eveningstar") then return true end
+          if name:find("demon whip") then return true end
+          if name:find("sacred scourge") then return true end
+          if name:find("dire flail") then return true end
+        end
+        if you.skill("Maces & Flails") > 14 then
+          if name:find("great mace") then return true end
+        end
+        if you.skill("Polearms") > 4 then
+          if name:find("trident") then return true end
+          if name:find("demon trident") then return true end
+          if name:find("trishula") then return true end
+        end
+        if you.skill("Polearms") > 14 then
+          if name:find("glaive") then return true end   
+          if name:find("bardiche") then return true end    
+        end
+        if you.skill("Staves") > 4 then
+          if name:find("lajatang") then return true end
+        end
+      end
+    else
+      if (you.skill("Unarmed Combat") < 5) and (items.equipped_at("Weapon") == nil) then
+        if it.class(true) == "weapon" then return true end
+      end
     end
   end
 end)
@@ -262,7 +297,7 @@ auto_exclude += Urug, Harold, Aizul, Erica, Jorgrun, ancienct lich, orb of fire
 auto_exclude += Saint Roka, Boris, Mennas, Nessos, Sonja, Agnes, Wiglaf, Fannar, Louise
 auto_exclude += Mara, Arachne, Xtahua, Frances, Frederick, ice statue, Polyphemus
 auto_exclude += Death drake, Kirke, Hog, Jorgrun, Sojobo, Nergalle, Maud, Eustachio
-auto_exclude += Crazy Yiuf, Asterion, Joseph, Terence, Grum, Donald, Natasha, Nikola
+auto_exclude += Crazy Yiuf, Asterion, Joseph, Terence, Grum, Donald, Natasha, Nikola, Maurice 
 
 ###############
 # Auto Travel #
@@ -299,13 +334,13 @@ rest_wait_both = true
 stop := runrest_stop_message
 ignore := runrest_ignore_message
 
+ignore += You regained.*mp
+
 # Jiyva Messages
-: if you.god() == "Jiyva" then
-	ignore += Jiyva gurgles merrily
-	ignore += Jiyva appreciates your sacrifice
-	ignore += Jiyva says: Divide and consume
-	ignore += You hear.*splatter
-: end
+ignore += Jiyva gurgles merrily
+ignore += Jiyva appreciates your sacrifice
+ignore += Jiyva says: Divide and consume
+ignore += You hear.*splatter
 
 # Annoyances  -- Don't stop autotravel for these events
 ignore += You feel.*sick
@@ -433,7 +468,7 @@ ai += (bad|dangerous)_item.*scroll:!r
 ai += rod of [^s][^t]:!a
 ai += [Mm]anual of:!d
 ai += dispersal:=f
-ai += large rock:=f
+ai += large rock:=f, !d
 ai += throwing net:=f, !d
 ai += tome of destruction:!d
 #ai += royal jell:!restore
