@@ -12,8 +12,6 @@ easy_eat_chunks = true
 auto_eat_chunks = true
 auto_drop_chunks = yes
 easy_eat_contaminated = true
-message_colour = mute:you're not good enough to have a special ability
-message_colour = mute:@corpse
 
 autoinscribe += bread ration:@e1
 autoinscribe += meat ration:@e2
