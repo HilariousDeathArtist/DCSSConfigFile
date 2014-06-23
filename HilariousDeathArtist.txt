@@ -124,28 +124,24 @@ ae += useless_item, dangerous_item, evil_item
 
 # Autopickup artefacts/ego
 ae += <artefact
-: if (you.xl() < 12) or (you.god():find("Nemelex")) or (you.god():find("Yred")) then
-ae += <ego
-: end
 
-# Armour autopickup by rwbarton, Weapon by HDA
+# Armour/Weapon autopickup by rwbarton, enhanced by HDA
 {
 add_autopickup_func(function(it, name)
   local class = it.class(true)
-  local good_slots = {cloak="Cloak", helmet="Helmet", gloves="Gloves", boots="Boots"}
+  local armour_slots = {cloak="Cloak", helmet="Helmet", gloves="Gloves", boots="Boots", body="Armour", shield="Shield"}
   
   if class == "armour" then
-    st, _ = it.subtype()
-    equipped_item = items.equipped_at(good_slots[st])
-    if good_slots[st] ~= nil and equipped_item == nil then
+    sub_type = it.subtype()
+    equipped_item = items.equipped_at(armour_slots[sub_type])
+    if equipped_item == nil then
       return true
-    elseif equipped_item then
-      if (equipped_item.plus < 2) and not (equipped_item.branded or equipped_item.artefact) then
-        return true
-      end
+    elseif (equipped_item.plus < 2) and not ((equipped_item.branded or equipped_item.artefact) or (equipped_item.name():find("troll") or equipped_item.name():find("dragon"))) then
+      return true
+    elseif (equipped_item.branded or equipped_item.artefact) or (equipped_item.name():find("troll") or equipped_item.name():find("dragon")) then
+      return ((you.xl() < 12) and it.branded) or it.artefact 
     end
-  elseif class == "weapon" then
-    equipped_item = items.equipped_at("Weapon")
+  
   elseif class == "jewellery" and name:find("amulet") then
     equipped_item = items.equipped_at("Amulet")
   end
@@ -165,55 +161,55 @@ add_autopickup_func(function(it, name)
       if (weapon.branded or weapon.artefact) then return false
       else
         local weapon_name = weapon.name()
-  
-        if you.skill("Short Blades") > 4 then
+        local sb = you.skill("Short Blades")
+        local lb = you.skill("Long Blades")
+        local axe = you.skill("Axes")
+        local mf = you.skill("Maces & Flails")
+        local pole = you.skill("Polearms")
+        local staff = you.skill("Staves")
+        if sb > 6 then
           if name:find("quick blade") then return true end
         end
-        if you.skill("Long Blades") > 8 then
+        if lb > 8 then
           if name:find("demon blade") then return true end
           if name:find("bastard sword") then return true end
         end
-        if you.skill("Long Blades") > 14 then
+        if lb > 14 then
           if name:find("claymore") then return true end
         end
-        if you.skill("Axes") > 4 then
-          if name:find("axe") then return true end
-        end
-        if you.skill("Axes") > 8 then
+        if axe > 8 then
           if name:find("battleaxe") then return true end
           if name:find("broad axe") then return true end
           if name:find("war axe") then return true end
           if name:find("executioner") then return true end
         end
-        if you.skill("Axes") > 18 then
+        if axe > 18 then
           if name:find("executioner") then return true end
         end
-        if you.skill("Maces & Flails") > 4 then
+        if mf > 8 then
           if name:find("eveningstar") then return true end
           if name:find("demon whip") then return true end
           if name:find("sacred scourge") then return true end
           if name:find("dire flail") then return true end
         end
-        if you.skill("Maces & Flails") > 14 then
+        if mf > 14 then
           if name:find("great mace") then return true end
         end
-        if you.skill("Polearms") > 4 then
+        if pole > 8 then
           if name:find("trident") then return true end
           if name:find("demon trident") then return true end
           if name:find("trishula") then return true end
         end
-        if you.skill("Polearms") > 14 then
+        if pole > 14 then
           if name:find("glaive") then return true end   
           if name:find("bardiche") then return true end    
         end
-        if you.skill("Staves") > 4 then
+        if staff > 8 then
           if name:find("lajatang") then return true end
         end
       end
-    else
-      if (you.skill("Unarmed Combat") < 5) and (items.equipped_at("Weapon") == nil) then
-        if it.class(true) == "weapon" then return true end
-      end
+    elseif (you.skill("Unarmed Combat") < 5) then
+      return true
     end
   end
 end)
@@ -248,12 +244,13 @@ slot += Sublimation of Blood:m
 slot += Abjuration:q
 slot += Regeneration:r
 slot += Recall:r
-slot += Swiftness:s
+slot += Condensation Shield:s
+slot += Shroud of Golubria:s
+slot += Slow:s
 slot += Sticky Flame:s
 slot += Sticks to Snakes:s
-slot += Condensation Shield:s
-slot += Slow:s
-slot += Song of Slaying:s
+slot += Stoneskin:s
+slot += Swiftness:s
 slot += Passwall:w
 slot += Corona:v
 slot += Iskenderun's Mystic Blast:x
@@ -272,7 +269,6 @@ slot += Spectral Weapon:z
 slot += Ozocubu's Armour:A
 slot += Animate Skeleton:A
 slot += Animate Dead:A
-slot += Stoneskin:A
 slot += Summon Butterflies:B
 slot += Controlled Blink:B
 slot += Control Teleport:C
@@ -281,6 +277,7 @@ slot += Flight:F
 slot += Cure Poison:P
 slot += Borgnjor's Revivification:R
 slot += Phase Shift:S
+slot += Song of Slaying:S
 
 ################
 # Auto Exclude #
@@ -460,10 +457,14 @@ ai := autoinscribe
 	ai += vampiric:!w
 : end
 
-ai += distortion:!w
-ai += (Sonja|Psyche):!w
+# Inscribe distortion weapons if you are not worshipping Lugonu
+: if you.god() ~= "Lugonu" then
+	ai += distortion:!w
+  ai += (Sonja|Psyche):!w
+: end
+
 ai += (bad|dangerous)_item.*potion:!q
-ai += potion of beserk rage:!q
+ai += potion of berserk rage:!q
 ai += (bad|dangerous)_item.*scroll:!r
 ai += rod of [^s][^t]:!a
 ai += [Mm]anual of:!d
@@ -473,6 +474,8 @@ ai += throwing net:=f, !d
 ai += tome of destruction:!d
 #ai += royal jell:!restore
 
+ai += troll leather armour:regen
+ai += troll hide:regen
 ai += pearl dragon (armour|hide):rN+
 ai += fire dragon (armour|hide):rF++, rC-
 ai += ice dragon (armour|hide):rC++, rF-
