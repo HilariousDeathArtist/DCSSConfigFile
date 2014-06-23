@@ -62,7 +62,13 @@ msc =
 
 msc += $mp:You feel your power returning
 
-#
+#msc += $danger:
+msc += $danger:The amulet engulfs you in a massive magical discharge
+msc ^= $danger:Your.*appears confused
+msc ^= $danger:You open a gate to Pandemonium
+msc += $danger:Some icy apparitions appear
+msc += $danger:You feel less empathic
+msc ^= $danger:Qazlal is no longer ready to protect you from an element
 msc ^= $danger:Your divine halo fades away
 msc ^= $danger:Your divine shield disappears
 msc ^= $danger:The orb of electricity explodes
@@ -389,6 +395,11 @@ msc += $danger:Blessed fire suddenly surrounds you
 
 # Item Destrucion, gaining bad mutions, or losing good ones, pennance, and gong
 #msc += $item_dmg:
+msc += $item_dmg:Your wings shrivel and weaken
+msc += $item_dmg:You feel very strange
+msc += $item_dmg:You feel conductive
+msc += $item_dmg:A chill runs up and down your throat
+msc += $item_dmg:You feel forlorn
 msc += $item_dmg:Your skin no longer functions as natural camouflage
 msc += $item_dmg:Your natural healing is weakened
 msc += $item_dmg:Your rate of healing slows
@@ -965,8 +976,12 @@ msc += $warning:dances into the air
 msc += $warning:appears
 msc += $warning:Your divine protection wanes
 msc += $warning:The sheep \"Baaaas\" balefully
+msc += $warning:is blown backwards by the freezing wind
 
 #msc += $boring:
+msc += $boring:Motes of dust swirl before your eyes
+msc ^= $boring:You squeeze the fleshy orifice shut
+msc += $boring:Gastronok glows a brilliant shade of cerise
 msc += $boring:fingertips start to glow
 msc += $boring:eyes start to glow
 msc += $boring:You smell tea
@@ -1415,10 +1430,10 @@ msc += $boring:shimmers violently
 msc += $good:You (hit|bite|slice|spit|open|slash|puncture|carve|perforate|stick|cut|trample|maul|pierce|punish|electrocute)
 msc += $good:You (chop|strike|skewer|impale|dice|headbutt|fracture|peck|touch|kick|freeze|smack|shred|scratch|devastate) 
 msc += $good:You (pummel|squash|pulverise|grab|squeeze|constrict|sock|thump|thrash|flatten|tail-slap|tentacle-slap)
-msc += $good:You (burn|claw|mangle|punch|drain|bludgeon|whack|shatter|hammer|sears|beat|pound|crush|eviscerate) 
+msc += $good:You (burn|claw|mangle|punch|drain|bludgeon|whack|shatter|hammer|sears|beat|pound|crush|eviscerate|shave) 
 msc += $good:(hits|bites|slices|spits|opens|slashes|punctures|carves|perforates|sticks|tramples|trunk-slaps) [^y]
 msc += $good:(freezes|poisons|engulfs|draws|tail-slaps|kicks|smacks|shreds|melts|mauls|touches|crushes) [^y]
-msc += $good:(pummels|squashes|pulverises|cuts|chops|strikes|skewers|attacks|hits|constricts|burns) [^y]
+msc += $good:(pummels|squashes|pulverises|cuts|chops|strikes|skewers|attacks|hits|constricts|burns|electrocutes) [^y]
 msc += $good:(grabs|claws|shocks|drains|sears|pecks|gores|stings|tentacle-slaps|headbutts|eviscerates|punches) [^y]
 msc += $good:You smite
 msc ^= $good:Your fire elemental burns
@@ -1459,6 +1474,10 @@ msc += $good:seems to burn from within
 
 # Non-damage combat messages
 #msc += $positive:
+msc += $positive:falters in the face of your power
+msc += $positive:in retribution by your aura
+msc += $positive:Your slowness suddenly goes away
+msc ^= $positive:Your.*seems less confused
 msc += $positive:is no longer regenerating
 msc += $positive:You repair your equipment
 msc += $positive:You extend your infusion
@@ -1698,6 +1717,8 @@ msc += $positive:appears in a shower of sparks
 msc += $positive:Malign forces permeate your being\, awaiting release
 msc += $positive:A glowing mist starts to gather
 msc += $positive:word of recall is interrupted
+msc ^= $positive:begin to glow red
+msc ^= $positive:begin to glow brighter
 
 #msc += $verypositive:
 msc ^= $verypositive:The.*zombie.*rots away
@@ -1713,7 +1734,6 @@ msc += $verypositive:You feel purified
 msc += $verypositive:You feel more resilient
 msc += $verypositive:You get a glimpse of the first card
 msc += $verypositive:You turn into a swirling mass of dark shadows
-msc ^= $verypositive:begin to glow red
 msc += $verypositive:You feel nimbler
 msc += $verypositive:the tentacle is hauled back through the portal
 msc += $verypositive:You feel more in control of your magic
@@ -1815,6 +1835,10 @@ msc += $verypositive:You feel more protected from negative energy
 
 #Positive mutation - or losing bad ones
 #msc += $awesome:
+msc += $awesome:A poisonous barb forms on the end of your tail
+msc += $awesome:Your wings grow larger and stronger
+msc += $awesome:You feel more spiritual
+msc ^= $awesome:You feel immune to rotting
 msc += $awesome:Your system.*accepts artificial healing
 msc += $awesome:You feel more resistant to hostile enchantments
 msc += $awesome:You feel completely energised by your suffering
@@ -1909,6 +1933,7 @@ msc += $awesome:Your throat feels hot
 msc += $awesome:Your teeth grow very long and razor-sharp
 
 # Other rare and awesome stuff
+msc += $awesome:You are surrounded by a storm
 msc += $awesome:You sense an aura of extreme power
 msc += $awesome:Your.*shines brightly
 msc ^= $awesome:The Shining One will now bless your weapon at an altar
@@ -1930,6 +1955,9 @@ msc += $awesome:That felt like a moral victory
 msc += $awesome:A shaft materialises beneath you
 msc += $awesome:You draw Experience
 msc += $awesome:You draw the Mercenary
+msc ^= $awesome:Qazlal will now grant you protection from an element of your choosing
+msc ^= $awesome:Kikubaaqudgha is protecting mute from unholy torment
+msc ^= $awesome:Kikubaaqudgha will now enhance your necromancy at an altar
 msc += $awesome:You rejoin the land of the living
 msc += $awesome:The sixfirhy explodes in a shower of sparks
 msc += $awesome:With a swish of your cloak
@@ -2062,9 +2090,8 @@ msc += $negative:constricts your?
 msc += $negative:(bites|hits|headbutts|punches|shocks|tentacle-slaps|claws|smites|stings|freezes|slaps|pecks|gores) your?
 msc += $negative:(tail-slaps|tramples|burns|poisons|gores|pecks|touches|kicks|trunk-slaps|skewers) your?
 # Thanks killer klowns
-msc += $negative:(tickles|prods|flogs|trip-wires|defenestrates|headlocks|strangle-hugs|pokes|pounds|squeezes|pinches|elbows|wrestles) your?
+msc += $negative:(teases|tickles|prods|flogs|trip-wires|defenestrates|headlocks|strangle-hugs|pokes|pounds|squeezes|pinches|elbows|wrestles) your?
 msc += $negative:Your.*burned by acid
-msc += $negative:Your.*appears confused
 msc += $negative:Your?.*is struck by the.*spines
 msc += $negative:Your spectral weapon shares its damage
 msc += $negative:The.*begins to radiate
@@ -2134,6 +2161,7 @@ msc += $warning:resists
 
 # For the text that describes ranged attacks and spells
 #msc += $takesaction:
+msc += $takesaction:You create a blast
 msc += $takesaction:The ophan calls forth blessed flames
 msc += $takesaction:You exhale
 msc += $takesaction:You enter the passage of Golubria
@@ -2258,7 +2286,6 @@ msc ^= $godaction:You feel protected from physical attacks
 msc ^= $godaction:You feel protected from cold
 msc ^= $godaction:You feel protected from fire
 msc ^= $godaction:You feel protected from electricity
-msc += $godaction:You are surrounded by a storm which can block enemy attacks
 msc += $godaction:resistances upon receiving elemental damage
 msc += $godaction:A storm cloud blasts the area with cutting wind
 msc += $godaction:A blizzard blasts the area with ice
@@ -2470,6 +2497,8 @@ msc += $interface:Saving macro
 
 # Muted - unnecessary 
 #msc += mute:
+msc += mute:The (plant|fungus|bush) is engulfed
+msc += mute:The (plant|fungus|bush) is struck by lightning
 msc += mute:Cast which spell
 msc += mute:Use which ability
 msc += mute:Evoke which item
