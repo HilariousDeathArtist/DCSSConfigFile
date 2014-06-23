@@ -47,6 +47,7 @@ autoinscribe += staff of energy:!d!a, @w1
 :   local need_to_recover = should_rest(hp, mp, max_hp, max_mp)
 :   local have_no_chunks = have_no_chunks()
 :   local you_are_sif = string.find(you.god(), "Sif")
+:   local you_are_yred = string.find(you.god(), "Yred")
 :   local you_are_good = string.find(you.god(), "Shining") or string.find(you.god(), "Elyvilon") or string.find(you.god(), "Zin")
 :   local sacrifice_god = you_worship_sacrifice_god()
 :   local you_are_mummy = string.find(you.race(), "Mummy")
@@ -59,6 +60,7 @@ autoinscribe += staff of energy:!d!a, @w1
 :   local you_know_simulacrum = known_spells["Simulacrum"] and (you.skill("Necromancy") >= 10)
 :   local you_know_sublimation = known_spells["Sublimation of Blood"] and (you.skill("Necromancy") >= 5)
 :   local you_know_animate_skeleton = known_spells["Animate Skeleton"]
+:   local you_know_animate_dead = known_spells["Animate Dead"]
 :   local chunks_are_equipped = is_weapon("chunk")
 :   local distort_weapon = is_weapon("distort")
 :   local vamp_weapon = is_weapon("vamp") and not chunks_are_equipped 
@@ -81,11 +83,12 @@ autoinscribe += staff of energy:!d!a, @w1
 :   local should_regen_hp = (not you_are_good) and ((max_hp - hp) > 10) and no_food_issues and (not you_are_regen)
 :   local should_sublimate = (not melded_weapon) and (not you_are_good) and should_channel_mp and you_know_sublimation and have_spare_chunks and mp>2 and (not (distort_weapon or vamp_weapon or staff_of_power_is_equipped)) and you_are_not_felid()
 :   local should_animate_skeleton = (not you_are_good) and you_know_animate_skeleton and mp>1 and (not can_not_animate())
+:   local should_animate_dead = (not you_are_good) and you_know_animate_dead and mp>4 and (not can_not_animate())
 :   local you_want_spare_chunks = (not have_spare_chunks) and (you_know_regen or you_know_sublimation or you_know_simulacrum or you_have_staff_of_energy or (you_are_sif and not you_are_mummy))
 :   local you_want_chunks = not you_are_hungerless and (not have_edible_chunks()) and (want_to_eat or you_want_spare_chunks)
-:   --crawl.mpr(string.format("you_are_good is: %s", you_are_good and "True" or "False"))
-:   --crawl.mpr(string.format("should_sublimate is: %s", should_sublimate and "True" or "False"))
-:   --crawl.mpr(string.format("should_regen_hp is: %s", should_regen_hp and "True" or "False"))
+:   --crawl.mpr(string.format("you.piety_rank() is: %s", you.piety_rank()))
+:   --crawl.mpr(string.format("want_to_eat is: %s", want_to_eat and "True" or "False"))
+:   --crawl.mpr(string.format("have_edible_chunks is: %s", have_edible_chunks() and "True" or "False"))
 :   --crawl.mpr(string.format("should_animate_skeleton is: %s", should_animate_skeleton and "True" or "False"))
 :   --crawl.mpr(string.format("have_spare_chunks is: %s", have_spare_chunks and "True" or "False"))
 :   --crawl.mpr(string.format("you_know_regen is: %s", you_know_regen and "True" or "False"))
@@ -165,9 +168,18 @@ autoinscribe += staff of energy:!d!a, @w1
 :       end
 :     elseif need_to_recover and not you_are_starving() then
 :       rest()
-:     elseif (not sacrifice_god) and on_corpses() and should_animate_skeleton then
-:       crawl.mpr("<cyan>Autocasting Animate Skeleton</cyan>")
+:     elseif you_are_yred and (you.piety_rank() >= 3) and item_in_view("corpse") then
+:       crawl.mpr("<cyan>Autocasting Mass Animate Remains.</cyan>")
+:       sendkeys('aa')
+:     elseif (not sacrifice_god) and item_in_view("corpse") and should_animate_dead and not already_animated() then
+:       crawl.mpr("<cyan>Autocasting Animate Dead.</cyan>")
 :       sendkeys('zA')
+:     elseif (not sacrifice_god) and on_corpses() and should_animate_skeleton then
+:       crawl.mpr("<cyan>Autocasting Animate Skeleton.</cyan>")
+:       sendkeys('zA')
+:     elseif you_are_yred and (you.piety_rank() >= 1) and on_corpses() then
+:       crawl.mpr("<cyan>Autocasting Animate Remains.</cyan>")
+:       sendkeys('aa')
 :     else
 :       --This does the general travelling
 :       autoexplore()
@@ -243,6 +255,10 @@ autoinscribe += staff of energy:!d!a, @w1
         or string.find(crawl.messages(10), escape("The barbed spikes dig painfully into your body as you move"))
   end
   
+  function already_animated()
+    return string.find(crawl.messages(10), escape("Autocasting Animate Dead"))
+  end
+  
   function removed_barbs()
     return string.find(crawl.messages(10), escape("You carefully extract the manticore spikes from your body")) 
         or string.find(crawl.messages(10), escape("The manticore spikes snap loose"))
@@ -301,7 +317,10 @@ autoinscribe += staff of energy:!d!a, @w1
   
   function have_edible_chunks()
     for it in inventory() do
-      if string.find(it.name(), "chunk") and food.can_eat(it) and not food.dangerous then
+      --if string.find(it.name(), "chunk") then
+        --crawl.mpr(it.name() .." is edible: " .. (food.can_eat(it) and "True" or "False") .. " and dangerous: " .. (food.dangerous(it) and "True" or "False"))
+      --end
+      if string.find(it.name(), "chunk") and food.can_eat(it) and not food.dangerous(it) then
         return true
       end
     end
