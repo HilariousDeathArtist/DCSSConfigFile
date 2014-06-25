@@ -17,6 +17,7 @@ more += You hear.*crackle.*magical portal
 more += You hear.*creaking.*oriflamme
 more += You hear.*crackling.*archway
 more += You hear.*rumble.*avalanche
+more += You hear.*hiss.*sand
 more += One of the plants suddenly grows acid sacs
 more += Another plant grows acid sacs
 more += distant snort
@@ -264,7 +265,7 @@ more += There is a sealed passage
 more += Something appears in a flash of light
 more += You feel your rage building
 more += You turn into a fleshy mushroom
-more += staircase.*moves from beneath you
+more += staircase.*moves
 
 # Interrupts for Hell effects
 more += You will not leave this place
