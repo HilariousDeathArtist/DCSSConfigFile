@@ -438,8 +438,8 @@ small_more = true
 # Settting this to false changes the turn display to show player turns (used for scoring)
 show_game_turns = true
 
-message_colour = mute:you're not good enough to have a special ability
-message_colour = mute:@corpse
+message_colour += mute:you're not good enough to have a special ability
+message_colour += mute:@corpse
 
 msg_min_height=7
 msg_max_height=10
