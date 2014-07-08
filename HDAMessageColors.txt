@@ -63,6 +63,7 @@ msc =
 msc += $mp:You feel your power returning
 
 #msc += $danger:
+msc += $danger:shrugs off the wave
 msc += $danger:Your unholy channel expires
 msc += $danger:Being near the torpor snail leaves you feeling lethargic
 msc += $danger:The amulet engulfs you in a massive magical discharge
@@ -397,6 +398,7 @@ msc += $danger:Blessed fire suddenly surrounds you
 
 # Item Destrucion, gaining bad mutions, or losing good ones, pennance, and gong
 #msc += $item_dmg:
+msc += $item_dmg:You feel a strong urge to yell
 msc += $item_dmg:Your wild genetic ride slows down
 msc += $item_dmg:The barb on your tail disappears
 msc += $item_dmg:Your wings shrivel and weaken
@@ -469,6 +471,7 @@ msc += $item_dmg:Your vision seems duller
 msc += $item_dmg:You feel less energetic
 
 #msc += $warning:
+msc += $warning:You scream at
 msc += $warning:is no longer distracted by gold
 msc += $warning:boulder beetle smashes into something
 msc += $warning:grate falls apart
@@ -1041,7 +1044,7 @@ msc += $boring:Your.*spins!
 msc += $boring:grins madly
 msc += $boring:You lose your grip on
 msc += $boring:The water engulfing you falls away
-msc += $boring:The disc glows for a moment\, then fades
+msc += $boring:The disc glows for a moment
 msc += $boring:Your.*briefly glows
 msc += $boring:You feel numb
 msc += $boring:The chaos spawn grows dozens of eye stalks in order to get a better look at you
@@ -1728,7 +1731,6 @@ msc ^= $positive:You feel as if something is helping you
 msc += $positive:appears in a shower of sparks
 msc += $positive:Malign forces permeate your being
 msc += $positive:A glowing mist starts to gather
-msc += $positive:word of recall is interrupted
 msc ^= $positive:begin to glow red
 msc ^= $positive:begin to glow brighter
 
@@ -1847,6 +1849,7 @@ msc += $verypositive:You feel more protected from negative energy
 
 #Positive mutation - or losing bad ones
 #msc += $awesome:
+msc += $awesome:You feel breathless
 msc += $awesome:Your genes go into a fast flux
 msc += $awesome:You feel more resistant to heat
 msc += $awesome:A poisonous barb forms on the end of your tail
@@ -1947,6 +1950,7 @@ msc += $awesome:Your throat feels hot
 msc += $awesome:Your teeth grow very long and razor-sharp
 
 # Other rare and awesome stuff
+msc += $awesome:word of recall is interrupted
 msc += $awesome:You are surrounded by a storm
 msc += $awesome:You sense an aura of extreme power
 msc += $awesome:Your.*shines brightly
@@ -2046,6 +2050,7 @@ msc ^= $awesome:You now have enough gold to fund merchants seeking to open store
 # Weapon brands/enchantment
 msc ^= $awesome:A searing pain shoots up your 
 msc += $awesome:You hear the crackle of electricity
+msc += $awesome:You see sparks fly
 msc += $awesome:Your hands tingle
 msc += $awesome:Your claws tingle
 msc += $awesome:You feel a dreadful hunger
@@ -2181,6 +2186,7 @@ msc += $warning:resists
 
 # For the text that describes ranged attacks and spells
 #msc += $takesaction:
+msc += $takesaction:calls upon its god to speed up
 msc += $takesaction:You create a blast
 msc += $takesaction:The ophan calls forth blessed flames
 msc += $takesaction:You exhale
@@ -2394,6 +2400,7 @@ msc += boring:Multicoloured lights dance around
 
 # Interface Messages - These shouldn't take any turns
 #msc += $interface:
+msc += $interface:Calm down first
 msc += $interface:You enter a permanent teleport trap
 msc += $interface:too cloudy to do that here
 msc += $interface:A powerful magic interferes with the creation of the passage
@@ -2566,3 +2573,9 @@ msc += mute:The plant looks sick
 msc += mute:You start butchering
 msc += mute:You continue butchering
 msc += mute:This raw flesh tastes terrible
+
+: if string.find(you.god(), "Jiyva") then
+  msc += mute:You hear a.*slurping noise
+  msc += mute:You hear a.*squelching noise
+  msc += mute:You feel a little less hungry
+: end
