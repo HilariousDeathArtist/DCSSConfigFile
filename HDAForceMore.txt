@@ -96,6 +96,7 @@ more += The octopode crusher throws you
 more += Mara shimmers
 more += There is a horrible\, sudden wrenching feeling in your soul
 more += Mara seems to draw the.*out of itself
+more += Being near the torpor snail leaves you feeling lethargic
 
 # Interrupts for unexpected situations
 more += The.*shudders
@@ -164,7 +165,6 @@ more += Your body armour is too heavy
 more += stands defiantly in death's doorway
 more += is no longer invulnerable
 more += This potion can/'t work under stasis
-more += splits in two
 more += Kikubaaqudgha will now enhance your necromancy
 more += Lugonu will now corrupt your weapon
 more += The Shining One will now bless
@@ -406,3 +406,7 @@ more += Jiyva alters your body
 : if you.god() == "Xom" then
 	more += god:
 : end
+
+: if not string.find(you.god(), "Jiyva") then
+  more += splits in two
+:end
