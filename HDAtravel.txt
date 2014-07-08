@@ -16,7 +16,7 @@ easy_eat_contaminated = true
 autoinscribe += bread ration:@e1
 autoinscribe += meat ration:@e2
 autoinscribe += chunk:@w0
-autoinscribe += staff of energy:!d!a, @w1
+autoinscribe += staff of energy:@w1
 
 ##################
 #    HDAtravel   #
@@ -49,6 +49,8 @@ autoinscribe += staff of energy:!d!a, @w1
 :   local you_are_good = string.find(you.god(), "Shining") or string.find(you.god(), "Elyvilon") or string.find(you.god(), "Zin")
 :   local sacrifice_god = you_worship_sacrifice_god()
 :   local you_are_mummy = string.find(you.race(), "Mummy")
+:   local you_are_vampire = string.find(you.race(), "Vampire")
+:   local can_bottle_blood = you_are_vampire and (you.xl() >= 6)
 :   local you_do_not_eat = string.find(you.race(), "Spriggan") or you_are_mummy
 :   local lichform = string.find(you.transform(), "lich")
 :   local bladehands = string.find(you.transform(), "blade")
@@ -109,7 +111,7 @@ autoinscribe += staff of energy:!d!a, @w1
 :       crawl.mpr("<lightcyan>Autochanneling using Sif.</lightcyan>")
 :       sendkeys('aa')
 :     elseif should_regen_hp and ((you_know_regen and (mp>3)) or (you_have_regen_ring and not regen_ring_is_equipped)) then
-:       if (you_know_regen ) then
+:       if (you_know_regen) then
 :         crawl.mpr("<green>Autocasting Regen.</green>")
 :         --This assumes casting regen is bound to zr
 :         sendkeys('zr')
