@@ -54,7 +54,7 @@
     local no_rC = you.res_cold() == 0
     local no_rN = you.res_draining() == 0
     local no_rE = you.res_shock() == 0
-    local no_Cons = not you.conservation()
+    local no_Cons = false
     local no_Sustab = you.res_statdrain() == 0
     local no_rMut = you.res_mutation() == 0
     local you_are_flying = you.flying()
