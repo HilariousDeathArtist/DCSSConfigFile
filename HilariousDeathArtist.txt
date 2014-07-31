@@ -186,7 +186,9 @@ add_autopickup_func(function(it, name)
     if (you.xl() < 12) or (you.god():find("Nemelex") 
                            or (you.god():find("Yred"))
                            or (you.god():find("Beogh"))) then
-      if it.branded then return true end
+      if it.branded and not (it.name() == "club") then 
+        return true 
+      end
     end
     local weapon = items.equipped_at("Weapon")
     if weapon then
@@ -240,7 +242,7 @@ add_autopickup_func(function(it, name)
           if name:find("lajatang") then return true end
         end
       end
-    elseif (you.skill("Unarmed Combat") < 5) then
+    elseif (you.skill("Unarmed Combat") < 3) then
       return true
     end
   end
