@@ -46,7 +46,8 @@ autoinscribe += staff of energy:@w1
 :   local have_no_chunks = have_no_chunks()
 :   local you_are_sif = string.find(you.god(), "Sif")
 :   local you_are_yred = string.find(you.god(), "Yred")
-:   local you_are_good = string.find(you.god(), "Shining") or string.find(you.god(), "Elyvilon") or string.find(you.god(), "Zin")
+:   local you_are_zin = string.find(you.god(), "Zin")
+:   local you_are_good = string.find(you.god(), "Shining") or string.find(you.god(), "Elyvilon") or you_are_zin
 :   local sacrifice_god = you_worship_sacrifice_god()
 :   local you_are_mummy = string.find(you.race(), "Mummy")
 :   local you_are_vampire = string.find(you.race(), "Vampire")
@@ -80,7 +81,7 @@ autoinscribe += staff of energy:@w1
 :   local you_have_regen_ring = is_in_inventory("regeneration")
 :   local regen_ring_letter = find_item_letter("regeneration")
 :   local regen_ring_is_equipped = is_ring("regeneration")
-:   local should_regen_hp = (not you_are_good) and ((max_hp - hp) > 10) and no_food_issues and (not you_are_regen)
+:   local should_regen_hp = (not you_are_good) and ((hp/max_hp) < 0.80) and no_food_issues and (not you_are_regen)
 :   local should_sublimate = (not melded_weapon) and (not you_are_good) and should_channel_mp and you_know_sublimation and have_spare_chunks and mp>2 and (not (distort_weapon or vamp_weapon or staff_of_power_is_equipped)) and you_are_not_felid()
 :   local should_animate_skeleton = (not you_are_good) and you_know_animate_skeleton and mp>1 and (not can_not_animate())
 :   local should_animate_dead = (not you_are_good) and you_know_animate_dead and mp>4 and (not can_not_animate())
@@ -126,7 +127,7 @@ autoinscribe += staff of energy:@w1
 :       end
 :       crawl.mpr("<lightcyan>Autochanneling using staff of energy.</lightcyan>")
 :       sendkeys('v')
-:     elseif (no_weapon() and have_a_weapon) or (staff_of_energy_is_equipped and (not (staff_of_energy_letter == 'a')) or (chunks_are_equipped and (not (chunks_letter == 'a')))) then
+:     elseif (weapon_in_slot_a() or uses_unarmed()) and (no_weapon() and have_a_weapon) or (staff_of_energy_is_equipped and (not (staff_of_energy_letter == 'a')) or (chunks_are_equipped and (not (chunks_letter == 'a')))) then
 :       if uses_unarmed() then
 :         crawl.mpr("<cyan>Switching to unarmed.</cyan>")
 :         sendkeys('w-')
@@ -138,14 +139,19 @@ autoinscribe += staff of energy:@w1
 :       crawl.mpr("<cyan>Autoeating chunks.</cyan>")
 :       sendkeys('e')
 :     elseif you_want_chunks and on_corpses() and not on_chunks() and (not can_not_butcher()) then 
-:       if should_animate_skeleton then
+:       if should_animate_skeleton and not can_bottle_blood then
 :         crawl.mpr("<cyan>Autocasting Animate Skeleton for chunks.</cyan>")
 :         sendkeys('zA')
 :       else
-:         crawl.mpr("<cyan>Autochopping corpse.</cyan>")
-:         sendkeys('c')
+:         if can_bottle_blood then
+:           crawl.mpr("<cyan>Auto Bottling Blood (uses aB).</cyan>")
+:           sendkeys('aB')
+:         else
+:           crawl.mpr("<cyan>Autochopping corpse.</cyan>")
+:           sendkeys('c')
+:         end
 :       end
-:     elseif (not need_to_recover) and you_want_chunks and (not on_chunks()) and (not on_corpses()) and (not already_checked) then
+:     elseif (not you_are_zin) and (not need_to_recover) and you_want_chunks and (not on_chunks()) and (not on_corpses()) and (not already_checked) then
 :       crawl.mpr("<yellow>You may need something to eat soon, looking for food.</yellow>")
 :       find_corpses()
 :     elseif you_are_starving_or_near() and (not have_edible_chunks()) and (not (on_chunks() or on_corpses())) then
@@ -200,15 +206,18 @@ autoinscribe += staff of energy:@w1
   end 
 
   function should_rest(hp, mp, max_hp, max_mp)
-    return (mp < (max_mp*0.50) 
-            or (hp < (max_hp*0.75)) 
-            or ((max_hp-hp) > 30) 
-            or ((max_mp-mp) > 20) 
-            or (you.slowed()) 
-            or (you.poisoned()) 
-            or (you.confused())
-            or (you.exhausted())
-            or (((hp < max_hp) or (mp < max_mp)) and you_are_mummy))
+    local you_are_mummy = string.find(you.race(), "Mummy")
+    local you_are_deep_dwarf = string.find(you.race(), "Deep Dwarf")
+    return (not you_are_deep_dwarf) 
+            and (mp < (max_mp*0.50) 
+                or (hp < (max_hp*0.80)) 
+                or ((max_hp-hp) > 30) 
+                or ((max_mp-mp) > 20) 
+                or (you.slowed()) 
+                or (you.poisoned()) 
+                or (you.confused())
+                or (you.exhausted())
+                or (((hp < max_hp) or (mp < max_mp)) and you_are_mummy))
   end
 
   -- Hungry, Very Hungry, Near Starving, Starving
@@ -345,6 +354,15 @@ autoinscribe += staff of energy:@w1
     return false
   end
   
+  function weapon_in_slot_a()
+    local it = items.inslot(0)
+    if it then 
+      return string.find(it.class(true), "weapon")
+    else
+      return false
+    end
+  end
+  
   function find_item_letter(str)
     for i = 0,51 do
       it = items.inslot(i)
@@ -406,7 +424,13 @@ autoinscribe += staff of energy:@w1
   end
 
   function find_corpses()
-    sendkeys(string.char(6) .. "@corpse&&!!rott&&!!skel&&!!sky&&!!necrop&&!!ugly&&!!vampire&&!!corpse rot" .. "\ra\r")
+    local race = you.race()
+    local god = you.god()
+    local exclude_this = ""
+    if string.find(god, "Shining") then
+      exlude_this = race
+    end
+    sendkeys(string.char(6) .. "@corpse&&!!rott&&!!skel&&!!sky&&!!necrop&&!!ugly&&!!vampire&&!!corpse rot&&!!&&!!botono" .. exclude_this .. "\ra\r")
   end
 
   function inventory()
