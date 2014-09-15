@@ -300,7 +300,7 @@
         mobwarnings["black mamba"] = "is very fast and can hit for high damage in melee!"
         mobwarnings["spiny frog"] = "is fast and can hit for high damage in melee!"
         mobwarnings["queen ant"] = "can berserk other ants!"
-        mobwarnings["naga"] = "cand constrict!"
+        mobwarnings["naga"] = "can constrict!"
       end
       if no_rE then
         mobwarnings["electric eel"] = "can hit for high damage at range!"
@@ -668,7 +668,7 @@
       mobwarnings["ogre mage"] = "might cast banishment, paralyse, or LCS!"
       mobwarnings["purple draconian"] = "can dispel your buffs!"
       mobwarnings["vault sentinel"] = "can mark you and blow a signal horn!"
-      mobwarnings["vault warden"] = "can lockdown doors and staircases!"
+      mobwarnings["vault warden"] = "can lock down doors and staircases!"
       mobwarnings["ironheart preserver"] = "can absorb the damage of its allies and heal itself!"
     end
     
@@ -715,7 +715,7 @@
     mobwarnings["electric golem"] = "is fast, has electric attacks, and blinks!"
     mobwarnings["Nikola"] = "casts Lightning Bolt, Chain Lightning and blinks!"
     mobwarnings["storm dragon"] = "can do high damage in melee and has a nasty electric breath attack!"
-    mobwarnings["shock serpent"] = "is fast, casts Bolt of Lighning, does electric damage, and causes electric damage when injured!"
+    mobwarnings["shock serpent"] = "is fast, casts Bolt of Lightning, does electric damage, and causes electric damage when injured!"
     mobwarnings["titan"] = "can cast Lightning Bolt and Airstrike!"
     mobwarnings["Sojobo"] = "is fast and can cast Airstrike and Lightning Bolt!"
     local electricwarning = ""
@@ -937,7 +937,7 @@
     -- For each type of monster you can see, using getMonsterList()
     -- This goes through each monster in the mobwarnings table above and
     -- Checks to see if it matches the description of each mob in sight
-    -- Excluding forms that can't cast: zombie, skeleton, simulcrum, but not incapacited forms
+    -- Excluding forms that can't cast: zombie, skeleton, simulcrum, but not incapacitated forms
     for mons, count in pairs(getMonsterList()) do  
       for mob, message in pairs(mobwarnings) do
         if string.find(mons, mob) 

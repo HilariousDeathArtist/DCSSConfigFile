@@ -5,7 +5,7 @@ This is the Dungeon Crawl Stone Soup config file used by HilariousDeathArtist. I
 
 It's still being updated regularly, and since it's started getting spread around I thought it would be good to put up on Github.
 
-Warning: including the rcfile with the following instructions may get you nothing or even previous versions of the files if you are not playing on CSZO (trunk or .14)
+Warning: including the rc file with the following instructions may get you nothing or even previous versions of the files if you are not playing on CSZO (trunk or .14)
 
 There are a few ways to use this in your own game, the simplest being to add the following line to your config:
     
@@ -78,12 +78,12 @@ Currently overly greedy and includes many items
 Defines which letters to assign spells to when memorizing
 
 ## Auto Exclude 
-Adds an exlusion to dangerous monsters and uniques when you happen upon them unaware
+Adds an exclusion to dangerous monsters and uniques when you happen upon them unaware
 
 ## Autotravel 
 Stops for most dungeon features and ego items
 * Will autopickup and continue travel for items/consumables you already have
-* Autotravel will automatically sacrifce items to gods when its possible
+* Autotravel will automatically sacrifice items to gods when its possible
 * Autotravel will automatically eat chunks when you are hungry
 * Autotravel will ignore a couple of minor messages
 * Autotravel will stop for a few bad situations and spell expiration warnings
@@ -102,12 +102,12 @@ A huge overhaul of message text colors based on message contents
 
 #### Standard colors that I've attempted to be used for various situations:
     $danger        = lightred       - For messages you should most likely pay attention to
-    $item_dmg      = red            - For messages about health or item desctuction, or other very bad things
+    $item_dmg      = red            - For messages about health or item destruction, or other very bad things
     $warning       = yellow         - For messages you should probably pay attention to, includes when stuff makes noise
     $boring        = darkgrey       - For messages you probably don't need to pay attention to
     $negative      = brown          - For messages that describe damage to you or an ally   
     $good          = lightblue      - For messages that describe you or an ally doing damage to an enemy
-    $positive      = green          - For messages that describe a benefecial effect that doesn't do damage
+    $positive      = green          - For messages that describe a beneficial effect that doesn't do damage
     $verypositive  = lightgreen     - For messages that describe when something dies or something good occurs
     $awesome       = lightmagenta   - For messages that describe gaining good mutations
     $interface     = cyan           - For messages that describe something to the player
@@ -118,9 +118,9 @@ A huge overhaul of message text colors based on message contents
 ## Item coloring 
 An attempt at bringing some meaning from the above colors into the item menus
 
-## Autoinsriptions 
-Insribes useful items with messages to stop you from dropping them and reminding what they do.
-* Autoinsribes fruit with a prompt when you worship Fedhas.
+## Autoinscriptions 
+Inscribes useful items with messages to stop you from dropping them and reminding what they do.
+* Autoinscribe fruit with a prompt when you worship Fedhas.
 
 ## Character dump 
 Adds a few tables to the end of the dump, adds more of your previous messages, and adds some notes to the dump.

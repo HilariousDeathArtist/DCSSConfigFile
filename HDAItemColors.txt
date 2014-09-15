@@ -33,7 +33,7 @@ menu += $negative:shield of the gong
 menu += $danger:.*artefact.* cursed
 menu += $awesome:manual
 
-menu += $warning:^unidentified .*(potion|scroll|wand|jewellery).*
+menu += $warning:^unidentified .*(jewellery|potion|scroll|wand).*
 menu += $good:^unidentified .*weapon.*(runed|glowing)
 menu += $good:^unidentified .*armour.*(runed|glowing|embroidered)
 menu += $good:^unidentified .*armour.*(shiny|dyed)
@@ -46,9 +46,9 @@ menu += $verypositive:rod
 
 # Wands
 menu += $boring:wand of (flame|frost|magic darts|random effects)
-menu += $decent:wand of (confusion|slowing|polymorph|enslavement|paralysis)
-menu += $good:wand of (draining|digging|lightning|fireball)
-menu += $good:wand of (fire|cold|disintegration|invisibility)
+menu += $decent:wand of (confusion|enslavement|paralysis|polymorph|slowing)
+menu += $good:wand of (cold|digging|disintegration|draining)
+menu += $good:wand of (fire|fireball|invisibility|lightning)
 menu += $positive:wand of hasting
 menu += $verypositive:wand of heal wounds
 menu += $awesome:wand of teleportation
@@ -70,39 +70,37 @@ menu += $good:(corpse|chunk)
 # Scrolls
 menu += $danger:scrolls? of torment
 menu += $boring:scrolls? of (noise|random)
-menu += $decent:scrolls? of (holy word|identify|remove curse|amnesia)
-menu += $good:scrolls? of (fog|fear|summoning|immolation|silence|vulnerability)
-menu += $positive:scrolls? of recharging
-menu += $positive:scrolls? of enchant (weapon|armour)
-menu += $positive:scrolls? of (magic mapping|vorpalise|brand)
+menu += $decent:scrolls? of (amnesia|holy word|identify|remove curse)
+menu += $good:scrolls? of (fear|fog|immolation|silence|summoning|vulnerability)
+menu += $positive:scrolls? of (brand|enchant|magic mapping|recharging|vorpalise)
 menu += $verypositive:scrolls? of acquirement
 menu += $awesome:scrolls? of (blinking|teleportation)
 
 # Potions
 menu += $danger:potions? of berserk
 menu += magenta:potions? of mutation
-menu += $decent:potions? of (restore|flight|lignification)
-menu += $good:potions? of (might|agility|brilliance|resistance|invisibility)
+menu += $decent:potions? of (flight|lignification|restore)
+menu += $good:potions? of (agility|brilliance|invisibility|might|resistance)
 menu += $positive:potions? of curing
 menu += $mp:potions? of magic
-menu += $verypositive:potions? of (haste|speed|heal wounds)
-menu += $awesome:potions? of (experience|cure mutation|gain|beneficial)
+menu += $verypositive:potions? of (haste|heal wounds|speed)
+menu += $awesome:potions? of (beneficial|cure mutation|experience|gain)
 
 # Amulets
 menu += $boring:amulet of inaccuracy
-menu += $good:amulet of (stasis|warding|guardian spirit)
-menu += $positive:amulet of (rage|faith|resist corrosion)
-menu += $verypositive:amulet of (resist mutation|the gourmand)
+menu += $good:amulet of (guardian spirit|stasis|warding)
+menu += $positive:amulet of (faith|rage|resist corrosion)
 menu += $verypositive:amulet of (clarity|conservation)
+menu += $verypositive:amulet of (resist mutation|the gourmand)
 
 # Rings
 menu += $negative:ring of hunger
-menu += $negative:ring of \-.*(slaying|evasion|protection|dexterity|intelligence|strength)
-menu += $warning:ring of (ice|fire)
+menu += $negative:ring of \-.*(dexterity|evasion|intelligence|protection|slaying|strength)
+menu += $warning:ring of (fire|ice)
 menu += $decent:ring of flight
-menu += $verypositive:ring of (slaying|regeneration)
-menu += $positive:ring of (poison resistance|protection from magic|see invisible|protection from fire|protection from cold)
-menu += $good:ring of (.*evasion|.*protection|sustain abilities|wizardry|invisibility|magical power)
+menu += $verypositive:ring of (regeneration|.*slaying)
+menu += $positive:ring of (poison resistance|protection from cold|protection from fire|protection from magic|see invisible)
+menu += $good:ring of (.*evasion|.*protection|invisibility|magical power|sustain abilities|wizardry)
 menu += $awesome:ring of teleport
 
 # Misc items
@@ -110,14 +108,14 @@ menu += $warning:tome of Destruction
 menu += $awesome:.*misc.*rune( of Zot)?
 menu += $awesome:.*orb.*Zot
 menu += blue:inert
+menu += $good:fan of gales
 menu += $good:lamp of fire
 menu += $good:phial of floods
-menu += $good:fan of gales
 menu += $good:sack of spiders
 menu += $good:throwing net
-menu += $decent:stone of tremors
-menu += $decent:lantern of shadows
 menu += $decent:box of beasts
+menu += $decent:lantern of shadows
+menu += $decent:stone of tremors
 menu += $warning:disc of storms
 menu += $mp:crystal ball of energy
 menu += $mp:Staff of Wucad Mu
@@ -128,6 +126,5 @@ menu += $verypositive:deck of escape
 menu += $positive:deck of summoning
 menu += $danger:deck of destruction
 menu += $warning:deck of (dungeon|changes)
-menu += $good:deck of defence
 menu += $decent:deck of cards
 menu += $good:deck of 

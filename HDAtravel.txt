@@ -1,6 +1,6 @@
 -- To use this create a macro with the following function call in game
 -- ===HDAtravel
--- This file can be included in your rcfile with the following line:
+-- This file can be included in your rc file with the following line:
 -- include += HDAtravel.rc
 
 # This still has plenty of bugs, submit them at: 
@@ -27,7 +27,7 @@ autoinscribe += staff of energy:@w1
 -- Travels to the nearest corpse if we have no chunks and are at Very Hungry or Hungry or using Gourmand and at Full
 -- Automatically chops valid corpses if we are standing on them and we have no chunks
 -- Will stop autotravel at Near Starving
--- Channels MP if you have staff of enery or worship Sif when you have extra chunks
+-- Channels MP if you have staff of energy or worship Sif when you have extra chunks
 -- Casts regen out of combat if you have spare chunks and are missing hp
 -- TODO: better detection of non-edible corpses before standing on them
 -- TODO: Fix up for Vampire, Ghoul, and possibly Spriggan/Mummy
