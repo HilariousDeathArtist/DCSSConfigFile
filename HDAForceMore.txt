@@ -26,7 +26,7 @@ more += Found a staircase to the Ecumenical Temple
 more += wave of frost
 more += roar of battle
 more += There is an entrance to a bailey on this level
-more += oppresive heat
+more += oppressive heat
 more += tolling of a bell
 more += sound of rushing water
 more += Found a frozen archway
@@ -39,8 +39,6 @@ more += You have no means to grasp a wand firmly enough
 more += Done waiting
 more += (The|Your).*falls away!
 more += acid corrodes your equipment
-more += catch(es)? fire
-more += freezes? and shatters?
 more += cast banishment
 more += cast paralyse
 more += cast Torment
@@ -384,6 +382,8 @@ more += Urug.*(comes? into view|opens the)
 more += Vashnia.*(comes? into view|opens the)
 more += Wiglaf.*(comes? into view|opens the)
 more += Xtahua.*(comes? into view|opens the)
+
+# More dangerous monsters
 more += 's ghost.*(comes? into view|opens the)
 more += A player ghost.*(comes? into view|opens the)
 more += shadow demons?.*(comes? into view|opens the)
