@@ -2,7 +2,7 @@
 # https://github.com/HilariousDeathArtist/DCSSConfigFile
 # or find me on crawl.s-z.org
 
-# I will try to keep my rcfiles up to date on CSZO and CAO
+# I will try to keep my rc files up to date on CSZO and CAO
 # If you are playing on these servers you can include this file in your config with the following line
 # include += HilariousDeathArtist.rc
 
@@ -37,7 +37,7 @@ note_chat_messages = true
 # Uncomment the next line and the call to SpoilerAlert() in the ready function to use it
 # include += SpoilerAlert.rc
 
-# The damage annoucement messages
+# The damage announcement messages
 include += HDamage.rc
 
 # Force More prompts
@@ -119,14 +119,14 @@ automagic_fight = true
 drop_mode += multi
 # Always show the full list of items when you pick up a stack
 pickup_mode += multi
-# Allows followers to pick up ANYTHING (take care not to lose artifacts)
+# Allows followers to pick up ANYTHING (take care not to lose artefacts)
 default_friendly_pickup += all
 
 # Set Alias for Autopickup Exceptions
 ae := autopickup_exceptions
 ae += useless_item, dangerous_item, evil_item
 
-# Dont pickup potion(s) of [coagulated] blood if you are not a vampire
+# Don't pick up potion(s) of [coagulated] blood if you are not a vampire
 : if you.race() ~= "Vampire" then
 	ae += potions? of.*blood
 : end
@@ -256,55 +256,55 @@ end)
 # Set Alias for Spell Slots
 slot := spell_slot
 
-# Try to keep in aplhabetic order
-slot += Shroud:a
+# Try to keep in alphabetic order (by keybind)
 slot += Freeze:a
+slot += Shroud:a
 slot += Blink:b
+slot += Call Canine Familiar:c
 slot += Call Imp:c
-slot += Petrify:c
 slot += Confuse:c
-slot += Control Undead:c
-slot += Spider Form:c
 slot += Conjure Flame:c
+slot += Control Undead:c
 slot += Freezing Aura:c
-slot += Repel Missiles:d
+slot += Petrify:c
+slot += Spider Form:c
 slot += Deflect Missiles:d
 slot += Lethal Infusion:d
-slot += Fireball:f
+slot += Repel Missiles:d
 slot += Fire Brand:f
+slot += Fireball:f
 slot += Apportation:g
 slot += Haste:h
 slot += Sublimation of Blood:m
 slot += Abjuration:q
-slot += Regeneration:r
 slot += Recall:r
+slot += Regeneration:r
 slot += Condensation Shield:s
 slot += Shroud of Golubria:s
 slot += Slow:s
-slot += Sticky Flame:s
 slot += Sticks to Snakes:s
+slot += Sticky Flame:s
 slot += Stoneskin:s
 slot += Swiftness:s
 slot += Passwall:w
 slot += Corona:v
-slot += Iskenderun's Mystic Blast:x
-slot += Call Canine Familiar:c
 slot += Blade Hands:x
-slot += Mephitic Cloud:x
+slot += Iskenderun's Mystic Blast:x
 slot += Lightning Bolt:x
+slot += Mephitic Cloud:x
 slot += Stone Arrow:x
-slot += Vampiric Draining:x
-slot += Throw Icicle:x
 slot += Throw Flame:x
 slot += Throw Frost:x
-slot += Lee's Rapid Deconstruction:z
+slot += Throw Icicle:x
+slot += Vampiric Draining:x
 slot += Iskenderun's Battlesphere:z
+slot += Lee's Rapid Deconstruction:z
 slot += Spectral Weapon:z
-slot += Ozocubu's Armour:A
-slot += Animate Skeleton:A
 slot += Animate Dead:A
-slot += Summon Butterflies:B
+slot += Animate Skeleton:A
+slot += Ozocubu's Armour:A
 slot += Controlled Blink:B
+slot += Summon Butterflies:B
 slot += Control Teleport:C
 slot += Death's Door:D
 slot += Flight:F
@@ -317,18 +317,20 @@ slot += Song of Slaying:S
 # Auto Exclude #
 ################
 
-## paralyzing monsters ##
-auto_exclude += [^c] wizard, eyeball, orb of eyes, sphinx, lich, ancient lich, ogre-mage, Norris
-auto_exclude += vampire knight, orc sorcerer, Grinder, Rupert, Ereshkigal, Erolcha, Jory
+## dangerous monsters ##
+auto_exclude += ancient lich, death drake, hydra, ice statue, jelly, orb of fire
 
-## uniques or dangerous ##
-auto_exclude += Roxanne, Sigmund, Hydra, Pikel, slave, Prince Ribbit, Snorg, Ijyb, Jessica
-auto_exclude += Menkaure, Duvessa, Dowan, Blork, jelly, Gastronok, Edmund, Psyche
-auto_exclude += Urug, Harold, Aizul, Erica, Jorgrun, ancienct lich, orb of fire
-auto_exclude += Saint Roka, Boris, Mennas, Nessos, Sonja, Agnes, Wiglaf, Fannar, Louise
-auto_exclude += Mara, Arachne, Xtahua, Frances, Frederick, ice statue, Polyphemus
-auto_exclude += Death drake, Kirke, Hog, Jorgrun, Sojobo, Nergalle, Maud, Eustachio
-auto_exclude += Crazy Yiuf, Asterion, Joseph, Terence, Grum, Donald, Natasha, Nikola, Maurice 
+## paralysing monsters and uniques ##
+auto_exclude += [^c] wizard, ancient lich, Ereshkigal, Erolcha, eyeball, Grinder, Jory, lich
+auto_exclude += Norris, ogre-mage, orb of eyes, orc sorcerer, Rupert, sphinx, vampire knight
+
+## other uniques and unique followers ##
+auto_exclude += Agnes, Aizul, Arachne, Asterion, Blork, Boris, Crazy Yiuf, Donald, Dowan
+auto_exclude += Duvessa, Edmund, Erica, Eustachio, Fannar, Frances, Frederick, Gastronok
+auto_exclude += Grum, Harold, Ijyb, Jessica, Jorgrun, Joseph, Kirke, Louise, Mara, Maud
+auto_exclude += Maurice, Menkaure, Mennas, Natasha, Nergalle, Nessos, Nikola, Pikel
+auto_exclude += Polyphemus, Prince Ribbit, Psyche, Roxanne, Saint Roka, Sigmund, Snorg
+auto_exclude += Sojobo, Sonja, Terence, Urug, Wiglaf, Xtahua, hog, slave
 
 ###############
 # Auto Travel #
@@ -342,7 +344,7 @@ explore_stop += greedy_visited_item_stack,stairs,shops
 explore_stop += altars,portals,branches,runed_doors,greedy_sacrificeable
 
 # Adjusts how much autoexplore favours attempting to discover room perimeters and corners. 
-# At values higer than 0, autoexplore will more heavily favour visiting squares that are next to walls
+# At values higher than 0, autoexplore will more heavily favour visiting squares that are next to walls
 # reasonable values range from 0 to 10 maybe?
 explore_wall_bias = 3
 
@@ -368,52 +370,43 @@ ignore := runrest_ignore_message
 ignore += You regained.*mp
 
 # Jiyva Messages
-ignore += Jiyva gurgles merrily
 ignore += Jiyva appreciates your sacrifice
+ignore += Jiyva gurgles merrily
 ignore += Jiyva says: Divide and consume
 ignore += You hear.*splatter
 
 # Annoyances  -- Don't stop autotravel for these events
-ignore += You feel.*sick
+ignore += A.*toadstool withers and dies
 ignore += disappears in a puff of smoke
 ignore += engulfed in a cloud of smoke
-ignore += standing in the rain
 ignore += engulfed in white fluffiness
-ignore += safely over a trap
-ignore += A.*toadstool withers and dies
-ignore += toadstools? grow
-ignore += You walk carefully through the
 ignore += grinding sound
 ignore += in your inventory.*rotted away
+ignore += safely over a trap
+ignore += standing in the rain
+ignore += toadstools? grow
+ignore += You feel.*sick
+ignore += You walk carefully through the
 # Qazlal
 ignore += The plant is engulfed
-ignore += You destroy the (plant|fungus|bush)
+ignore += You destroy the (bush|fungus|plant)
 ignore += You displace your
 
 # Bad things -- Stop autotravel for these events
-stop += found a zot trap
-stop += Wait a moment
-stop += You fall through a shaft
-stop += An alarm trap emits a blaring wail
 stop += (blundered into a|invokes the power of) Zot
-stop += hear a soft click
+stop += (devoid of blood|starving)
 stop += A huge blade swings out and slices into you[^r]
-stop += sense of stasis
+stop += An alarm trap emits a blaring wail
 stop += flesh start
-stop += (starving|devoid of blood)
-stop += wrath finds you
+stop += found a zot trap
+stop += hear a soft click
 stop += lose consciousness
+stop += sense of stasis
+stop += Wait a moment
+stop += wrath finds you
+stop += You fall through a shaft
 
 # Expiring effects -- Stop autotravel for spells beginning to expire (to allow recasts)
-# Haste
-stop += You feel yourself slow down
-# Flight
-stop += You are starting to lose your buoyancy
-stop += You lose control over your flight
-# Necromutation
-stop += Your transformation is almost over
-stop += You have a feeling this form
-stop += You feel yourself come back to life
 # Control Teleport
 stop += uncertain
 # Deaths Door
@@ -421,13 +414,22 @@ stop += time is quickly running out
 stop += life is in your own
 # Enslavement
 stop += is no longer charmed
+# Flight
+stop += You are starting to lose your buoyancy
+stop += You lose control over your flight
+# Haste
+stop += You feel yourself slow down
+# Necromutation
+stop += Your transformation is almost over
+stop += You have a feeling this form
+stop += You feel yourself come back to life
+# Repel/Deflect
+stop += missiles spell is about to expire
 # Shroud
 stop += shroud begins to fray
 stop += shroud unravels
 # Swiftness
 stop += start to feel a little slower
-# Repel/Deflect
-stop += missiles spell is about to expire
 
 # Ghouls
 : if you.race() == "Ghoul" then
@@ -463,13 +465,13 @@ equip_unequip = true
 
 #hp_warning = 25 -- Damage Calc overrides these
 #mp_warning = 25 -- Damage Calc overrides these
-hp_colour = 100:green, 99:lightgray, 75:yellow, 50:lightred, 25:red
-mp_colour = 100:green, 99:lightgray, 75:yellow, 50:lightred, 25:red
+hp_colour = 100:green, 99:lightgrey, 75:yellow, 50:lightred, 25:red
+mp_colour = 100:green, 99:lightgrey, 75:yellow, 50:lightred, 25:red
 stat_colour = 3:red, 7:lightred
 # Removes the more prompts when outputting more than one screen of messages
 show_more = false
 small_more = true
-# Settting this to false changes the turn display to show player turns (used for scoring)
+# Setting this to false changes the turn display to show player turns (used for scoring)
 show_game_turns = true
 
 msg_min_height=7
@@ -506,27 +508,27 @@ ai += dispersal:=f
 ai += large rock:!d
 ai += throwing net:=f, !d
 ai += tome of destruction:!d
-#ai += royal jell:!restore
 
-ai += troll leather armour:regen
-ai += troll hide:regen
-ai += pearl dragon (armour|hide):rN+
+# Armour
 ai += fire dragon (armour|hide):rF++, rC-
-ai += ice dragon (armour|hide):rC++, rF-
-ai += swamp dragon (armour|hide):rP+
-ai += mottled dragon (armour|hide):rSticky
-ai += storm dragon (armour|hide):rElec
 ai += gold dragon (armour|hide):rC+, rF+, rP+
+ai += ice dragon (armour|hide):rC++, rF-
+ai += mottled dragon (armour|hide):rSticky
+ai += pearl dragon (armour|hide):rN+
 ai += steam dragon (armour|hide):rSteam
+ai += storm dragon (armour|hide):rElec
+ai += swamp dragon (armour|hide):rP+
+ai += troll hide:regen
+ai += troll leather armour:regen
 
-ai += ambrosia:!magic, !confuse
-ai += scrolls? of vulnerability:!r
+# Consumables
+ai += scrolls? of blinking:!r
 ai += scrolls? of holy word:!r
 ai += scrolls? of magic mapping:!r
-ai += scrolls? of blinking:!r
+ai += scrolls? of vulnerability:!r
 
+# Amulets
 ai += amulet of clarity:Clarity, !d
-ai += amulet of conservation:Cons, !d
 ai += amulet of faith:Faith, !P
 ai += amulet of guardian spirit:Spirit
 ai += amulet of rage:+Rage, !d
@@ -536,35 +538,39 @@ ai += amulet of stasis:Stasis, !d
 ai += amulet of the gourmand:Gourmand, !d
 ai += amulet of warding:Ward, rN+, !d
 
+# Rings
 ai += ring of fire:rF+, rC-
 ai += ring of flight:+Fly, !d
 ai += ring of ice:rC+, rF-
 ai += ring of invisibility:+Inv, !d
+ai += ring of loudness:Stlth-
 ai += ring of magical power:MP+9
-ai += ring of positive energy:rN+
 ai += ring of poison resistance:rP+, !d
+ai += ring of positive energy:rN+
 ai += ring of protection from cold:rC+, !d
 ai += ring of protection from fire:rF+, !d
 ai += ring of protection from magic:MR+, !d
 ai += ring of regeneration:regen, !d
 ai += ring of see invisible:sInv, !d
+ai += ring of stealth:Stlth+
 ai += ring of sustain abilities:sustAb
-ai += ring of sustenance:Hunger-
 ai += ring of teleport control:cTele, !d
 ai += ring of teleportation:+/*tele, !d
 ai += ring of wizardry:wiz+, !d
 
+# Staves
 ai += staff of air:rElec
 ai += staff of cold:rC+
+ai += staff of conjuration:!a
 ai += staff of death:rN+
+ai += staff of energy:+MP, hungerless spells, !d!a 
 ai += staff of fire:rF+
 ai += staff of poison:rP+
-ai += staff of energy:+MP, hungerless spells, !d!a 
-ai += staff of wizardry:wiz+, !a
 ai += staff of power:MP+17, !a
-ai += staff of conjuration:!a
 ai += staff of summoning:!a
+ai += staff of wizardry:wiz+, !a
 
+# Save fruit for abilities under Fedhas
 : if you.god() == "Fedhas" then
 	ai += fruit:!e
 : end
