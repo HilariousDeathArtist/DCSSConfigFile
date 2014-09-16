@@ -511,13 +511,13 @@ ai += tome of destruction:!d
 
 # Armour
 ai += fire dragon (armour|hide):rF++, rC-
-ai += gold dragon (armour|hide):rC+, rF+, rP+
+ai += gold dragon (armour|hide):rC+, rF+, rPois
 ai += ice dragon (armour|hide):rC++, rF-
 ai += mottled dragon (armour|hide):rSticky
 ai += pearl dragon (armour|hide):rN+
 ai += steam dragon (armour|hide):rSteam
 ai += storm dragon (armour|hide):rElec
-ai += swamp dragon (armour|hide):rP+
+ai += swamp dragon (armour|hide):rPois
 ai += troll hide:regen
 ai += troll leather armour:regen
 
@@ -545,7 +545,7 @@ ai += ring of ice:rC+, rF-
 ai += ring of invisibility:+Inv, !d
 ai += ring of loudness:Stlth-
 ai += ring of magical power:MP+9
-ai += ring of poison resistance:rP+, !d
+ai += ring of poison resistance:rPois, !d
 ai += ring of positive energy:rN+
 ai += ring of protection from cold:rC+, !d
 ai += ring of protection from fire:rF+, !d
@@ -565,7 +565,7 @@ ai += staff of conjuration:!a
 ai += staff of death:rN+
 ai += staff of energy:+MP, hungerless spells, !d!a 
 ai += staff of fire:rF+
-ai += staff of poison:rP+
+ai += staff of poison:rPois
 ai += staff of power:MP+17, !a
 ai += staff of summoning:!a
 ai += staff of wizardry:wiz+, !a
