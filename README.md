@@ -5,7 +5,7 @@ This is the Dungeon Crawl Stone Soup config file used by HilariousDeathArtist. I
 
 It's still being updated regularly, and since it's started getting spread around I thought it would be good to put up on Github.
 
-Warning: including the rc file with the following instructions may get you nothing or even previous versions of the files if you are not playing on CSZO (trunk or .14)
+Warning: including the rc file with the following instructions may get you nothing or even previous versions of the files if you are not playing on CSZO (trunk or .15)
 
 There are a few ways to use this in your own game, the simplest being to add the following line to your config:
     

@@ -508,7 +508,6 @@ ai += dispersal:=f
 ai += large rock:=f, !d
 ai += throwing net:=f, !d
 ai += tome of destruction:!d
-#ai += royal jell:!restore
 
 # Armour
 ai += fire dragon (armour|hide):rF++, rC-
@@ -523,7 +522,6 @@ ai += troll hide:regen
 ai += troll leather armour:regen
 
 # Consumables
-ai += ambrosia:!magic, !confuse
 ai += scrolls? of blinking:!r
 ai += scrolls? of holy word:!r
 ai += scrolls? of magic mapping:!r
@@ -531,7 +529,6 @@ ai += scrolls? of vulnerability:!r
 
 # Amulets
 ai += amulet of clarity:Clarity, !d
-ai += amulet of conservation:Cons, !d
 ai += amulet of faith:Faith, !P
 ai += amulet of guardian spirit:Spirit
 ai += amulet of rage:+Rage, !d
@@ -546,6 +543,7 @@ ai += ring of fire:rF+, rC-
 ai += ring of flight:+Fly, !d
 ai += ring of ice:rC+, rF-
 ai += ring of invisibility:+Inv, !d
+ai += ring of loudness:Stlth-
 ai += ring of magical power:MP+9
 ai += ring of poison resistance:rP+, !d
 ai += ring of positive energy:rN+
@@ -554,8 +552,8 @@ ai += ring of protection from fire:rF+, !d
 ai += ring of protection from magic:MR+, !d
 ai += ring of regeneration:regen, !d
 ai += ring of see invisible:sInv, !d
+ai += ring of stealth:Stlth+
 ai += ring of sustain abilities:sustAb
-ai += ring of sustenance:Hunger-
 ai += ring of teleport control:cTele, !d
 ai += ring of teleportation:+/*tele, !d
 ai += ring of wizardry:wiz+, !d

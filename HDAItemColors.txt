@@ -38,7 +38,7 @@ menu += $good:^unidentified .*weapon.*(runed|glowing)
 menu += $good:^unidentified .*armour.*(runed|glowing|embroidered)
 menu += $good:^unidentified .*armour.*(shiny|dyed)
 
-# Staffs
+# Staves
 menu += $mp:staff of energy
 menu += $positive:[^r]staff of
 # rod
@@ -59,12 +59,9 @@ menu += $danger:rot-inducing
 menu += magenta:mutagenic
 menu += $warning:poisonous
 menu += $boring:inedible
-#menu += $positive:royal jell
-menu += $mp:ambrosia
 menu += $good:meat ration
 menu += $good:bread ration
 menu += $good:preferred
-menu += blue:contaminated
 menu += $good:(corpse|chunk)
 
 # Scrolls
@@ -72,7 +69,7 @@ menu += $danger:scrolls? of torment
 menu += $boring:scrolls? of (noise|random)
 menu += $decent:scrolls? of (amnesia|holy word|identify|remove curse)
 menu += $good:scrolls? of (fear|fog|immolation|silence|summoning|vulnerability)
-menu += $positive:scrolls? of (brand|enchant|magic mapping|recharging|vorpalise)
+menu += $positive:scrolls? of (brand|enchant|magic mapping|recharging)
 menu += $verypositive:scrolls? of acquirement
 menu += $awesome:scrolls? of (blinking|teleportation)
 
@@ -80,10 +77,10 @@ menu += $awesome:scrolls? of (blinking|teleportation)
 menu += $danger:potions? of berserk
 menu += magenta:potions? of mutation
 menu += $decent:potions? of (flight|lignification|restore)
-menu += $good:potions? of (agility|brilliance|invisibility|might|resistance)
+menu += $good:potions? of (agility|brilliance|cancellation|invisibility|might|resistance)
 menu += $positive:potions? of curing
 menu += $mp:potions? of magic
-menu += $verypositive:potions? of (haste|heal wounds|speed)
+menu += $verypositive:potions? of (haste|heal wounds)
 menu += $awesome:potions? of (beneficial|cure mutation|experience|gain)
 
 # Amulets
@@ -94,13 +91,13 @@ menu += $verypositive:amulet of (clarity|conservation)
 menu += $verypositive:amulet of (resist mutation|the gourmand)
 
 # Rings
-menu += $negative:ring of hunger
+menu += $negative:ring of loudness
 menu += $negative:ring of \-.*(dexterity|evasion|intelligence|protection|slaying|strength)
 menu += $warning:ring of (fire|ice)
 menu += $decent:ring of flight
 menu += $verypositive:ring of (regeneration|.*slaying)
 menu += $positive:ring of (poison resistance|protection from cold|protection from fire|protection from magic|see invisible)
-menu += $good:ring of (.*evasion|.*protection|invisibility|magical power|sustain abilities|wizardry)
+menu += $good:ring of (.*evasion|.*protection|invisibility|magical power|stealth|sustain abilities|wizardry)
 menu += $awesome:ring of teleport
 
 # Misc items
