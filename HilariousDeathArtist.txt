@@ -499,9 +499,17 @@ ai := autoinscribe
   ai += (Sonja|Psyche):!w
 : end
 
+# Consumables
 ai += (bad|dangerous)_item.*potion:!q
-ai += potion of berserk rage:!q
+ai += potions? of berserk rage:!q
+ai += potions? of cure mutation:!q
 ai += (bad|dangerous)_item.*scroll:!r
+ai += scrolls? of blinking:!r
+ai += scrolls? of holy word:!r
+ai += scrolls? of magic mapping:!r
+ai += scrolls? of vulnerability:!r
+
+# Misc
 ai += rod of [^s][^t]:!a
 ai += [Mm]anual of:!d
 ai += dispersal:=f
@@ -509,7 +517,7 @@ ai += large rock:=f, !d
 ai += throwing net:=f, !d
 ai += tome of destruction:!d
 
-# Armour
+# Hide Armour
 ai += fire dragon (armour|hide):rF++, rC-
 ai += gold dragon (armour|hide):rC+, rF+, rPois
 ai += ice dragon (armour|hide):rC++, rF-
@@ -521,14 +529,39 @@ ai += swamp dragon (armour|hide):rPois
 ai += troll hide:regen
 ai += troll leather armour:regen
 
-# Consumables
-ai += scrolls? of blinking:!r
-ai += scrolls? of holy word:!r
-ai += scrolls? of magic mapping:!r
-ai += scrolls? of vulnerability:!r
+# Regular Armour
+#ai += (animal skin|chain mail|crystal plate armour|leather armour|plate armour|ring mail|robe|scale mail) of cold resistance:rC+
+#ai += (animal skin|chain mail|crystal plate armour|leather armour|plate armour|ring mail|robe|scale mail) of fire resistance:rF+
+#ai += (chain mail|leather armour|plate armour|ring mail|robe|scale mail) of magic resistance:MR+
+#ai += (chain mail|leather armour|plate armour|ring mail|robe|scale mail) of positive energy:rN+
+#ai += (chain mail|leather armour|plate armour|ring mail|scale mail) of poison resistance:rPois
+#ai += plate armour of ponderousness:Speed-
+#ai += robe of the archmagi:Spellpower+
+#ai += robe of resistance:rC+, rF+
+
+# Accessories
+#ai += (boots|buckler|centaur barding|cloak|gloves|hat|helmet|large shield|naga barding|shield) of cold resistance:rC+
+#ai += (boots|buckler|centaur barding|cloak|gloves|hat|helmet|large shield|naga barding|shield) of fire resistance:rF+
+#ai += (boots|centaur barding|naga barding) of flight:+Fly
+#ai += (boots|centaur barding|naga barding) of stealth:Stlth+
+#ai += (boots|centaur barding|naga barding) of running:Speed+
+#ai += (boots|centaur barding|naga barding) of jumping:+Jump
+#ai += (buckler|cloak|large shield|shield) of poison resistance:rPois
+#ai += (buckler|large shield|shield) of positive energy:rN+
+#ai += (buckler|large shield|shield) of protection:AC+3
+#ai += (buckler|large shield|shield) of reflection:Reflect
+#ai += (buckler|large shield|shield) of resistance:rC+, rF+
+#ai += (cloak|hat|helmet) of magic resistance:MR+
+#ai += (hat|helmet) of intelligence:Int+3
+#ai += (hat|helmet) of see invisible:sInv
+#ai += cloak of darkness:+Inv
+#ai += gloves of strength:Str+3
+#ai += gloves of dexterity:Dex+3
+#ai += gloves of archery:Ranged Slay+4
+#ai += hat of spirit shield:Spirit
 
 # Amulets
-ai += amulet of clarity:Clarity, !d
+ai += amulet of clarity:Clar, !d
 ai += amulet of faith:Faith, !P
 ai += amulet of guardian spirit:Spirit
 ai += amulet of rage:+Rage, !d
