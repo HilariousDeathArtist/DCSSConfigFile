@@ -75,7 +75,7 @@ autofight_throw_nomove = true
 autofight_fire_stop = true
 
 fire_order  = launcher, return
-fire_order += large rock, javelin, tomahawk, dart, stone
+fire_order += rock, javelin, tomahawk, stone
 
 # Prevent me from tab-fighting to death by keeping this high
 autofight_stop = 60
@@ -513,7 +513,7 @@ ai += scrolls? of vulnerability:!r
 ai += rod of [^s][^t]:!a
 ai += [Mm]anual of:!d
 ai += dispersal:=f
-ai += large rock:=f, !d
+ai += large rock:!d
 ai += throwing net:=f, !d
 ai += tome of destruction:!d
 

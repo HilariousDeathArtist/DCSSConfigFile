@@ -98,6 +98,7 @@ more += Being near the torpor snail leaves you feeling lethargic
 
 # Interrupts for unexpected situations
 more += The.*shudders
+more += A magical barricade bars your way
 more += The shadow imp is revulsed by your support of nature
 more += Something interferes with your magic
 more += You feel a genetic drift
@@ -398,6 +399,7 @@ more += You now sometimes bleed smoke
 more += You.*no longer.*bleed smoke
 more += Your shadow now sometimes tangibly mimics your actions
 more += Your shadow no longer tangibly mimics your actions
+more += Sif Muna is protecting you from the effects of miscast magic
 more += You can no longer
 more += Your.*can no longer
 more += The rod doesn't have enough magic points

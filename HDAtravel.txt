@@ -58,7 +58,6 @@ autoinscribe += staff of energy:@w1
 :   local dragonform = string.find(you.transform(), "dragon")
 :   local melded_weapon = (bladehands or dragonform)
 :   local you_are_regen = you.regenerating()
-:   local you_know_simulacrum = known_spells["Simulacrum"] and (you.skill("Necromancy") >= 10)
 :   local you_know_sublimation = known_spells["Sublimation of Blood"] and (you.skill("Necromancy") >= 5)
 :   local you_know_animate_skeleton = known_spells["Animate Skeleton"]
 :   local you_know_animate_dead = known_spells["Animate Dead"]
@@ -77,22 +76,22 @@ autoinscribe += staff of energy:@w1
 :   local you_are_hungerless = you_are_mummy or lichform
 :   local no_food_issues = (you_are_hungerless or have_spare_chunks)
 :   local should_channel_mp = ((max_mp - mp) > 5) and no_food_issues
-:   local you_know_regen = known_spells["Regeneration"]
+:   local can_cast_regen = known_spells["Regeneration"] and (mp>3)
 :   local you_have_regen_ring = is_in_inventory("regeneration")
 :   local regen_ring_letter = find_item_letter("regeneration")
 :   local regen_ring_is_equipped = is_ring("regeneration")
-:   local should_regen_hp = (not you_are_good) and ((hp/max_hp) < 0.80) and no_food_issues and (not you_are_regen)
-:   local should_sublimate = (not melded_weapon) and (not you_are_good) and should_channel_mp and you_know_sublimation and have_spare_chunks and mp>2 and (not (distort_weapon or vamp_weapon or staff_of_power_is_equipped)) and you_are_not_felid()
+:   local should_regen_hp = (not you_are_good) and ((hp/max_hp) < 0.80) and (not you_are_regen) and (you_have_regen_ring or can_cast_regen)
+:   local should_sublimate = (not you_are_good) and ((mp/max_mp) < 0.60) and you_know_sublimation and mp>2 and ((hp/max_hp) > 0.95)
 :   local should_animate_skeleton = (not you_are_good) and you_know_animate_skeleton and mp>1 and (not can_not_animate())
 :   local should_animate_dead = (not you_are_good) and you_know_animate_dead and mp>4 and (not can_not_animate())
-:   local you_want_spare_chunks = (not have_spare_chunks) and (you_know_regen or you_know_sublimation or you_know_simulacrum or you_have_staff_of_energy or (you_are_sif and not you_are_mummy))
+:   local you_want_spare_chunks = (not have_spare_chunks) and (can_cast_regen or you_have_staff_of_energy or (you_are_sif and not you_are_mummy))
 :   local you_want_chunks = not you_are_hungerless and (not have_edible_chunks()) and (want_to_eat or you_want_spare_chunks)
 :   --crawl.mpr(string.format("you.piety_rank() is: %s", you.piety_rank()))
 :   --crawl.mpr(string.format("want_to_eat is: %s", want_to_eat and "True" or "False"))
 :   --crawl.mpr(string.format("have_edible_chunks is: %s", have_edible_chunks() and "True" or "False"))
 :   --crawl.mpr(string.format("should_animate_skeleton is: %s", should_animate_skeleton and "True" or "False"))
 :   --crawl.mpr(string.format("have_spare_chunks is: %s", have_spare_chunks and "True" or "False"))
-:   --crawl.mpr(string.format("you_know_regen is: %s", you_know_regen and "True" or "False"))
+:   --crawl.mpr(string.format("can_cast_regen is: %s", can_cast_regen and "True" or "False"))
 :   --crawl.mpr(string.format("you_know_sublimation is: %s", you_know_sublimation and "True" or "False"))
 :   --crawl.mpr(string.format("you_know_simulacrum is: %s", you_know_simulacrum and "True" or "False"))
 :   --crawl.mpr(string.format("you_have_staff_of_energy is: %s", you_know_simulacrum and "True" or "False"))
@@ -102,24 +101,15 @@ autoinscribe += staff of energy:@w1
 :     if you_are_barbed then
 :       rest()
 :     elseif should_sublimate then
-:       if not chunks_are_equipped then
-:         crawl.mpr("<cyan>Wielding chunks to sublimate.</cyan>")
-:         sendkeys('w0')
-:       end
 :       crawl.mpr("<lightcyan>Autocasting Sublimation of Blood.</lightcyan>")
 :       sendkeys('zm')
 :     elseif should_channel_mp and you_are_sif then
 :       crawl.mpr("<lightcyan>Autochanneling using Sif.</lightcyan>")
 :       sendkeys('aa')
-:     elseif should_regen_hp and ((you_know_regen and (mp>3)) or (you_have_regen_ring and not regen_ring_is_equipped)) then
-:       if (you_know_regen) then
-:         crawl.mpr("<green>Autocasting Regen.</green>")
-:         --This assumes casting regen is bound to zr
-:         sendkeys('zr')
-:       else 
-:         crawl.mpr("<yellow>You should equip your regen ring.</yellow>")
-:         sendkeys('P' .. regen_ring_letter)
-:       end  
+:     elseif should_regen_hp and can_cast_regen then
+:       crawl.mpr("<green>Autocasting Regen.</green>")
+:       --This assumes casting regen is bound to zr
+:       sendkeys('zr')
 :     elseif (not melded_weapon) and (should_channel_mp and you_have_staff_of_energy and no_food_issues) and (not (distort_weapon or vamp_weapon)) and you_are_not_felid() then
 :       if not staff_of_energy_is_equipped then
 :         crawl.mpr("<cyan>Switching to staff of energy.</cyan>")
@@ -174,7 +164,7 @@ autoinscribe += staff of energy:@w1
 :       end
 :     elseif need_to_recover and not you_are_starving() then
 :       rest()
-:     elseif you_are_yred and (you.piety_rank() >= 3) and item_in_view("corpse") then
+:     elseif you_are_yred and (you.piety_rank() >= 3) and item_in_view("corpse") and not recently_mass_animated() then
 :       crawl.mpr("<cyan>Autocasting Mass Animate Remains.</cyan>")
 :       sendkeys('aa')
 :     elseif (not sacrifice_god) and item_in_view("corpse") and should_animate_dead and not already_animated() then
@@ -287,6 +277,10 @@ autoinscribe += staff of energy:@w1
     return string.find(crawl.messages(10), escape("There is nothing here that can be animated")) 
   end
   
+  function recently_mass_animated()
+    return string.find(crawl.messages(10), escape("Autocasting Mass Animate Remains")) 
+  end
+  
   function can_not_butcher()
     return string.find(crawl.messages(10), escape("anything suitable to butcher here")) 
   end
@@ -303,7 +297,7 @@ autoinscribe += staff of energy:@w1
   end
 
   function you_are_gourmand()
-    return you.gourmand() or (not you_are_not_troll()) or (string.find(you.race(), "Kobold"))
+    return you.gourmand() or (not you_are_not_felid()) or (not you_are_not_troll()) or (string.find(you.race(), "Kobold"))
   end
 
   function have_no_chunks()
