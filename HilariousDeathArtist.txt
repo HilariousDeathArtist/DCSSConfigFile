@@ -530,27 +530,27 @@ ai += troll hide:regen
 ai += troll leather armour:regen
 
 # Regular Armour
-#ai += (animal skin|chain mail|crystal plate armour|leather armour|plate armour|ring mail|robe|scale mail) of cold resistance:rC+
-#ai += (animal skin|chain mail|crystal plate armour|leather armour|plate armour|ring mail|robe|scale mail) of fire resistance:rF+
-#ai += (chain mail|leather armour|plate armour|ring mail|robe|scale mail) of magic resistance:MR+
-#ai += (chain mail|leather armour|plate armour|ring mail|robe|scale mail) of positive energy:rN+
-#ai += (chain mail|leather armour|plate armour|ring mail|scale mail) of poison resistance:rPois
+#ai += (leather armour|mail|plate armour|robe|skin) of cold resistance:rC+
+#ai += (leather armour|mail|plate armour|robe|skin) of fire resistance:rF+
+#ai += (leather armour|mail|plate armour|robe) of magic resistance:MR+
+#ai += (leather armour|mail|plate armour|robe) of positive energy:rN+
+#ai += (leather armour|mail|plate armour) of poison resistance:rPois
 #ai += plate armour of ponderousness:Speed-
-#ai += robe of the archmagi:Spellpower+
 #ai += robe of resistance:rC+, rF+
+#ai += robe of the archmagi:Spellpower+
 
 # Accessories
-#ai += (boots|buckler|centaur barding|cloak|gloves|hat|helmet|large shield|naga barding|shield) of cold resistance:rC+
-#ai += (boots|buckler|centaur barding|cloak|gloves|hat|helmet|large shield|naga barding|shield) of fire resistance:rF+
-#ai += (boots|centaur barding|naga barding) of flight:+Fly
-#ai += (boots|centaur barding|naga barding) of stealth:Stlth+
-#ai += (boots|centaur barding|naga barding) of running:Speed+
-#ai += (boots|centaur barding|naga barding) of jumping:+Jump
-#ai += (buckler|cloak|large shield|shield) of poison resistance:rPois
-#ai += (buckler|large shield|shield) of positive energy:rN+
-#ai += (buckler|large shield|shield) of protection:AC+3
-#ai += (buckler|large shield|shield) of reflection:Reflect
-#ai += (buckler|large shield|shield) of resistance:rC+, rF+
+#ai += (barding|boots|buckler|cloak|gloves|hat|helmet|shield) of cold resistance:rC+
+#ai += (barding|boots|buckler|cloak|gloves|hat|helmet|shield) of fire resistance:rF+
+#ai += (barding|boots) of flight:+Fly
+#ai += (barding|boots) of stealth:Stlth+
+#ai += (barding|boots) of running:Speed+
+#ai += (barding|boots) of jumping:+Jump
+#ai += (buckler|cloak|shield) of poison resistance:rPois
+#ai += (buckler|shield) of positive energy:rN+
+#ai += (buckler|shield) of protection:AC+3
+#ai += (buckler|shield) of reflection:Reflect
+#ai += (buckler|shield) of resistance:rC+, rF+
 #ai += (cloak|hat|helmet) of magic resistance:MR+
 #ai += (hat|helmet) of intelligence:Int+3
 #ai += (hat|helmet) of see invisible:sInv
