@@ -569,7 +569,7 @@ ai += amulet of rage:+Rage, !d
 ai += amulet of resist corrosion:rCorr, !d
 ai += amulet of resist mutation:rMut, !d
 ai += amulet of stasis:Stasis, !d
-ai += amulet of the gourmand:Gourmand, !d
+ai += amulet of the gourmand:Gourm, !d
 ai += amulet of warding:Ward, rN+, !d
 
 # Rings
@@ -587,10 +587,10 @@ ai += ring of protection from magic:MR+, !d
 ai += ring of regeneration:regen, !d
 ai += ring of see invisible:sInv, !d
 ai += ring of stealth:Stlth+
-ai += ring of sustain abilities:sustAb
+ai += ring of sustain abilities:SustAb
 ai += ring of teleport control:cTele, !d
 ai += ring of teleportation:+/*tele, !d
-ai += ring of wizardry:wiz+, !d
+ai += ring of wizardry:Wiz+, !d
 
 # Staves
 ai += staff of air:rElec
