@@ -499,6 +499,14 @@ ai := autoinscribe
   ai += (Sonja|Psyche):!w
 : end
 
+# Misc
+ai += rod of [^s][^t]:!a
+ai += [Mm]anual of:!d
+ai += dispersal:=f
+ai += large rock:!d
+ai += throwing net:=f, !d
+ai += tome of destruction:!d
+
 # Consumables
 ai += (bad|dangerous)_item.*potion:!q
 ai += potions? of berserk rage:!q
@@ -509,14 +517,6 @@ ai += scrolls? of holy word:!r
 ai += scrolls? of magic mapping:!r
 ai += scrolls? of vulnerability:!r
 
-# Misc
-ai += rod of [^s][^t]:!a
-ai += [Mm]anual of:!d
-ai += dispersal:=f
-ai += large rock:!d
-ai += throwing net:=f, !d
-ai += tome of destruction:!d
-
 # Hide Armour
 ai += fire dragon (armour|hide):rF++, rC-
 ai += gold dragon (armour|hide):rC+, rF+, rPois
@@ -526,18 +526,19 @@ ai += pearl dragon (armour|hide):rN+
 ai += steam dragon (armour|hide):rSteam
 ai += storm dragon (armour|hide):rElec
 ai += swamp dragon (armour|hide):rPois
-ai += troll hide:regen
-ai += troll leather armour:regen
+ai += troll (hide|leather armour):regen
 
-# Regular Armour
-#ai += (leather armour|mail|plate armour|robe|skin) of cold resistance:rC+
-#ai += (leather armour|mail|plate armour|robe|skin) of fire resistance:rF+
+# Body Armour Egos
+#ai += ([^l] leather armour|mail|plate armour|robe|skin) of cold resistance:rC+
+#ai += ([^l] leather armour|mail|plate armour|robe|skin) of fire resistance:rF+
 #ai += (leather armour|mail|plate armour|robe) of magic resistance:MR+
 #ai += (leather armour|mail|plate armour|robe) of positive energy:rN+
 #ai += (leather armour|mail|plate armour) of poison resistance:rPois
 #ai += plate armour of ponderousness:Speed-
 #ai += robe of resistance:rC+, rF+
 #ai += robe of the archmagi:Spellpower+
+#ai += troll leather armour of cold resistance:, rC+
+#ai += troll leather armour of fire resistance:, rF+
 
 # Accessories
 #ai += (barding|boots|buckler|cloak|gloves|hat|helmet|shield) of cold resistance:rC+
