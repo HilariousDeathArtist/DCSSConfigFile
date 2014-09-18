@@ -11,7 +11,7 @@
 # Mob Warnings #
 ################
 
-<   
+<
   --Returns a table where the key is the monster description and value is the total number of that mob in your vision
   function getMonsterList()
     local monsters = {}
@@ -29,7 +29,7 @@
         end
       end
     end
-    return monsters   
+    return monsters
   end
 
   --Escapes the special characters in a string for pattern matching
@@ -39,15 +39,15 @@
     --Removes any coloration parts of the string
     return (escaped:gsub('<[^<]*>',''))
   end
-  
+
   -- Uses the getMonsterList and escape functions above
   function SpoilerAlert()
     local mobwarnings = {}
     --Add dangerous monsters to this table by using their name as the key, (as a lua pattern)
     --Set the value to the warning string you want to display, where it will formatted like:
     --"[The] Monster_Name Warning_Message"
-    --If the Monster_Name includes a capital letter, the message will be prepended with [The] 
-    
+    --If the Monster_Name includes a capital letter, the message will be prepended with [The]
+
     local xl = you.xl()
     local no_rP = you.res_poison() == 0
     local no_rF = you.res_fire() == 0
@@ -58,34 +58,34 @@
     local no_rMut = you.res_mutation() == 0
     local you_are_flying = you.flying()
     local no_see_invis = not you.see_invisible()
-    local no_rCorr = not you.res_corr()    
+    local no_rCorr = not you.res_corr()
     local race = you.race()
     local form = you.transform()
     local you_are_undead = (race:find("ghoul") or race:find("vampire") or race:find("mummy") or form:find("lich"))
-    
+
     --crawl.mpr(string.format("you.res_mutation() is: %s", you.res_mutation()))
     --crawl.mpr(string.format("no_rMut is: %s", no_rMut and "True" or "False"))
-    
+
     if xl < 3 then
       if no_rP then
         mobwarnings["giant mite"] = "can poison!"
       end
-     
+
       mobwarnings["ball python"] = "can constrict!"
       mobwarnings["giant cockroach"] = "is fast!"
       mobwarnings["giant gecko"] = "is fast!"
       mobwarnings["jackal"] = "is fast!"
     end
-    
+
     if xl < 5 then
       if no_rP then
         mobwarnings["adder"] = "is fast and can poison!"
         mobwarnings["scorpion"] = "can poison!"
       end
-      
+
       mobwarnings["worm"] = "can hit for moderate damage in melee!"
     end
-    
+
     if xl < 9 then
       if no_rP then
         mobwarnings["worker ant"] = "is fast and can poison!"
@@ -404,7 +404,7 @@
       mobwarnings["Erolcha"] = "might cast banishment, paralyse, or LCS!"
     end
 
-    if you.xl() < 27 then 
+    if you.xl() < 27 then
       local tengureaverwarn = ""
 
 	  if no_rF then
@@ -479,7 +479,7 @@
           end
         end
       end
-      
+
       mobwarnings["Lernaean hydra"] = "don't fight it in melee! Just don't!"
       mobwarnings["tengu reaver"] = "is fast"..tengureaverwarn.."!"
       mobwarnings["water nymph"] = "can create water, teleport to other water, and Waterstrike you!"
@@ -497,21 +497,21 @@
       mobwarnings["ettin"] = "can hit for very high damage in melee!"
       mobwarnings["Louise"] = "can cast banishment!"
       mobwarnings["purple very ugly thing"] = "is fast and can cause rotting in melee!"
-      mobwarnings["deep troll earth mage"] = "can cast LRD and dig!"  
+      mobwarnings["deep troll earth mage"] = "can cast LRD and dig!"
       mobwarnings["ogre mage"] = "might cast banishment, paralyse, or LCS!"
       mobwarnings["purple draconian"] = "can dispel your buffs!"
       mobwarnings["vault sentinel"] = "can mark you and blow a signal horn!"
       mobwarnings["vault warden"] = "can lock down doors and staircases!"
       mobwarnings["ironheart preserver"] = "can absorb the damage of its allies and heal itself!"
     end
-    
+
     if no_rP then
       mobwarnings["red wasp"] = "is very fast and can Paralyse and poison in melee!"
       mobwarnings["yellow wasp"] = "is very fast and can Slow and poison in melee!"
     else
       mobwarnings["red wasp"] = "is very fast and can Slow in melee!"
     end
-    
+
     if no_rF then
       mobwarnings["fire giant"] = "can cast fireball and bolt of fire!"
       mobwarnings["fire dragon"] = "has a nasty fire breath attack!"
@@ -520,7 +520,7 @@
     else
       mobwarnings["merfolk aquamancer"] = "can cast Primal Wave, Throw Icicle, and Blink!"
     end
-    
+
     if no_rN then
       mobwarnings["shadow dragon"] = "has a nasty draining breath attack!"
     end
@@ -541,14 +541,14 @@
       mobwarnings["titan"] = mobwarnings["titan"] .. electricwarning
       mobwarnings["Sojobo"] = mobwarnings["Sojobo"] .. electricwarning
     end
-    
+
     mobwarnings["Norris"] = "can cast Paralyse, Smite you, and drain your Int!"
     mobwarnings["orange crystal statue"] = "can cast Confuse, Drain MP, and drain your Int!"
     mobwarnings["neqoxec"] = "can mutate you, and drain your Int!"
     mobwarnings["giant orange brain"] = "can cast Shadow Creatures, and drain your Int!"
     if no_Sustab then
       local statdrainwarning = "<red> You are not wearing SustAb!</red>"
-      mobwarnings["brain worm"] = "can drain your Int!" .. statdrainwarning 
+      mobwarnings["brain worm"] = "can drain your Int!" .. statdrainwarning
       mobwarnings["Norris"] = mobwarnings["Norris"] .. statdrainwarning
       mobwarnings["orange crystal statue"] = mobwarnings["orange crystal statue"] .. statdrainwarning
       mobwarnings["neqoxec"] = mobwarnings["neqoxec"] .. statdrainwarning
@@ -570,18 +570,18 @@
     local alichwarn = ""
     if (no_rF or no_rP or no_rC or no_rN or no_see_invis) then
       if no_rF then
-        gdwarn = gdwarn .. ", breathe Bolts of Fire" 
-        alichwarn = alichwarn .. ", cast Bolt of Fire" 
+        gdwarn = gdwarn .. ", breathe Bolts of Fire"
+        alichwarn = alichwarn .. ", cast Bolt of Fire"
       end
       if no_rC then
-        gdwarn = gdwarn .. ", breathe freezing blasts" 
-        alichwarn = alichwarn .. ", cast Bolt of Cold" 
+        gdwarn = gdwarn .. ", breathe freezing blasts"
+        alichwarn = alichwarn .. ", cast Bolt of Cold"
       end
       if no_rN then
-        alichwarn = alichwarn .. ", cast Bolt of Draining" 
+        alichwarn = alichwarn .. ", cast Bolt of Draining"
       end
-      if no_rP then 
-        gdwarn = gdwarn .. ", breathe poison clouds" 
+      if no_rP then
+        gdwarn = gdwarn .. ", breathe poison clouds"
       end
       if no_see_invis then
         alichwarn = alichwarn .. ", or go Invisible"
@@ -591,13 +591,13 @@
     mobwarnings["golden dragon"] = gdwarn .. "!"
     mobwarnings["lich"] = "might cast Banishment, Paralyse, Summon Demon, IOOD, or LCS!"
     mobwarnings["ancient lich"] = "might cast Banishment, Paralyse, SGD, IOOD, or LCS" .. alichwarn .. "!"
-    
+
     if no_rF then
       mobwarnings["Xtahua"] = "does high damage in melee and has a nasty fire breath attack"
     else
       mobwarnings["Xtahua"] = "does high damage in melee!"
     end
-    
+
     mobwarnings["air mage"] = "can cast Airstrike!"
     mobwarnings["blizzard demon"] = "can cast Airstrike!"
     mobwarnings["wind drake"] = "can cast Airstrike and push you away!"
@@ -617,23 +617,23 @@
     else
       mobwarnings["boggart"] = "can cast Shadow Creatures!"
     end
-    
+
     if no_rCorr then
       mobwarnings["yellow draconian"] = "can corrode your equipment at range!"
     end
-    
+
     if no_rP and no_rE then
       mobwarnings["draconian annihilator"] = "can cast LCS, Poison Arrow, Lightning Bolt, and Iron Shot!"
-    elseif no_rP then 
+    elseif no_rP then
       mobwarnings["draconian annihilator"] = "can cast LCS, Poison Arrow, and Iron Shot!"
     elseif no_rE then
       mobwarnings["draconian annihilator"] = "can cast LCS, Lightning Bolt, and Iron Shot!"
-    else  
+    else
       mobwarnings["draconian annihilator"] = "can cast Lehudib's Crystal Spear or Iron Shot!"
     end
 
     mobwarnings["octopode crusher"] = "can cast Iron Shot and throw you in melee!"    	
-    mobwarnings["rakshasa"] = "can cast IMB, Phantom Mirror, duplicating itself and allies, and blinks!"    
+    mobwarnings["rakshasa"] = "can cast IMB, Phantom Mirror, duplicating itself and allies, and blinks!"
     mobwarnings["phantasmal warrior"] = "can bypass armour and shields, and lowers MR!"
     mobwarnings["giant eyeball"] = "can paralyse you!"
     mobwarnings["mana viper"] = "is fast and has an antimagic bite!"
@@ -704,8 +704,8 @@
     mobwarnings["Dispater"] = "can cast line-of-sight Hellfire, Iron Shot, and summon Greater Demons!"
     mobwarnings["ghost moth"] = "will drain your Magic!"
     mobwarnings["eye of draining"] = "will drain your Magic!"
-  
-    -- Holds the overall alert message and count of dangers 
+
+    -- Holds the overall alert message and count of dangers
     local alerts = ""
     local short_alert = " "
     local total_dangers = 0
@@ -713,15 +713,15 @@
     -- This goes through each monster in the mobwarnings table above and
     -- Checks to see if it matches the description of each mob in sight
     -- Excluding forms that can't cast: zombie, skeleton, simulcrum, but not incapacitated forms
-    for mons, count in pairs(getMonsterList()) do  
+    for mons, count in pairs(getMonsterList()) do
       for mob, message in pairs(mobwarnings) do
-        if string.find(mons, mob) 
+        if string.find(mons, mob)
         and not string.find(mons, "zombie")
         and not string.find(mons, "skeleton")
         and not string.find(mons, "shaped block of ice")
         and not string.find(mons, "spectral")
         and not (string.find(mons, "simulacr") and mob ~= "simulacr")
-        and not (string.find(mons, "orc") and mob == "wizard") 
+        and not (string.find(mons, "orc") and mob == "wizard")
         and not (string.find(mons, "ancient lich") and mob == "lich")
         and not (string.find(mons, "death yak") and mob == "yak")
         and not (string.find(mons, "gnoll shaman") and mob == "gnoll")
@@ -745,7 +745,7 @@
           --For more than 1 of the same monster
           elseif (count > 1) then
             alert = "The <cyan>".. mons .. "</cyan> " .. message .. " x" .. count
-            mob_name = mons .. " x" .. count 
+            mob_name = mons .. " x" .. count
           --For a single non-unique monster
           else
             alert = "The <cyan>" .. mons .. "</cyan> " .. message
@@ -755,15 +755,15 @@
           total_dangers = total_dangers + count
           --Adds the created alert string to the full string of alerts
           alerts = alerts .. " " .. alert
-          short_alert = short_alert .. mob_name .. ", " 
+          short_alert = short_alert .. mob_name .. ", "
         end
       end
     end
-    
+
     short_alert = string.sub(short_alert, 1, -3) .. "!"
-    
+
     --If there is an alert and it was not displayed in the last six messages then display the warning
-    if not ((alerts == "") 
+    if not ((alerts == "")
     or string.find(crawl.messages(6), escape(alerts))) then
       --For a single monster
       if total_dangers == 1 then

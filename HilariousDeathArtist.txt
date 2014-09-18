@@ -137,26 +137,26 @@ ae += <artefact
 # Armour/Weapon autopickup by rwbarton, enhanced by HDA
 {
 add_autopickup_func(function(it, name)
-  
+
   if name:find("curare") then return true end
   if name:find("dispersal") and (name:find("dart") or name:find("tomahawk")) then return true end
   if name:find("throwing net") then return true end
-  
+
   local class = it.class(true)
   local armour_slots = {cloak="Cloak", helmet="Helmet", gloves="Gloves", boots="Boots", body="Armour", shield="Shield"}
-  
+
   if (class == "armour") then
     sub_type = it.subtype()
     equipped_item = items.equipped_at(armour_slots[sub_type])
-    
+
     if (sub_type == "cloak") or (sub_type == "helmet") or (sub_type == "gloves") or (sub_type == "boots") then
       if not equipped_item then
         return true
-      else 
+      else
         return it.artefact or it.branded or it.ego
       end
     end
-    
+
     if (sub_type == "body") then
       if equipped_item then
         local armourname = equipped_item.name()
@@ -168,7 +168,7 @@ add_autopickup_func(function(it, name)
       end
       return true
     end
-    
+
     if (sub_type == "shield") then
       if equipped_item then
         if equipped_item.artefact or equipped_item.branded or equipped_item.ego or (equipped_item.plus > 2) then
@@ -181,13 +181,13 @@ add_autopickup_func(function(it, name)
       end
     end
   end
-  
+
   if (class == "weapon") then
-    if (you.xl() < 12) or (you.god():find("Nemelex") 
+    if (you.xl() < 12) or (you.god():find("Nemelex")
                            or (you.god():find("Yred"))
                            or (you.god():find("Beogh"))) then
-      if it.branded and not (it.name() == "club") then 
-        return true 
+      if it.branded and not (it.name() == "club") then
+        return true
       end
     end
     local weapon = items.equipped_at("Weapon")
@@ -235,8 +235,8 @@ add_autopickup_func(function(it, name)
           if name:find("trishula") then return true end
         end
         if pole > 14 then
-          if name:find("glaive") then return true end   
-          if name:find("bardiche") then return true end    
+          if name:find("glaive") then return true end
+          if name:find("bardiche") then return true end
         end
         if staff > 8 then
           if name:find("lajatang") then return true end
@@ -248,7 +248,7 @@ add_autopickup_func(function(it, name)
   end
 end)
 }
-  
+
 ###############
 # Spell slots #
 ###############
@@ -343,7 +343,7 @@ explore_stop = glowing_items,artefacts,greedy_pickup_smart
 explore_stop += greedy_visited_item_stack,stairs,shops
 explore_stop += altars,portals,branches,runed_doors,greedy_sacrificeable
 
-# Adjusts how much autoexplore favours attempting to discover room perimeters and corners. 
+# Adjusts how much autoexplore favours attempting to discover room perimeters and corners.
 # At values higher than 0, autoexplore will more heavily favour visiting squares that are next to walls
 # reasonable values range from 0 to 10 maybe?
 explore_wall_bias = 3
@@ -596,7 +596,7 @@ ai += staff of air:rElec
 ai += staff of cold:rC+
 ai += staff of conjuration:!a
 ai += staff of death:rN+
-ai += staff of energy:+MP, hungerless spells, !d!a 
+ai += staff of energy:+MP, hungerless spells, !d!a
 ai += staff of fire:rF+
 ai += staff of poison:rPois
 ai += staff of power:MP+17, !a
