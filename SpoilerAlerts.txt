@@ -62,6 +62,8 @@
     local race = you.race()
     local form = you.transform()
     local you_are_undead = (race:find("ghoul") or race:find("vampire") or race:find("mummy") or form:find("lich"))
+    --Only hide Torment for races with full, permanent immunity
+    local you_perm_rTorment = (race:find("ghoul") or race:find("mummy"))
 
     --crawl.mpr(string.format("you.res_mutation() is: %s", you.res_mutation()))
     --crawl.mpr(string.format("no_rMut is: %s", no_rMut and "True" or "False"))
@@ -98,21 +100,21 @@
           mobwarnings["Natasha"] = "can cast Slow, Call Imp, and go Invisible!"
         end
         if no_rF and no_rC then
-          mobwarnings["Sigmund"] = "can cast Slow, Confuse, Throw Flame, and go Invisible!"
           mobwarnings["Blork"] = "can cast Haste, Throw Frost, Throw Flame, and go Invisible!"
           mobwarnings["orc wizard"] = "might cast Slow, Confuse, Throw Flame, Throw Frost, or go Invisible!"
-        elseif no_rF then
           mobwarnings["Sigmund"] = "can cast Slow, Confuse, Throw Flame, and go Invisible!"
+        elseif no_rF then
           mobwarnings["Blork"] = "can cast Haste, Throw Flame, and go Invisible!"
           mobwarnings["orc wizard"] = "might cast Slow, Confuse, Throw Flame, or go Invisible!"
+          mobwarnings["Sigmund"] = "can cast Slow, Confuse, Throw Flame, and go Invisible!"
         elseif no_rC then
-          mobwarnings["Sigmund"] = "can cast Slow, Confuse, and go Invisible!"
           mobwarnings["Blork"] = "can cast Haste, Throw Frost, and go Invisible!"
           mobwarnings["orc wizard"] = "might cast Slow, Confuse, Throw Frost, or go Invisible!"
+          mobwarnings["Sigmund"] = "can cast Slow, Confuse, and go Invisible!"
         else
-          mobwarnings["Sigmund"] = "can cast Slow, Confuse, and go Invisible"
           mobwarnings["Blork"] = "can cast Haste and go Invisible!"
           mobwarnings["orc wizard"] = "might cast Slow, Confuse, or go Invisible!"
+          mobwarnings["Sigmund"] = "can cast Slow, Confuse, and go Invisible"
         end
       else
         if no_rP then
@@ -121,52 +123,52 @@
           mobwarnings["Natasha"] = "can cast Slow and Call Imp!"
         end
         if no_rF and no_rC then
-          mobwarnings["Sigmund"] = "can cast Slow, Confuse, and Throw Flame!"
           mobwarnings["Blork"] = "can cast Haste, Throw Frost, and Throw Flame!"
           mobwarnings["orc wizard"] = "might cast Slow, Confuse, Throw Flame, or Throw Frost!"
-        elseif no_rF then
           mobwarnings["Sigmund"] = "can cast Slow, Confuse, and Throw Flame!"
+        elseif no_rF then
           mobwarnings["Blork"] = "can cast Haste, and Throw Flame!"
           mobwarnings["orc wizard"] = "might cast Slow, Confuse, or Throw Flame!"
+          mobwarnings["Sigmund"] = "can cast Slow, Confuse, and Throw Flame!"
         elseif no_rC then
-          mobwarnings["Sigmund"] = "can cast Slow and Confuse!"
           mobwarnings["Blork"] = "can cast Haste and Throw Frost!"
           mobwarnings["orc wizard"] = "might cast Slow, Confuse, or Throw Frost!"
-        else
           mobwarnings["Sigmund"] = "can cast Slow and Confuse!"
+        else
           mobwarnings["Blork"] = "can cast Haste!"
           mobwarnings["orc wizard"] = "might cast Slow or Confuse!"
+          mobwarnings["Sigmund"] = "can cast Slow and Confuse!"
         end
       end
 
-      mobwarnings["phantom"] = "can hit for moderate damage in melee and blinks!"
+      mobwarnings["big kobold"] = "will probably throw things at you!"
+      mobwarnings["Crazy Yiuf"] = "can hit for high damage in melee!"
+      mobwarnings["Dowan"] = "can Haste Duvessa, and will become Hasted and cast Throw Icicle when Duvessa dies!"
+      mobwarnings["Duvessa"] = "can hit for moderate damage in melee, and goes Berserk when Dowan dies!"
+      mobwarnings["Eustachio"] = "can summon minor creatures and blink!"
+      mobwarnings["gnoll"] = "can hit for moderate damage in melee, and throws nets!"
+      mobwarnings["Ijyb"] = "will often zap you with wands!"
       mobwarnings["mummy"] = "can hit for moderate damage in melee!"
       mobwarnings["ogre"] = "can hit for high damage in melee!"
-      mobwarnings["gnoll"] = "can hit for moderate damage in melee, and throws nets!"
-      mobwarnings["Eustachio"] = "can summon minor creatures and blink!"
-      mobwarnings["Crazy Yiuf"] = "can hit for high damage in melee!"
-      mobwarnings["Duvessa"] = "can hit for moderate damage in melee, and goes Berserk when Dowan dies!"
-      mobwarnings["Dowan"] = "can Haste Duvessa, and will become Hasted and cast Throw Icicle when Duvessa dies!"
-      mobwarnings["Ijyb"] = "will often zap you with wands!"
-      mobwarnings["big kobold"] = "will probably throw things at you!"
+      mobwarnings["phantom"] = "can hit for moderate damage in melee and blinks!"
     end
 
     if xl < 14 then
 
       if no_rN then
-        mobwarnings["wight"] = "can drain you in melee!"
-        mobwarnings["shadow imp"] = "can cast Pain and Animate Dead!"
         mobwarnings["Grinder"] = "can cast Paralyse and Pain!"
+        mobwarnings["shadow imp"] = "can cast Pain and Animate Dead!"
+        mobwarnings["wight"] = "can drain you in melee!"
       else
-        mobwarnings["wight"] = "can hit for moderate damage in melee!"
-        mobwarnings["shadow imp"] = "can Animate Dead!"
         mobwarnings["Grinder"] = "can cast Paralyse!"
+        mobwarnings["shadow imp"] = "can Animate Dead!"
+        mobwarnings["wight"] = "can hit for moderate damage in melee!"
       end
 
       if no_rC then
-        mobwarnings["white imp"] = "can cast Throw Frost!"
         mobwarnings["ice beast"] = "can hit for moderate damage in melee!"
         mobwarnings["simulacr"] = "can hit for high damage in melee!"
+        mobwarnings["white imp"] = "can cast Throw Frost!"
         mobwarnings["white ugly thing"] = "is fast and can hit for high cold damage in melee!"
       else
         mobwarnings["simulacr"] = "can hit for moderate damage in melee!"
@@ -175,8 +177,8 @@
 
       if no_rF then
         mobwarnings["fire drake"] = "can breathe blasts of flame!"
-        mobwarnings["steam dragon"] = "breathes balls of steam!"
         mobwarnings["red ugly thing"] = "is fast and can hit for high fire damage in melee!"
+        mobwarnings["steam dragon"] = "breathes balls of steam!"
         if no_see_invis and no_rP then
           mobwarnings["Erica"] = "can hit for moderate fire damage in melee, can cast Venom Bolt, IMB, Confuse, Slow, go Invisible, and teleport away!"
         elseif no_rP then
@@ -204,31 +206,31 @@
       end
 
       if no_rP then
-        mobwarnings["soldier ant"] = "is fast and can poison!"
-        mobwarnings["water moccasin"] = "is fast and can poison!"
-        mobwarnings["killer bee"] = "is very fast and can poison!"
         mobwarnings["black mamba"] = "is very fast, can hit for high damage in melee, and can poison!"
-        mobwarnings["spiny frog"] = "is fast, can hit for high damage in melee, and can poison!"
-        mobwarnings["queen ant"] = "can berserk other ants, and can poison!"
-        mobwarnings["naga"] = "can constrict and spit poison!"
-        mobwarnings["redback"] = "is fast and can poison!"
-        mobwarnings["swamp drake"] = "breathes Mephitic clouds!"
         mobwarnings["green ugly thing"] = "is fast and can hit for high poison damage in melee!"
+        mobwarnings["killer bee"] = "is very fast and can poison!"
+        mobwarnings["naga"] = "can constrict and spit poison!"
+        mobwarnings["queen ant"] = "can berserk other ants, and can poison!"
+        mobwarnings["redback"] = "is fast and can poison!"
+        mobwarnings["soldier ant"] = "is fast and can poison!"
+        mobwarnings["spiny frog"] = "is fast, can hit for high damage in melee, and can poison!"
+        mobwarnings["swamp drake"] = "breathes Mephitic clouds!"
+        mobwarnings["water moccasin"] = "is fast and can poison!"
       else
-        mobwarnings["soldier ant"] = "is fast!"
-        mobwarnings["redback"] = "is fast!"
-        mobwarnings["water moccasin"] = "is fast!"
-        mobwarnings["killer bee"] = "is very fast!"
         mobwarnings["black mamba"] = "is very fast and can hit for high damage in melee!"
-        mobwarnings["spiny frog"] = "is fast and can hit for high damage in melee!"
-        mobwarnings["queen ant"] = "can berserk other ants!"
-        mobwarnings["naga"] = "can constrict!"
         mobwarnings["green ugly thing"] = "is fast and can hit for moderate damage in melee!"
+        mobwarnings["killer bee"] = "is very fast!"
+        mobwarnings["naga"] = "can constrict!"
+        mobwarnings["queen ant"] = "can berserk other ants!"
+        mobwarnings["redback"] = "is fast!"
+        mobwarnings["soldier ant"] = "is fast!"
+        mobwarnings["spiny frog"] = "is fast and can hit for high damage in melee!"
+        mobwarnings["water moccasin"] = "is fast!"
       end
 
       if no_rE then
-        mobwarnings["electric eel"] = "can hit for high damage at range!"
         mobwarnings["cyan ugly thing"] = "can hit for high electric damage in melee!"
+        mobwarnings["electric eel"] = "can hit for high damage at range!"
       else
         mobwarnings["cyan ugly thing"] = "is fast and can hit for moderate damage in melee!"
 	  end
@@ -237,36 +239,36 @@
         mobwarnings["jelly"] = "can corrode equipment in melee!"
       end
 
-      mobwarnings["elephant"] = "can hit for high damage in melee, and can trample!"
-      mobwarnings["Maud"] = "can hit for high damage in melee!"
-      mobwarnings["warg"] = "is fast and can hit for moderate damage in melee!"
-      mobwarnings["slave"] = "means Pikel is nearby!"
-      mobwarnings["Pikel"] = "can hit for high damage in melee!"
-      mobwarnings["draconian"] = "can hit for high damage in melee!"
-      mobwarnings["gargoyle"] = "can cast Stone Arrow!"
       mobwarnings["blink frog"] = "is fast, can hit for moderate damage in melee, and blinks!"
-      mobwarnings["wolf"] = "is very fast and can hit for moderate damage in melee!"
-      mobwarnings["goliath beetle"] = "can hit for high damage in melee!"
-      mobwarnings["wyvern"] = "is fast and can hit for high damage in melee!"
-      mobwarnings["hippogriff"] = "can hit for high damage in melee!"
-      mobwarnings["small abomination"] = "might be fast and can hit for high damage in melee!"
-      mobwarnings["gnoll shaman"] = "can heal itself and can heal or Haste other gnolls!"
-      mobwarnings["Prince Ribbit"] = "is fast and can hit for high damage in melee!"
-      mobwarnings["orc warrior"] = "can hit for high damage!"
-      mobwarnings["hill giant"] = "can hit for high damage in melee!"
-      mobwarnings["troll"] = "can hit for high damage in melee, and regenerates quickly!"
-      mobwarnings["Psyche"] = "might banish you in melee!"
-      mobwarnings["two-headed ogre"] = "can hit for high damage in melee!"
-      mobwarnings["raven"] = "is very fast and can hit for moderate damage in melee!"
-      mobwarnings["yak"] = "can hit for moderate damage in melee!"
       mobwarnings["centaur"] = "is fast and can hit for moderate damage at range!"
+      mobwarnings["draconian"] = "can hit for high damage in melee!"
+      mobwarnings["elephant"] = "can hit for high damage in melee, and can trample!"
+      mobwarnings["gargoyle"] = "can cast Stone Arrow!"
+      mobwarnings["gnoll shaman"] = "can heal itself and can heal or Haste other gnolls!"
+      mobwarnings["goliath beetle"] = "can hit for high damage in melee!"
+      mobwarnings["hill giant"] = "can hit for high damage in melee!"
+      mobwarnings["hippogriff"] = "can hit for high damage in melee!"
+      mobwarnings["Maud"] = "can hit for high damage in melee!"
+      mobwarnings["orc warrior"] = "can hit for high damage!"
+      mobwarnings["Pikel"] = "can hit for high damage in melee!"
+      mobwarnings["Prince Ribbit"] = "is fast and can hit for high damage in melee!"
+      mobwarnings["Psyche"] = "might banish you in melee!"
+      mobwarnings["raven"] = "is very fast and can hit for moderate damage in melee!"
+      mobwarnings["slave"] = "means Pikel is nearby!"
       mobwarnings["slime creature"] = "can hit for high damage in melee!"
+      mobwarnings["small abomination"] = "might be fast and can hit for high damage in melee!"
+      mobwarnings["troll"] = "can hit for high damage in melee, and regenerates quickly!"
+      mobwarnings["two-headed ogre"] = "can hit for high damage in melee!"
+      mobwarnings["warg"] = "is fast and can hit for moderate damage in melee!"
+      mobwarnings["wolf"] = "is very fast and can hit for moderate damage in melee!"
       mobwarnings["wraith"] = "can slow you in melee!"
+      mobwarnings["wyvern"] = "is fast and can hit for high damage in melee!"
+      mobwarnings["yak"] = "can hit for moderate damage in melee!"
     end
 
     if you.xl() < 21 then
-      local tenguconjwarn = ""
       local orcsorcwarn = ""
+      local tenguconjwarn = ""
 
       if no_rF then
         if no_see_invis and no_rP then
@@ -278,14 +280,14 @@
         else
           mobwarnings["Erica"] = "can cast IMB and teleport away!"
         end
-        mobwarnings["Harold"] = "can throw nets and cast Bolt of Fire!"
         mobwarnings["deep elf mage"] = "can cast Fireball and Slow!"
-        mobwarnings["salamander"] = "uses fire branded attacks!"
         mobwarnings["efreet"] = "can cast Bolt of Fire and Fireball!"
+        mobwarnings["Harold"] = "can throw nets and cast Bolt of Fire!"
         mobwarnings["lindwurm"] = "has a nasty fire breath attack!"
         mobwarnings["red very ugly thing"] = "can hit for high fire damage in melee!"
-        tenguconjwarn = tenguconjwarn  .. ", Bolt of Magma"
+        mobwarnings["salamander"] = "uses fire branded attacks!"
         orcsorcwarn = orcsorcwarn .. ", Bolt of Fire"
+        tenguconjwarn = tenguconjwarn  .. ", Bolt of Magma"
       else
         if no_see_invis and no_rP then
           mobwarnings["Erica"] = "can cast Venom Bolt, IMB, go Invisible, and teleport away!"
@@ -296,44 +298,44 @@
         else
           mobwarnings["Erica"] = "can cast IMB, and teleport away!"
         end
-        mobwarnings["Harold"] = "can throw nets!"
         mobwarnings["deep elf mage"] = "can cast slow!"
+        mobwarnings["Harold"] = "can throw nets!"
         mobwarnings["lindwurm"] = "can hit for high damage in melee!"
         mobwarnings["red very ugly thing"] = "can hit for high damage in melee!"
       end
 
       if no_rP then
-        mobwarnings["wolf spider"] = "is fast and can hit for high damage in melee, and can poison!"
-        mobwarnings["naga warrior"] = "can constrict you and hit for high damage in melee, and spits poison!"
+        mobwarnings["green very ugly thing"] = "is fast and can hit for high poison damage in melee!"
         mobwarnings["naga mage"] = "can cast IMB and Poison Arrow, and spits poison!"
         mobwarnings["naga ritualist"] = "can give poison vulnerability, and do poison damage over time with toxic radiance!"
+        mobwarnings["naga warrior"] = "can constrict you and hit for high damage in melee, and spits poison!"
         mobwarnings["redback"] = "is fast and can poison!"
         mobwarnings["Sonja"] = "shoots Curare needles and will probably banish you in melee!"
-        mobwarnings["green very ugly thing"] = "is fast and can hit for high poison damage in melee!"
+        mobwarnings["wolf spider"] = "is fast and can hit for high damage in melee, and can poison!"
         tenguconjwarn = tenguconjwarn  .. ", Venom Bolt"
       else
-        mobwarnings["naga warrior"] = "can constrict you and hit for high damage in melee!"
-        mobwarnings["naga mage"] = "can cast IMB and Poison Arrow!"
-        mobwarnings["wolf spider"] = "is fast and can hit for high damage in melee!"
-        mobwarnings["naga ritualist"] = "can remove poison resistance, and do damage over time with toxic radiance!"
-        mobwarnings["Sonja"] = "will probably banish you in melee!"
         mobwarnings["green very ugly thing"] = "is fast and can hit for high damage in melee!"
+        mobwarnings["naga mage"] = "can cast IMB and Poison Arrow!"
+        mobwarnings["naga ritualist"] = "can remove poison resistance, and do damage over time with toxic radiance!"
+        mobwarnings["naga warrior"] = "can constrict you and hit for high damage in melee!"
+        mobwarnings["Sonja"] = "will probably banish you in melee!"
+        mobwarnings["wolf spider"] = "is fast and can hit for high damage in melee!"
       end
 
       if no_rE then
-        tenguconjwarn = tenguconjwarn  .. ", Lightning Bolt"
-        mobwarnings["raiju"] = "is fast and can Lightning Bolt itself at you!"
         mobwarnings["cyan very ugly thing"] = "is fast and can hit for high electric damage in melee!"
+        mobwarnings["raiju"] = "is fast and can Lightning Bolt itself at you!"
+        tenguconjwarn = tenguconjwarn  .. ", Lightning Bolt"
       else
-        mobwarnings["raiju"] = "is fast and blinks around!"
         mobwarnings["cyan very ugly thing"] = "is fast and can hit for high damage in melee!"
+        mobwarnings["raiju"] = "is fast and blinks around!"
       end
 
       if no_rC then
         mobwarnings["bog body"] = "can cast Slow and Bolt of Cold!"
         mobwarnings["Fannar"] = "can cast Bolt of Cold, Ozo's Refrigeration, Summon Ice Beast, and Blink!"
-        mobwarnings["simulacr"] = "can hit for high damage in melee!"
         mobwarnings["freezing wraith"] = "can hit for high cold damage and slow you in melee!"
+        mobwarnings["simulacr"] = "can hit for high damage in melee!"
         mobwarnings["white very ugly thing"] = "is fast and can hit for high cold damage in melee!"
       else
         mobwarnings["bog body"] = "can cast Slow!"
@@ -376,59 +378,59 @@
         mobwarnings["Maurice"] = "can steal items, and teleport away!"
 	  end
 
-      mobwarnings["spriggan"] = "is very fast and can hit for moderate damage!"
-      mobwarnings["firefly"] = "is very fast, can hit for moderate damage, and flashes a warning beacon!"
-      mobwarnings["komodo dragon"] = "can hit for high damage in melee!"
-      mobwarnings["purple ugly thing"] = "can hit for high damage in melee!"
-      mobwarnings["tengu conjurer"] = "is fast and can cast Force Lance, IMB"..tenguconjwarn.."!"
-      mobwarnings["orc sorcerer"] = "can cast Paralyse, Summon Demon, Animate Dead"..orcsorcwarn.."!"
-      mobwarnings["Snorg"] = "can berserk and hit for high damage!"
-      mobwarnings["manticore"] = "can hit for high damage at range, and Barbs causes damage when you move!"
-      mobwarnings["large abomination"] = "might be fast and can hit for high damage in melee!"
-      mobwarnings["harpy"] = "is very fast and can hit for high damage in melee!"
       mobwarnings["anaconda"] = "is very fast and can constrict you!"
-      mobwarnings["thorn lotus"] = "can hit for high damage at range!"
-      mobwarnings["tengu warrior"] = "is fast and can hit for high damage in melee!"
-      mobwarnings["kobold demonologist"] = "can summon minor demons!"
-      mobwarnings["death yak"] = "can hit for high damage in melee!"
       mobwarnings["centaur warrior"] = "can hit for high damage at range!"
-      mobwarnings["skeletal warrior "] = "can hit for high damage in melee!"
-      mobwarnings["large slime creature"] = "can hit for high damage in melee!"
-      mobwarnings["enormous slime creature"] = "can hit for high damage in melee!"
-      mobwarnings["hydra"] = "can hit for high damage in melee!"
-      mobwarnings["dire elephant"] = "can hit for high damage in melee, and can trample!"
-      mobwarnings["tarantella"] = "is fast and can cause confusion in melee!"
-      mobwarnings["orc knight"] = "can hit for high damage!"
-      mobwarnings["naga sharpshooter"] = "can shoot you with portal projectiles!"
       mobwarnings["cyclops"] = "can throw large rocks!"
+      mobwarnings["death yak"] = "can hit for high damage in melee!"
+      mobwarnings["dire elephant"] = "can hit for high damage in melee, and can trample!"
+      mobwarnings["enormous slime creature"] = "can hit for high damage in melee!"
       mobwarnings["Erolcha"] = "might cast banishment, paralyse, or LCS!"
+      mobwarnings["firefly"] = "is very fast, can hit for moderate damage, and flashes a warning beacon!"
+      mobwarnings["harpy"] = "is very fast and can hit for high damage in melee!"
+      mobwarnings["hydra"] = "can hit for high damage in melee!"
+      mobwarnings["kobold demonologist"] = "can summon minor demons!"
+      mobwarnings["komodo dragon"] = "can hit for high damage in melee!"
+      mobwarnings["large abomination"] = "might be fast and can hit for high damage in melee!"
+      mobwarnings["large slime creature"] = "can hit for high damage in melee!"
+      mobwarnings["manticore"] = "can hit for high damage at range, and Barbs causes damage when you move!"
+      mobwarnings["naga sharpshooter"] = "can shoot you with portal projectiles!"
+      mobwarnings["orc knight"] = "can hit for high damage!"
+      mobwarnings["orc sorcerer"] = "can cast Paralyse, Summon Demon, Animate Dead"..orcsorcwarn.."!"
+      mobwarnings["purple ugly thing"] = "can hit for high damage in melee!"
+      mobwarnings["skeletal warrior "] = "can hit for high damage in melee!"
+      mobwarnings["Snorg"] = "can berserk and hit for high damage!"
+      mobwarnings["spriggan"] = "is very fast and can hit for moderate damage!"
+      mobwarnings["tarantella"] = "is fast and can cause confusion in melee!"
+      mobwarnings["tengu conjurer"] = "is fast and can cast Force Lance, IMB"..tenguconjwarn.."!"
+      mobwarnings["tengu warrior"] = "is fast and can hit for high damage in melee!"
+      mobwarnings["thorn lotus"] = "can hit for high damage at range!"
     end
 
     if you.xl() < 27 then
       local tengureaverwarn = ""
 
 	  if no_rF then
-        mobwarnings["salamander firebrand"] = "is fast and melee attacks will surround you with flame clouds!"
-        mobwarnings["salamander mystic"] = "can haste allies, and casts Bolt of Magma and IMB!"
-        mobwarnings["red very ugly thing"] = "is fast, can cause sticky flames in melee!"
-        mobwarnings["flaming corpse"] = "is fast, can cause sticky flames in melee!"
-        mobwarnings["mottled draconian"] = "can spit sticky flames at range!"
         mobwarnings["fire dragon"] = "has a nasty fire breath attack!"
         mobwarnings["fire giant"] = "can cast Fireball and Bolt of Fire!"
+        mobwarnings["flaming corpse"] = "is fast, can cause sticky flames in melee!"
+        mobwarnings["mottled draconian"] = "can spit sticky flames at range!"
+        mobwarnings["red very ugly thing"] = "is fast, can cause sticky flames in melee!"
+        mobwarnings["salamander firebrand"] = "is fast and melee attacks will surround you with flame clouds!"
+        mobwarnings["salamander mystic"] = "can haste allies, and casts Bolt of Magma and IMB!"
         tengureaverwarn = tengureaverwarn .. ", can cast Bolt of Magma, Fireball"
       else
-        mobwarnings["salamander mystic"] = "can haste allies and casts IMB!"
-        mobwarnings["salamander firebrand"] = "is fast and melee attacks will surround you with flame clouds!"
-        mobwarnings["red very ugly thing"] = "is fast!"
-        mobwarnings["flaming corpse"] = "is fast!"
         mobwarnings["fire dragon"] = "can hit for high damage in melee!"
         mobwarnings["fire giant"] = "can hit for high damage in melee!"
+        mobwarnings["flaming corpse"] = "is fast!"
+        mobwarnings["red very ugly thing"] = "is fast!"
+        mobwarnings["salamander firebrand"] = "is fast and melee attacks will surround you with flame clouds!"
+        mobwarnings["salamander mystic"] = "can haste allies and casts IMB!"
       end
 
       if no_rC then
-        tengureaverwarn = tengureaverwarn .. ", can cast Freezing Cloud"
         mobwarnings["frost giant"] = "can cast Bolt of Cold!"
         mobwarnings["ice dragon"] = "has a nasty cold breath attack!"
+        tengureaverwarn = tengureaverwarn .. ", can cast Freezing Cloud"
       else
         mobwarnings["frost giant"] = "can hit for high damage in melee!"
         mobwarnings["ice dragon"] = "can hit for high damage in melee!"
@@ -445,11 +447,11 @@
       end
 
       if no_rP then
-        mobwarnings["greater naga"] = "is strong in melee, and casts Venom Bolt, Poison Arrow, IMB, and spits poison!"
         mobwarnings["Aizul"] = "is very fast and casts Sleep, Poison Arrow, and Venom Bolt!"
+        mobwarnings["greater naga"] = "is strong in melee, and casts Venom Bolt, Poison Arrow, IMB, and spits poison!"
       else
-        mobwarnings["greater naga"] = "is strong in melee, and can cast Poison Arrow and IMB!"
         mobwarnings["Aizul"] = "is very fast and casts Sleep and Poison Arrow!"
+        mobwarnings["greater naga"] = "is strong in melee, and can cast Poison Arrow and IMB!"
       end
 
       if no_see_invis then
@@ -480,29 +482,29 @@
         end
       end
 
-      mobwarnings["Lernaean hydra"] = "don't fight it in melee! Just don't!"
-      mobwarnings["tengu reaver"] = "is fast"..tengureaverwarn.."!"
-      mobwarnings["water nymph"] = "can create water, teleport to other water, and Waterstrike you!"
-      mobwarnings["yaktaur"] = "can hit for high damage at range!"
-      mobwarnings["Wiglaf"] = "can cast might and haste on himself!"
-      mobwarnings["orc warlord"] = "can hit for high damage!"
-      mobwarnings["minotaur"] = "can hit for very high damage!"
-      mobwarnings["titanic slime creature"] = "can hit for high damage in melee!"
-      mobwarnings["Rupert"] = "can paralyse you in fear!"
-      mobwarnings["Vashnia"] = "can blink herself and allies away!"
+      mobwarnings["deep troll earth mage"] = "can cast LRD and dig!"
+      mobwarnings["ettin"] = "can hit for very high damage in melee!"
       mobwarnings["great orb of eyes"] = "can cast paralyse, disintegrate, slow, confuse, and teleport you!"
+      mobwarnings["ironheart preserver"] = "can absorb the damage of its allies and heal itself!"
+      mobwarnings["Lernaean hydra"] = "don't fight it in melee! Just don't!"
+      mobwarnings["Louise"] = "can cast banishment!"
+      mobwarnings["minotaur"] = "can hit for very high damage!"
+      mobwarnings["ogre mage"] = "might cast banishment, paralyse, or LCS!"
+      mobwarnings["orc warlord"] = "can hit for high damage!"
+      mobwarnings["purple draconian"] = "can dispel your buffs!"
+      mobwarnings["purple very ugly thing"] = "is fast and can cause rotting in melee!"
+      mobwarnings["Rupert"] = "can paralyse you in fear!"
+      mobwarnings["stone giant"] = "throws large rocks and can hit for very high damage!"
+      mobwarnings["tengu reaver"] = "is fast"..tengureaverwarn.."!"
+      mobwarnings["titanic slime creature"] = "can hit for high damage in melee!"
       mobwarnings["vampire knight"] = "can cast paralyse!"
       mobwarnings["vampire mage"] = "can Summon Undead and Animate Dead!"
-      mobwarnings["stone giant"] = "throws large rocks and can hit for very high damage!"
-      mobwarnings["ettin"] = "can hit for very high damage in melee!"
-      mobwarnings["Louise"] = "can cast banishment!"
-      mobwarnings["purple very ugly thing"] = "is fast and can cause rotting in melee!"
-      mobwarnings["deep troll earth mage"] = "can cast LRD and dig!"
-      mobwarnings["ogre mage"] = "might cast banishment, paralyse, or LCS!"
-      mobwarnings["purple draconian"] = "can dispel your buffs!"
+      mobwarnings["Vashnia"] = "can blink herself and allies away!"
       mobwarnings["vault sentinel"] = "can mark you and blow a signal horn!"
       mobwarnings["vault warden"] = "can lock down doors and staircases!"
-      mobwarnings["ironheart preserver"] = "can absorb the damage of its allies and heal itself!"
+      mobwarnings["water nymph"] = "can create water, teleport to other water, and Waterstrike you!"
+      mobwarnings["Wiglaf"] = "can cast might and haste on himself!"
+      mobwarnings["yaktaur"] = "can hit for high damage at range!"
     end
 
     if no_rP then
@@ -513,9 +515,9 @@
     end
 
     if no_rF then
-      mobwarnings["fire giant"] = "can cast fireball and bolt of fire!"
-      mobwarnings["fire dragon"] = "has a nasty fire breath attack!"
       mobwarnings["deep elf mage"] = "can cast fireball and slow!"
+      mobwarnings["fire dragon"] = "has a nasty fire breath attack!"
+      mobwarnings["fire giant"] = "can cast fireball and bolt of fire!"
       mobwarnings["merfolk aquamancer"] = "can cast Primal Wave, Steam Ball, Throw Icicle, and Blink!"
     else
       mobwarnings["merfolk aquamancer"] = "can cast Primal Wave, Throw Icicle, and Blink!"
@@ -527,43 +529,43 @@
 
     mobwarnings["electric golem"] = "is fast, has electric attacks, and blinks!"
     mobwarnings["Nikola"] = "casts Lightning Bolt, Chain Lightning and blinks!"
-    mobwarnings["storm dragon"] = "can hit for high damage in melee and has a nasty electric breath attack!"
     mobwarnings["shock serpent"] = "is fast, casts Bolt of Lightning, does electric damage, and causes electric damage when injured!"
-    mobwarnings["titan"] = "can cast Lightning Bolt and Airstrike!"
     mobwarnings["Sojobo"] = "is fast and can cast Airstrike and Lightning Bolt!"
+    mobwarnings["storm dragon"] = "can hit for high damage in melee and has a nasty electric breath attack!"
+    mobwarnings["titan"] = "can cast Lightning Bolt and Airstrike!"
     local electricwarning = ""
     if no_rE then
       electricwarning = "<red> You are not wearing rElec!</red>"
       mobwarnings["electric golem"] = mobwarnings["electric golem"] .. electricwarning
       mobwarnings["Nikola"] = mobwarnings["Nikola"] .. electricwarning
-      mobwarnings["storm dragon"] = mobwarnings["storm dragon"] .. electricwarning
       mobwarnings["shock serpent"] = mobwarnings["shock serpent"] .. electricwarning
-      mobwarnings["titan"] = mobwarnings["titan"] .. electricwarning
       mobwarnings["Sojobo"] = mobwarnings["Sojobo"] .. electricwarning
+      mobwarnings["storm dragon"] = mobwarnings["storm dragon"] .. electricwarning
+      mobwarnings["titan"] = mobwarnings["titan"] .. electricwarning
     end
 
+    mobwarnings["giant orange brain"] = "can cast Shadow Creatures, and drain your Int!"
+    mobwarnings["neqoxec"] = "can mutate you, and drain your Int!"
     mobwarnings["Norris"] = "can cast Paralyse, Smite you, and drain your Int!"
     mobwarnings["orange crystal statue"] = "can cast Confuse, Drain MP, and drain your Int!"
-    mobwarnings["neqoxec"] = "can mutate you, and drain your Int!"
-    mobwarnings["giant orange brain"] = "can cast Shadow Creatures, and drain your Int!"
     if no_Sustab then
       local statdrainwarning = "<red> You are not wearing SustAb!</red>"
       mobwarnings["brain worm"] = "can drain your Int!" .. statdrainwarning
+      mobwarnings["giant orange brain"] = mobwarnings["giant orange brain"] .. statdrainwarning
+      mobwarnings["neqoxec"] = mobwarnings["neqoxec"] .. statdrainwarning
       mobwarnings["Norris"] = mobwarnings["Norris"] .. statdrainwarning
       mobwarnings["orange crystal statue"] = mobwarnings["orange crystal statue"] .. statdrainwarning
-      mobwarnings["neqoxec"] = mobwarnings["neqoxec"] .. statdrainwarning
-      mobwarnings["giant orange brain"] = mobwarnings["giant orange brain"] .. statdrainwarning
     end
 
-    mobwarnings["orb of fire"] = "can cast Fireball and Bolt of Fire, and mutate you!"
     mobwarnings["cacodemon"] = "can cast Energy bolts, Dig, and mutate you!"
+    mobwarnings["orb of fire"] = "can cast Fireball and Bolt of Fire, and mutate you!"
     if no_rMut then
       local mutationwarning = "<red> You are not wearing rMut!</red>"
       mobwarnings["cacodemon"] = mobwarnings["cacodemon"] .. mutationwarning
-      mobwarnings["shining eye"] = "can temporarily mutate you!" .. mutationwarning
-      mobwarnings["pulsating lump"] = "can mutate you in melee!" .. mutationwarning
-      mobwarnings["orb of fire"] = mobwarnings["orb of fire"] ..mutationwarning
       mobwarnings["neqoxec"] = mobwarnings["neqoxec"] .. mutationwarning
+      mobwarnings["orb of fire"] = mobwarnings["orb of fire"] ..mutationwarning
+      mobwarnings["pulsating lump"] = "can mutate you in melee!" .. mutationwarning
+      mobwarnings["shining eye"] = "can temporarily mutate you!" .. mutationwarning
     end
 
     local gdwarn = "can hit for high damage in melee"
@@ -588,9 +590,9 @@
       end
     end
 
+    mobwarnings["ancient lich"] = "might cast Banishment, Paralyse, SGD, IOOD, or LCS" .. alichwarn .. "!"
     mobwarnings["golden dragon"] = gdwarn .. "!"
     mobwarnings["lich"] = "might cast Banishment, Paralyse, Summon Demon, IOOD, or LCS!"
-    mobwarnings["ancient lich"] = "might cast Banishment, Paralyse, SGD, IOOD, or LCS" .. alichwarn .. "!"
 
     if no_rF then
       mobwarnings["Xtahua"] = "does high damage in melee and has a nasty fire breath attack"
@@ -600,16 +602,16 @@
 
     mobwarnings["air mage"] = "can cast Airstrike!"
     mobwarnings["blizzard demon"] = "can cast Airstrike!"
-    mobwarnings["wind drake"] = "can cast Airstrike and push you away!"
     mobwarnings["Gastronok"] = "can cast Airstrike!"
+    mobwarnings["wind drake"] = "can cast Airstrike and push you away!"
     if you_are_flying then
       local flightwarning = " <red>You are in flight!</red>"
       mobwarnings["air mage"] = mobwarnings["air mage"] .. flightwarning
       mobwarnings["blizzard demon"] = mobwarnings["blizzard demon"]..flightwarning
-      mobwarnings["wind drake"] = mobwarnings["wind drake"]..flightwarning
-      mobwarnings["titan"] = mobwarnings["titan"]..flightwarning
       mobwarnings["Gastronok"] = mobwarnings["Gastronok"]..flightwarning
       mobwarnings["Sojobo"] = mobwarnings["Sojobo"]..flightwarning
+      mobwarnings["titan"] = mobwarnings["titan"]..flightwarning
+      mobwarnings["wind drake"] = mobwarnings["wind drake"]..flightwarning
     end
 
     if no_see_invis then
@@ -632,78 +634,90 @@
       mobwarnings["draconian annihilator"] = "can cast Lehudib's Crystal Spear or Iron Shot!"
     end
 
-    mobwarnings["octopode crusher"] = "can cast Iron Shot and throw you in melee!"    	
-    mobwarnings["rakshasa"] = "can cast IMB, Phantom Mirror, duplicating itself and allies, and blinks!"
-    mobwarnings["phantasmal warrior"] = "can bypass armour and shields, and lowers MR!"
-    mobwarnings["giant eyeball"] = "can paralyse you!"
-    mobwarnings["mana viper"] = "is fast and has an antimagic bite!"
-    mobwarnings["golden eyeball"] = "can confuse you!"
-    mobwarnings["spriggan druid"] = "is very fast, can awaken trees, recall animals, and cast Stone Arrow!"
-    mobwarnings["thorn hunter"] = "can throw a nasty volley of thorns, and create brambles!"
+    if you_perm_rTorment then
+      mobwarnings["Brimstone Fiend"] = "can cast line-of-sight Hellfire!"
+      mobwarnings["curse skull"] = "can cast Summon Undead!"
+      mobwarnings["curse toe"] = "can cast Summon Fungus!"
+      mobwarnings["Ereshkigal"] = "can cast Paralyse!"
+      mobwarnings["greater mummy"] = "can smite you!"
+      mobwarnings["Khufu"] = "can smite you!"
+      mobwarnings["mummy priest"] = "can smite you!"
+      mobwarnings["Shadow Fiend"] = "can cast Dispel Undead!"
+    else
+      mobwarnings["Brimstone Fiend"] = "can cast Torment and line-of-sight Hellfire!"
+      mobwarnings["curse skull"] = "can cast Torment and Summon Undead!"
+      mobwarnings["curse toe"] = "can cast Torment and Summon Fungus!"
+      mobwarnings["Ereshkigal"] = "can cast Torment and Paralyse!"
+      mobwarnings["Gloorx Vloq"] = "can cast Torment!"
+      mobwarnings["greater mummy"] = "can cast Torment and smite you!"
+      mobwarnings["Ice Fiend"] = "can cast Torment!"
+      mobwarnings["Khufu"] = "can cast Torment and smite you!"
+      mobwarnings["Menkaure"] = "can cast Torment!"
+      mobwarnings["mummy priest"] = "can cast Torment and smite you!"
+      mobwarnings["Shadow Fiend"] = "can cast Torment and Dispel Undead!"
+      mobwarnings["tormentor"] = "can cast Torment!"
+    end
+
     mobwarnings["apocalypse crab"] = "is fast and has a chaos cloud breath attack!"
-    mobwarnings["tentacled monstrosity"] = "has dangerous constriction in melee!"
-    mobwarnings["jumping spider"] = "is fast and can ensnare you in webs!"
     mobwarnings["Arachne"] = "can ensnare you in her webs!"
-    mobwarnings["Enchantress"] = "is very fast and can cast Dimension Anchor, Slow, Haste, Mass Confusion, and Strip Resistance!"
-    mobwarnings["deep elf demonologist"] = "can cast banishment or summon Greater Demons!"
-    mobwarnings["draconian caller"] = "can summon Dragons and Death Drakes!"
-    mobwarnings["draconian zealot"] = "can cast smite-targeted Hellfire or smite you!"
-    mobwarnings["deep elf annihilator"] = "can cast Lehudib's Crystal Spear or Iron Shot!"
-    mobwarnings["blood saint"] = "can cast LCS and other Legendary Destruction!"
-    mobwarnings["black sun"] = "can give allies a dangerous black mark which gives melee effects!"
-    mobwarnings["corrupter"] = "can summon allies from various branches!"
-    mobwarnings["moth of wrath"] = "is fast and can enrage both enemies and you!"
-    mobwarnings["orb spider"] = "is fast and can cast Orb of Destruction!"
-    mobwarnings["deep troll shaman"] = "can cast haste and might on allies!"
-    mobwarnings["warmonger"] = "can sap your magic and summon a grand avatar!"
-    mobwarnings["chaos champion"] = "can dispel buffs, entrap you, and other chaotic effects!"
-    mobwarnings["draconian shifter"] = "can block teleports, blink allies encircling you, or cause you to blink!"
-    mobwarnings["guardian serpent"] = "can blink allies encircling you!"
-    mobwarnings["Roxanne"] = "can cast LCS and Iron Shot at you, or shift your position!"
-    mobwarnings["draconian scorcher"] = "can cast smite-targeted Hellfire!"
-    mobwarnings["hellion"] = "can cast smite-targeted Hellfire!"
-    mobwarnings["Azrael"] = "can cast smite-targeted Hellfire!"
-    mobwarnings["deep elf sorcerer"] = "can cast banishment or line-of-sight Hellfire!"
-    mobwarnings["quicksilver dragon"] = "can dispel your buffs!"
-    mobwarnings["ironbrand convoker"] = "can recall allies and cast might on them!"
-    mobwarnings["Hell Sentinel"] = "can cast line-of-sight Hellfire and Iron Shot!"
     mobwarnings["Asmodeus"] = "can cast line-of-sight Hellfire and Summon Greater Demons!"
-    mobwarnings["flayed ghost"] = "can Flay you to shreds!"
-    mobwarnings["Ice Fiend"] = "can cast Torment!"
-    mobwarnings["Shadow Fiend"] = "can cast Torment and Dispel Undead!"
-    mobwarnings["curse skull"] = "can cast Torment and Summon Undead!"
-    mobwarnings["tormentor"] = "can cast Torment!"
-    mobwarnings["curse toe"] = "can cast Torment and Summon Fungus!"
-    mobwarnings["Menkaure"] = "can cast Torment!"
-    mobwarnings["Gloorx Vloq"] = "can cast Torment!"
-    mobwarnings["Ereshkigal"] = "can cast Torment and paralyse!"
-    mobwarnings["Brimstone Fiend"] = "can cast Torment and line-of-sight Hellfire!"
-    mobwarnings["daeva"] = "can smite you!"
+    mobwarnings["Azrael"] = "can cast smite-targeted Hellfire!"
     mobwarnings["balrug"] = "can smite you, and cast fireball!"
-    mobwarnings["smoke demon"] = "can smite you, and cast ranged sticky flame!"
-    mobwarnings["deep elf priest"] = "can smite you!"
-    mobwarnings["orc priest"] = "can smite you!"
-    mobwarnings["orc high priest"] = "can smite you!"
-    mobwarnings["starcursed mass"] = "can smite you!"
-    mobwarnings["Frances"] = "can smite you!"
-    mobwarnings["Mnoleg"] = "cast Summon Eyes and smite you!"
-    mobwarnings["deep elf high priest"] = "can cast smite-targeted Hellfire or smite you!"
-    mobwarnings["mummy priest"] = "can cast Torment and smite you!"
-    mobwarnings["greater mummy"] = "can cast Torment and smite you!"
-    mobwarnings["Khufu"] = "can cast Torment and smite you!"
-    mobwarnings["sphinx"] = "can cast paralyse, slow, confuse, and smite you!"
+    mobwarnings["black sun"] = "can give allies a dangerous black mark which gives melee effects!"
+    mobwarnings["blood saint"] = "can cast LCS and other Legendary Destruction!"
     mobwarnings["catoblepas"] = "can petrify you with its breath!"
+    mobwarnings["Cerebov"] = "can cast Fire Storm, Iron Shot, and Summon Greater Demons!"
+    mobwarnings["chaos champion"] = "can dispel buffs, entrap you, and other chaotic effects!"
+    mobwarnings["corrupter"] = "can summon allies from various branches!"
+    mobwarnings["daeva"] = "can smite you!"
+    mobwarnings["deep elf annihilator"] = "can cast Lehudib's Crystal Spear or Iron Shot!"
+    mobwarnings["deep elf demonologist"] = "can cast banishment or summon Greater Demons!"
+    mobwarnings["deep elf high priest"] = "can cast smite-targeted Hellfire or smite you!"
+    mobwarnings["deep elf priest"] = "can smite you!"
+    mobwarnings["deep elf sorcerer"] = "can cast banishment or line-of-sight Hellfire!"
+    mobwarnings["deep troll shaman"] = "can cast haste and might on allies!"
+    mobwarnings["Dispater"] = "can cast line-of-sight Hellfire, Iron Shot, and summon Greater Demons!"
+    mobwarnings["draconian caller"] = "can summon Dragons and Death Drakes!"
+    mobwarnings["draconian scorcher"] = "can cast smite-targeted Hellfire!"
+    mobwarnings["draconian shifter"] = "can block teleports, blink allies encircling you, or cause you to blink!"
+    mobwarnings["draconian zealot"] = "can cast smite-targeted Hellfire or smite you!"
+    mobwarnings["Enchantress"] = "is very fast and can cast Dimension Anchor, Slow, Haste, Mass Confusion, and Strip Resistance!"
+    mobwarnings["eye of draining"] = "will drain your Magic!"
+    mobwarnings["flayed ghost"] = "can Flay you to shreds!"
+    mobwarnings["Frances"] = "can smite you!"
+    mobwarnings["Frederick"] = "can cast Iron Shot!"
+    mobwarnings["ghost moth"] = "will drain your Magic!"
+    mobwarnings["giant eyeball"] = "can paralyse you!"
+    mobwarnings["golden eyeball"] = "can confuse you!"
+    mobwarnings["guardian serpent"] = "can blink allies encircling you!"
+    mobwarnings["Hell Sentinel"] = "can cast line-of-sight Hellfire and Iron Shot!"
+    mobwarnings["hellion"] = "can cast smite-targeted Hellfire!"
+    mobwarnings["Ignacio"] = "can cast Agony!"
+    mobwarnings["ironbrand convoker"] = "can recall allies and cast might on them!"
     mobwarnings["Jorgrun"] = "can cast petrify and shatter!"
     mobwarnings["Jory"] = "can mesmerise, cast LCS and blink close!"
-    mobwarnings["Cerebov"] = "can cast Fire Storm, Iron Shot, and Summon Greater Demons!"
+    mobwarnings["jumping spider"] = "is fast and can ensnare you in webs!"
+    mobwarnings["mana viper"] = "is fast and has an antimagic bite!"
     mobwarnings["Mennas"] = "can cast silence and confuse!"
-    mobwarnings["Ignacio"] = "can cast Agony!"
+    mobwarnings["Mnoleg"] = "cast Summon Eyes and smite you!"
+    mobwarnings["moth of wrath"] = "is fast and can enrage both enemies and you!"
+    mobwarnings["octopode crusher"] = "can cast Iron Shot and throw you in melee!"
+    mobwarnings["orb spider"] = "is fast and can cast Orb of Destruction!"
+    mobwarnings["orc high priest"] = "can smite you!"
+    mobwarnings["orc priest"] = "can smite you!"
+    mobwarnings["phantasmal warrior"] = "can bypass armour and shields, and lowers MR!"
+    mobwarnings["quicksilver dragon"] = "can dispel your buffs!"
+    mobwarnings["rakshasa"] = "can cast IMB, Phantom Mirror, duplicating itself and allies, and blinks!"
+    mobwarnings["Roxanne"] = "can cast LCS and Iron Shot at you, or shift your position!"
     mobwarnings["shadow demon"] = "can cast Shadow Creatures!"
+    mobwarnings["smoke demon"] = "can smite you, and cast ranged sticky flame!"
+    mobwarnings["sphinx"] = "can cast paralyse, slow, confuse, and smite you!"
+    mobwarnings["spriggan druid"] = "is very fast, can awaken trees, recall animals, and cast Stone Arrow!"
+    mobwarnings["starcursed mass"] = "can smite you!"
+    mobwarnings["tentacled monstrosity"] = "has dangerous constriction in melee!"
+    mobwarnings["thorn hunter"] = "can throw a nasty volley of thorns, and create brambles!"
+    mobwarnings["warmonger"] = "can sap your magic and summon a grand avatar!"
     mobwarnings["ynoxinul"] = "can cast Iron Shot!"
-    mobwarnings["Frederick"] = "can cast Iron Shot!"
-    mobwarnings["Dispater"] = "can cast line-of-sight Hellfire, Iron Shot, and summon Greater Demons!"
-    mobwarnings["ghost moth"] = "will drain your Magic!"
-    mobwarnings["eye of draining"] = "will drain your Magic!"
 
     -- Holds the overall alert message and count of dangers
     local alerts = ""
