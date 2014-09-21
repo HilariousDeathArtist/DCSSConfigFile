@@ -265,6 +265,7 @@ more += Something appears in a flash of light
 more += You feel your rage building
 more += You turn into a fleshy mushroom
 more += staircase.*moves
+more += is too large for the net to hold
 
 # Interrupts for Hell effects
 more += You will not leave this place
