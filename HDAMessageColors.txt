@@ -22,7 +22,7 @@ $godaction := magenta
 $mp := lightcyan
 
 #Channels
-#channel.plain =
+#channel.plain = 
 channel.prompt = $interface
 channel.god = $godaction
 channel.pray = $godaction
@@ -50,7 +50,7 @@ channel.multiturn = $boring
 #channel.examine = 
 #channel.examine_filter = 
 #channel.diagnostics = 
-#channel.error =
+#channel.error = 
 #channel.tutorial = 
 channel.orb = $awesome
 #channel.hell_effect = -either danger/warning/boring
@@ -58,7 +58,7 @@ channel.orb = $awesome
 # Set Alias
 msc := message_colour
 # Clear defaults
-msc =
+msc = 
 
 msc += $mp:You feel your power returning
 
