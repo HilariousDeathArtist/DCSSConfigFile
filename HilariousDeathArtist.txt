@@ -520,7 +520,7 @@ ai += scrolls? of holy word:!r
 ai += scrolls? of magic mapping:!r
 ai += scrolls? of vulnerability:!r
 
-# Hide Armour
+# Body Armour
 ai += fire dragon (armour|hide):rF++, rC-
 ai += gold dragon (armour|hide):rC+, rF+, rPois
 ai += ice dragon (armour|hide):rC++, rF-
@@ -543,7 +543,7 @@ ai += troll (hide|leather armour):regen
 #ai += troll leather armour of cold resistance:, rC+
 #ai += troll leather armour of fire resistance:, rF+
 
-# Accessories
+# Accessory Egos
 #ai += (barding|boots|buckler|cloak|gloves|hat|helmet|shield) of cold resistance:rC+
 #ai += (barding|boots|buckler|cloak|gloves|hat|helmet|shield) of fire resistance:rF+
 #ai += (barding|boots) of flight:+Fly
