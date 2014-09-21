@@ -137,26 +137,26 @@ ae += <artefact
 # Armour/Weapon autopickup by rwbarton, enhanced by HDA
 {
 add_autopickup_func(function(it, name)
-  
+
   if name:find("curare") then return true end
   if name:find("dispersal") and (name:find("dart") or name:find("tomahawk")) then return true end
   if name:find("throwing net") then return true end
-  
+
   local class = it.class(true)
   local armour_slots = {cloak="Cloak", helmet="Helmet", gloves="Gloves", boots="Boots", body="Armour", shield="Shield"}
-  
+
   if (class == "armour") then
     sub_type = it.subtype()
     equipped_item = items.equipped_at(armour_slots[sub_type])
-    
+
     if (sub_type == "cloak") or (sub_type == "helmet") or (sub_type == "gloves") or (sub_type == "boots") then
       if not equipped_item then
         return true
-      else 
+      else
         return it.artefact or it.branded or it.ego
       end
     end
-    
+
     if (sub_type == "body") then
       if equipped_item then
         local armourname = equipped_item.name()
@@ -168,7 +168,7 @@ add_autopickup_func(function(it, name)
       end
       return true
     end
-    
+
     if (sub_type == "shield") then
       if equipped_item then
         if equipped_item.artefact or equipped_item.branded or equipped_item.ego or (equipped_item.plus > 2) then
@@ -181,13 +181,13 @@ add_autopickup_func(function(it, name)
       end
     end
   end
-  
+
   if (class == "weapon") then
-    if (you.xl() < 12) or (you.god():find("Nemelex") 
+    if (you.xl() < 12) or (you.god():find("Nemelex")
                            or (you.god():find("Yred"))
                            or (you.god():find("Beogh"))) then
-      if it.branded and not (it.name() == "club") then 
-        return true 
+      if it.branded and not (it.name() == "club") then
+        return true
       end
     end
     local weapon = items.equipped_at("Weapon")
@@ -235,8 +235,8 @@ add_autopickup_func(function(it, name)
           if name:find("trishula") then return true end
         end
         if pole > 14 then
-          if name:find("glaive") then return true end   
-          if name:find("bardiche") then return true end    
+          if name:find("glaive") then return true end
+          if name:find("bardiche") then return true end
         end
         if staff > 8 then
           if name:find("lajatang") then return true end
@@ -248,7 +248,7 @@ add_autopickup_func(function(it, name)
   end
 end)
 }
-  
+
 ###############
 # Spell slots #
 ###############
@@ -343,7 +343,7 @@ explore_stop = glowing_items,artefacts,greedy_pickup_smart
 explore_stop += greedy_visited_item_stack,stairs,shops
 explore_stop += altars,portals,branches,runed_doors,greedy_sacrificeable
 
-# Adjusts how much autoexplore favours attempting to discover room perimeters and corners. 
+# Adjusts how much autoexplore favours attempting to discover room perimeters and corners.
 # At values higher than 0, autoexplore will more heavily favour visiting squares that are next to walls
 # reasonable values range from 0 to 10 maybe?
 explore_wall_bias = 3
@@ -369,12 +369,6 @@ ignore := runrest_ignore_message
 
 ignore += You regained.*mp
 
-# Jiyva Messages
-ignore += Jiyva appreciates your sacrifice
-ignore += Jiyva gurgles merrily
-ignore += Jiyva says: Divide and consume
-ignore += You hear.*splatter
-
 # Annoyances  -- Don't stop autotravel for these events
 ignore += A.*toadstool withers and dies
 ignore += disappears in a puff of smoke
@@ -387,12 +381,17 @@ ignore += standing in the rain
 ignore += toadstools? grow
 ignore += You feel.*sick
 ignore += You walk carefully through the
+# Jiyva Messages
+ignore += Jiyva appreciates your sacrifice
+ignore += Jiyva gurgles merrily
+ignore += Jiyva says: Divide and consume
+ignore += You hear.*splatter
 # Qazlal
 ignore += The plant is engulfed
 ignore += You destroy the (bush|fungus|plant)
 ignore += You displace your
 
-# Bad things -- Stop autotravel for these events
+# Bad things -- Stop autotravel for these events (duplicates some of HDAForceMore)
 stop += (blundered into a|invokes the power of) Zot
 stop += (devoid of blood|starving)
 stop += A huge blade swings out and slices into you[^r]
@@ -406,38 +405,42 @@ stop += Wait a moment
 stop += wrath finds you
 stop += You fall through a shaft
 
-# Expiring effects -- Stop autotravel for spells beginning to expire (to allow recasts)
+# Expiring spells effects -- Stop to allow recasts (duplicates some of HDAForceMore)
 # Control Teleport
-stop += uncertain
-# Deaths Door
-stop += time is quickly running out
-stop += life is in your own
+stop += you feel uncertain
+# Death's Door
+more += time is quickly running out
+more += life is in your own
 # Enslavement
-stop += is no longer charmed
+more += is no longer charmed
 # Flight
-stop += You are starting to lose your buoyancy
+more += You are starting to lose your buoyancy
 stop += You lose control over your flight
 # Haste
-stop += You feel yourself slow down
-# Necromutation
-stop += Your transformation is almost over
-stop += You have a feeling this form
-stop += You feel yourself come back to life
+more += You feel yourself slow down
+# Phase Shift
+more += You feel closer to the material plane
 # Repel/Deflect
 stop += missiles spell is about to expire
-# Shroud
+# Shroud of Golubria
 stop += shroud begins to fray
 stop += shroud unravels
+more += Your shroud falls apart
 # Swiftness
 stop += start to feel a little slower
+# Transmutations
+more += Your transformation is almost over
+more += You have a feeling this form
+more += Your skin feels tender
+more += You feel yourself come back to life
 
-# Ghouls
+# Ghouls (Not part of HDAForceMore)
 : if you.race() == "Ghoul" then
 	stop += smell.*(rott(ing|en)|decay)
 	stop += something tasty in your inventory
 : end
 
-# Good things - Bad things wearing off
+# Good things - Bad things wearing off (Duplicates some of HDAForceMore)
 stop += contamination has completely
 stop += You are no longer firmly anchored in space
 
@@ -499,9 +502,7 @@ ai := autoinscribe
   ai += (Sonja|Psyche):!w
 : end
 
-ai += (bad|dangerous)_item.*potion:!q
-ai += potion of berserk rage:!q
-ai += (bad|dangerous)_item.*scroll:!r
+# Misc
 ai += rod of [^s][^t]:!a
 ai += [Mm]anual of:!d
 ai += dispersal:=f
@@ -509,33 +510,69 @@ ai += large rock:!d
 ai += throwing net:=f, !d
 ai += tome of destruction:!d
 
-# Armour
-ai += fire dragon (armour|hide):rF++, rC-
-ai += gold dragon (armour|hide):rC+, rF+, rP+
-ai += ice dragon (armour|hide):rC++, rF-
-ai += mottled dragon (armour|hide):rSticky
-ai += pearl dragon (armour|hide):rN+
-ai += steam dragon (armour|hide):rSteam
-ai += storm dragon (armour|hide):rElec
-ai += swamp dragon (armour|hide):rP+
-ai += troll hide:regen
-ai += troll leather armour:regen
-
 # Consumables
+ai += (bad|dangerous)_item.*potion:!q
+ai += potions? of berserk rage:!q
+ai += potions? of cure mutation:!q
+ai += (bad|dangerous)_item.*scroll:!r
 ai += scrolls? of blinking:!r
 ai += scrolls? of holy word:!r
 ai += scrolls? of magic mapping:!r
 ai += scrolls? of vulnerability:!r
 
+# Body Armour
+ai += fire dragon (armour|hide):rF++, rC-
+ai += gold dragon (armour|hide):rC+, rF+, rPois
+ai += ice dragon (armour|hide):rC++, rF-
+ai += mottled dragon (armour|hide):rSticky
+ai += pearl dragon (armour|hide):rN+
+ai += steam dragon (armour|hide):rSteam
+ai += storm dragon (armour|hide):rElec
+ai += swamp dragon (armour|hide):rPois
+ai += troll (hide|leather armour):regen
+
+# Body Armour Egos
+#ai += ([^l] leather armour|mail|plate armour|robe|skin) of cold resistance:rC+
+#ai += ([^l] leather armour|mail|plate armour|robe|skin) of fire resistance:rF+
+#ai += (leather armour|mail|plate armour|robe) of magic resistance:MR+
+#ai += (leather armour|mail|plate armour|robe) of positive energy:rN+
+#ai += (leather armour|mail|plate armour) of poison resistance:rPois
+#ai += plate armour of ponderousness:Speed-
+#ai += robe of resistance:rC+, rF+
+#ai += robe of the archmagi:Spellpower+
+#ai += troll leather armour of cold resistance:, rC+
+#ai += troll leather armour of fire resistance:, rF+
+
+# Accessory Egos
+#ai += (barding|boots|buckler|cloak|gloves|hat|helmet|shield) of cold resistance:rC+
+#ai += (barding|boots|buckler|cloak|gloves|hat|helmet|shield) of fire resistance:rF+
+#ai += (barding|boots) of flight:+Fly
+#ai += (barding|boots) of stealth:Stlth+
+#ai += (barding|boots) of running:Speed+
+#ai += (barding|boots) of jumping:+Jump
+#ai += (buckler|cloak|shield) of poison resistance:rPois
+#ai += (buckler|shield) of positive energy:rN+
+#ai += (buckler|shield) of protection:AC+3
+#ai += (buckler|shield) of reflection:Reflect
+#ai += (buckler|shield) of resistance:rC+, rF+
+#ai += (cloak|hat|helmet) of magic resistance:MR+
+#ai += (hat|helmet) of intelligence:Int+3
+#ai += (hat|helmet) of see invisible:sInv
+#ai += cloak of darkness:+Inv
+#ai += gloves of strength:Str+3
+#ai += gloves of dexterity:Dex+3
+#ai += gloves of archery:Ranged Slay+4
+#ai += hat of spirit shield:Spirit
+
 # Amulets
-ai += amulet of clarity:Clarity, !d
+ai += amulet of clarity:Clar, !d
 ai += amulet of faith:Faith, !P
 ai += amulet of guardian spirit:Spirit
 ai += amulet of rage:+Rage, !d
 ai += amulet of resist corrosion:rCorr, !d
 ai += amulet of resist mutation:rMut, !d
 ai += amulet of stasis:Stasis, !d
-ai += amulet of the gourmand:Gourmand, !d
+ai += amulet of the gourmand:Gourm, !d
 ai += amulet of warding:Ward, rN+, !d
 
 # Rings
@@ -545,7 +582,7 @@ ai += ring of ice:rC+, rF-
 ai += ring of invisibility:+Inv, !d
 ai += ring of loudness:Stlth-
 ai += ring of magical power:MP+9
-ai += ring of poison resistance:rP+, !d
+ai += ring of poison resistance:rPois, !d
 ai += ring of positive energy:rN+
 ai += ring of protection from cold:rC+, !d
 ai += ring of protection from fire:rF+, !d
@@ -553,19 +590,19 @@ ai += ring of protection from magic:MR+, !d
 ai += ring of regeneration:regen, !d
 ai += ring of see invisible:sInv, !d
 ai += ring of stealth:Stlth+
-ai += ring of sustain abilities:sustAb
+ai += ring of sustain abilities:SustAb
 ai += ring of teleport control:cTele, !d
 ai += ring of teleportation:+/*tele, !d
-ai += ring of wizardry:wiz+, !d
+ai += ring of wizardry:Wiz+, !d
 
 # Staves
 ai += staff of air:rElec
 ai += staff of cold:rC+
 ai += staff of conjuration:!a
 ai += staff of death:rN+
-ai += staff of energy:+MP, hungerless spells, !d!a 
+ai += staff of energy:+MP, hungerless spells, !d!a
 ai += staff of fire:rF+
-ai += staff of poison:rP+
+ai += staff of poison:rPois
 ai += staff of power:MP+17, !a
 ai += staff of summoning:!a
 ai += staff of wizardry:wiz+, !a
