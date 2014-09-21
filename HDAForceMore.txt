@@ -1,306 +1,446 @@
-#################
-# Force Prompts #
-#################
+#####################
+# Table of Contents #
+#####################
+
+# 1. Dungeon Features
+# 2. Failure
+# 3. Bad Things
+# 4. Translocations
+# 5. Expiring Effects
+# 6. Religion
+# 7. Hell Effects
+# 8. Monsters
 
 # Set Alias
 more := force_more_message
 
-# Important dungeon features
-more += invites you to visit
-more += interdimensional caravan
-more += You hear.*rusting.*drain
-more += You hear the drain falling apart
-more += The drain falls to bits
-more += The mighty Pandemonium lord.*resides here
-more += You hear.*ticking.*clock
-more += You hear.*crackle.*magical portal
-more += You hear.*creaking.*oriflamme
-more += You hear.*crackling.*archway
-more += You hear.*rumble.*avalanche
-more += You hear.*hiss.*sand
-more += One of the plants suddenly grows acid sacs
-more += Another plant grows acid sacs
-more += distant snort
-more += Found a gateway leading out of the Abyss
-more += Found a staircase to the Ecumenical Temple
-more += wave of frost
-more += roar of battle
-more += There is an entrance to a bailey on this level
-more += oppressive heat
-more += tolling of a bell
-more += sound of rushing water
-more += Found a frozen archway
-more += Found a labyrinth entrance
-more += You have a vision of.*gates?
-more += Nemelex gives you another card to finish dealing
-more += Fedhas invokes the elements against you
-more += Lugonu sends minions to punish you
-more += You have no means to grasp a wand firmly enough
-more += Done waiting
-more += (The|Your).*falls away!
-more += acid corrodes your equipment
-more += cast banishment
-more += cast paralyse
-more += cast Torment
-more += MASSIVE DAMAGE
-more += Your body shudders with the violent release of wild energies
-more += is duplicated
-more += You feel sluggish
-more += You are shrouded in an aura of darkness
-more += You really shouldn't be using
-more += Mutagenic energies flood into your body
-more += You are surrounded by a storm which can block enemy attacks
-more += resistances upon receiving elemental damage
-
-# Translocations
-more += You.*teleport [^f]
-more += You blink
-more += Your surroundings suddenly seem different
-more += You feel strangely (unstable|stable)
-more += You cannot teleport right now
-more += You cannot blink right now
-
-# Wands/Potions/Scrolls/evokes used by monsters
-more += zaps a (wand|rod)
-more += drinks a potion
-more += reads a scroll
-more += evokes.*(amulet|ring)
+####################
+# Dungeon Features #
+####################
 
 # Abyssal Rune
 more += Found .* abyssal rune of Zot
 
-# Dangerous Monsters
-more += giant eyeball.*comes? into view
-more += giant spore.*comes? into view
-more += tormentor.*comes? into view
-more += flayed ghost.*comes? into view
-more += fiend.*comes? into view
-more += hellion.*comes? into view
-more += silver statue.*comes? into view
-more += curse skull.*comes? into view
-more += ironbrand convoker.*comes? into view
-more += Lich.*comes? into view
-more += The blast of calcifying dust hits you[^r]
-more += You are engulfed in calcifying dust
-more += begins to recite a word of recall
-more += You are engulfed in dark miasma
-more += swoops through the air toward you
-more += orange crystal statue.*comes? into view
-more += The ghost moth stares at you
-more += You feel you are being watched by something
-more += Its appearance distorts for a moment
-more += You feel haunted
-more += The octopode crusher throws you
-more += Mara shimmers
-more += There is a horrible\, sudden wrenching feeling in your soul
-more += Mara seems to draw the.*out of itself
-more += Being near the torpor snail leaves you feeling lethargic
+# Entrances, Exits, and Arrivals
+more += Found a frozen archway
+more += Found a gateway leading out of the Abyss
+more += Found a labyrinth entrance
+more += Found a staircase to the Ecumenical Temple
+more += The mighty Pandemonium lord.*resides here
 
-# Interrupts for unexpected situations
-more += The.*shudders
-more += A magical barricade bars your way
-more += The shadow imp is revulsed by your support of nature
+# Portal Timers
+more += distant snort
+more += interdimensional caravan
+more += invites you to visit
+more += oppressive heat
+more += roar of battle
+more += sound of rushing water
+more += The drain falls to bits
+more += There is an entrance to a bailey on this level
+more += tolling of a bell
+more += wave of frost
+more += You hear the drain falling apart
+more += You hear.*crackle.*magical portal
+more += You hear.*crackling.*archway
+more += You hear.*creaking.*oriflamme
+more += You hear.*hiss.*sand
+more += You hear.*rumble.*avalanche
+more += You hear.*rusting.*drain
+more += You hear.*ticking.*clock
+
+# Traps
+more += (blundered into a|invokes the power of) Zot
+more += A huge blade swings out and slices into you
+stop += An alarm trap emits a blaring wail
+stop += found a zot trap
+stop += hear a soft click
+more += The power of Zot is invoked against you
+more += You (become entangled|are caught) in (a|the) (web|net)
+more += You fall through a shaft
+more += You stumble into the trap
+
+# Other
+more += Another plant grows acid sacs
+more += One of the plants suddenly grows acid sacs
+more += The walls and floor vibrate strangely for a moment
+more += You are suddenly pulled into a different region
+more += You have a vision of.*gates?
+
+###########
+# Failure #
+###########
+
+more += do not work when you're silenced
+more += sense of stasis
 more += Something interferes with your magic
-more += You feel a genetic drift
+more += The rod doesn't have enough magic points
+more += The spell fizzles
+more += The writing blurs in front of your eyes
+more += The.*is unaffected
+more += This potion can/'t work under stasis
+more += This wand has no charges
+more += too hungry
+more += You are held in a net
+more += You are too injured to fight blindly
+more += You can't gag anything down
+more += You can't unwield
+more += You cannot cast spells when silenced
+more += You cannot cast spells while unable to breathe
+more += You cannot teleport right now
+more += You don't have any such object
+more += You don't have enough magic
 more += You don't.* that spell
 more += You fail to use your ability
-more += You miscast
-more += You cannot teleport right now
-more += appears in a shower of sparks
-more += It doesn't seem very happy
-more += Some monsters swap places
-more += This wand has no charges
-more += You are held in a net
-more += You have disarmed
-more += You can't gag anything down
-more += You don't have any such object
-more += do not work when you're silenced
-more += You cannot cast spells when silenced
-more += The barbed spikes dig painfully into your body as you move
-more += The water nymph flows with the water
-more += You can't unwield
-more += You don't have enough magic
-more += You haven't enough magic at the moment
-more += You feel your control is inadequate
-more += Your guardian golem overheats
-more += You have finished your manual
-more += You can't take your gloves off to put on a ring
-more += You feel your power leaking away
-more += You feel your power drain away
-more += Space warps horribly around you
-more += Your damage is reflected back at you
-more += dark mirror aura disappears
-more += Space bends around you
-more += The.*grabs you[^r]
-more += Your attempt to break free
-more += The.*is a mimic
-more += The.*offers itself to Yredelemnul
-more += You are blown backwards
-more += Agitated ravens fly out from beneath the
-more += goes berserk
-more += are blown away by the wind
-more += Your magical defenses are stripped away
-more += appears out of thin air
-more += You feel less protected from missiles
-more += Your body is wracked with pain
-more += surroundings become eerily quiet
-more += The pull of.*song draws you forwards
-more += comes (up|down) the stairs
-more += The jumping spider pounces on you [^but]
-more += Wisps of shadow swirl around
-more += begins to accept its allies' injuries
-more += doors? slams? shut
-more += The vault warden activates a sealing rune
-more += Miasma billows from the
-more += You feel.*firmly anchored in space
-more += You stumble into the trap
 more += You have no appropriate body parts free
-more += drinks a potion
-more += You stop (a|de)scending the stairs
-more += The walls disappear
-more += too hungry
-more += The spell fizzles
-more += Your body armour is too heavy
-more += stands defiantly in death's doorway
-more += is no longer invulnerable
-more += This potion can/'t work under stasis
-more += Kikubaaqudgha will now enhance your necromancy
-more += Lugonu will now corrupt your weapon
-more += The Shining One will now bless
-more += You cannot cast spells while unable to breathe
-more += Your fit of retching subsides
-more += You are wearing\:
-more += The walls and floor vibrate strangely for a moment
-more += You feel your flesh start to rot away
-more += You sense the presence of something unfriendly
-
-# Interrupts for Bad things
-more += Your surroundings flicker
-more += You feel yourself grow more vulnerable to poison
-more += You feel less vulnerable to poison
-more += The poison in your body grows stronger
-more += burn any scroll you tried to read
-more += Your icy (shield|armour) evaporates
-more += Your.*(shield|armour) melts away
-more += sense of stasis
+more += You have no means to grasp a wand firmly enough
+more += You haven't enough magic at the moment
+more += You miscast
 more += Your amulet of stasis
-more += You smell decay. (^Yuck!)
-more += The writing blurs in front of your eyes
-more += You fall through a shaft
-more += A huge blade swings out and slices into you
-more += your magic stops regenerating
-more += (blundered into a|invokes the power of) Zot
-more += Ouch! That really hurt!
+more += Your attempt to break free
+more += Your body armour is too heavy
+
+#############################
+# Bad and Unexpected Things #
+#############################
+
+# Bad things happening to you
+more += acid corrodes your equipment
+more += are blown away by the wind
 more += dispelling energy hits you
-more += You convulse
-more += You feel drained
-more += You are (blasted|electrocuted)
-more += You feel uncertain
-more += (You are|You're) poisoned
-more += (You are|You're) more poisoned
-more += (You are|You're) lethally poisoned
-more += (You are|You're) confused
-more += (You are|You're) more confused
-more += (You are|You're) too confused
-more += (starving|devoid of blood)
-more += You need to eat something NOW
-more += You are engulfed in mutagenic fog
-more += wrath finds you
-more += lose consciousness
-more += You are too injured to fight blindly
-more += Green shoots are pushing up through the earth
-more += your.*devoured
-more += You are drained
-more += shoots a curare
-more += You feel your attacks grow feeble
-more += You are blown backwards by the freezing wind
-more += You are knocked back by the lance of force
-more += You are knocked back by the blast of cold
-more += You are knocked back by the great wave of water
-more += You stumble backwards
-more += You are trampled
-more += Okawaru sends forces against you
-more += You are slowing down.
-more += You flicker for a moment.
-more += You flicker back
-more += The.*is unaffected
-more += You (become entangled|are caught) in (a|the) (web|net)
-more += The arrow of dispersal hits you[^r]
-more += The forest starts to sway and rumble
-more += Vines fly forth from the trees!
-more += A tree reaches out and hits you!
-more += You are hit by a branch
-more += The.*answers the.*call
-more += The air twists around and violently strikes you in flight
-more += The.*engulfs you in water
-more += The power of Zot is invoked against you
-more += The acid corrodes your
-more += You feel (dopey|clumsy|weak)
-more += The air around.*erupts in flames
-more += Terrible wounds (open|spread) all over you
-more += You are encased in ice
-more += Your.*suddenly stops moving
-more += You suddenly stop moving
-more += Your surroundings seem slightly different
-more += Your resistance to elements expires
-more += You feel a (horrible|terrible) chill
-more += You are burned terribly
-more += You are mesmerised
-more += The barbed spikes become lodged in your body
-more += mark forms upon you
-more += blows on a signal horn
-more += silver sears you
-more += The.*seems to speed up
-more += steals.*your
 more += infuriates you
+more += lose consciousness
+more += mark forms upon you
+more += MASSIVE DAMAGE
+more += Ouch! That really hurt!
+more += silver sears you
+more += Space bends around you
+more += Space warps horribly around you
+more += surroundings become eerily quiet
+more += Terrible wounds (open|spread) all over you
+more += The acid corrodes your
+more += The air around.*erupts in flames
+more += The air twists around and violently strikes you in flight
+more += The arrow of dispersal hits you[^r]
+more += The barbed spikes become lodged in your body
+more += The barbed spikes dig painfully into your body as you move
+more += The blast of calcifying dust hits you[^r]
+more += The poison in your body grows stronger
+more += The pull of.*song draws you forwards
+more += The.*engulfs you in water
+more += The.*grabs you[^r]
+more += You (are|feel) drained
+more += You are (blasted|electrocuted)
+more += You are blown backwards
+more += You are burned terribly
+more += You are encased in ice
+more += You are engulfed in calcifying dust
+more += You are engulfed in dark miasma
+more += You are engulfed in mutagenic fog
+more += You are knocked back
+more += You are mesmerised
+more += You are slowing down
+more += You are trampled
+more += You convulse
+more += You feel a (horrible|terrible) chill
+more += You feel haunted
+more += You feel less vulnerable to poison
+more += You feel your attacks grow feeble
+more += You feel your flesh.*rot
+more += You feel your power drain away
+more += You feel your power leaking away
+more += You feel yourself grow more vulnerable to poison
+more += You stumble backwards
+more += You.*re (confused|more confused|too confused)
+more += You.*re (poisoned|more poisoned|lethally poisoned)
+more += Your body is wracked with pain
+more += Your damage is reflected back at you
+more += Your limbs are stiffening
+more += Your magical defenses are stripped away
+more += Your?.*suddenly stops? moving
+
+# Monsters doing bad things
+more += A tree reaches out and hits you!
+more += Agitated ravens fly out from beneath the
+more += begins to recite a word of recall
+more += Being near the torpor snail leaves you feeling lethargic
+more += blows on a signal horn
+more += cast banishment
+more += cast paralyse
+more += cast Torment
+more += goes berserk
+more += is duplicated
+more += is no longer invulnerable
+more += Its appearance distorts for a moment
+more += Mara seems to draw the.*out of itself
+more += Mara shimmers
+more += Miasma billows from the
+more += shoots a curare
+more += stands defiantly in death's doorway
+more += steals.*your
+more += swoops through the air toward you
+more += The forest starts to sway and rumble
+more += The ghost moth stares at you
+more += The jumping spider pounces on you [^but]
+more += The octopode crusher throws you
+more += The shadow imp is revulsed by your support of nature
+more += The vault warden activates a sealing rune
+more += The water nymph flows with the water
+more += The.*offers itself to Yredelemnul
+more += The.*seems to speed up
+more += The.*shudders
+more += There is a horrible\, sudden wrenching feeling in your soul
+more += Vines fly forth from the trees!
+more += You are hit by a branch
+more += You feel you are being watched by something
+more += Your magical defenses are stripped away
 more += \'s.*reflects
+
+# Unexpected situations
+more += A magical barricade bars your way
+more += Done waiting
+more += doors? slams? shut
+more += It doesn't seem very happy
+more += Mutagenic energies flood into your body
+more += Some monsters swap places
+more += (starving|devoid of blood)
+more += (The|Your).*falls away!
+more += The divine light dispels your darkness!
+more += The walls disappear
+more += There is a sealed passage
+more += You are wearing\:
+more += You can now
 more += You cannot afford.*fee
+more += You feel (dopey|clumsy|weak)
+more += You feel a genetic drift
+more += You feel monstrous
+more += You feel your rage building
+more += You have disarmed
+more += You have finished your manual
+more += You have reached level
+more += You need to eat something NOW
+more += You smell decay. (^Yuck!)
+more += You stop (a|de)scending the stairs
+more += You turn into a fleshy mushroom
+more += Your body shudders with the violent release of wild energies
+more += Your guardian golem overheats
+more += your magic stops regenerating
+more += Your scales start
+more += your.*devoured
+more += Your?.*can no longer
+more += Green shoots are pushing up through the earth
+
+# Things getting better
+stop += contamination has completely
 more += You can move again
 more += You slip out of the net
 more += You.*and break free
-more += You feel your flesh rotting away
+more += Your fit of retching subsides
+
+# Ghouls
+: if you.race() == "Ghoul" then
+	stop += smell.*(rott(ing|en)|decay)
+	stop += something tasty in your inventory
+: end
+
+##################
+# Translocations #
+##################
+
+# Teleporting
+more += You blink
+more += You.*teleport [^f]
+more += You feel strangely (unstable|stable)
 more += You feel your translocation being delayed
-more += There is a sealed passage
-more += Something appears in a flash of light
-more += You feel your rage building
-more += You turn into a fleshy mushroom
-more += staircase.*moves
+more += Your surroundings flicker
+more += Your surroundings seem slightly different
+more += Your surroundings suddenly seem different
+# -Tele
+more += You cannot blink right now
+more += You cannot teleport right now
+more += You feel.*firmly anchored in space
+more += You are no longer firmly anchored in space
+# -cTele
+more += You feel your control is inadequate
 
-# Interrupts for Hell effects
-more += You will not leave this place
-more += Die\, mortal
-more += We do not forgive those who trespass against us
-more += Trespassers are not welcome here
-more += You do not belong in this place
-more += Leave now\, before it is too late
-more += We have you now
-more += You smell brimstone
-more += Brimstone rains from above
-more += You feel lost and a long\, long way from home
-more += You shiver with fear
-more += You feel a terrible foreboding
-more += Something frightening happens
-more += You sense an ancient evil watching you
-more += You suddenly feel all small and vulnerable
-more += You sense a hostile presence
-more += A gut-wrenching scream fills the air
-more += You hear words spoken in a strange and terrible language
-more += You hear diabolical laughter
+####################
+# Expiring Effects #
+####################
 
-# Interrupts for Expiring spell effects
-more += You feel yourself slow down
-more += You are starting to lose your buoyancy
-more += Your hearing returns
-more += Your transformation is almost over
-more += Your skin feels tender
-more += You have a feeling this form
-more += You feel yourself come back to life
+# God Abilities
+# Divine Shield (The Shining One)
+Your divine shield starts to fade.
+Your divine shield fades away.
+# Jelly Prayer (Jiyva)
+Your prayer is over.
+# Mirror Damage (Yredelemnul)
+more += dark mirror aura disappears
+
+# Player Spells
+# Aura of Abjuration
+stop += Your aura of abjuration expires
+# Control Teleport
+stop += you feel uncertain
+# Death's Door
 more += time is quickly running out
 more += life is in your own
+# Enslavement
 more += is no longer charmed
-more += Your shroud falls apart
+# Flight
+more += You are starting to lose your buoyancy
+stop += You lose control over your flight
+# Haste
 more += Your extra speed is starting to run out
+more += You feel yourself slow down
+# Invisibility
+more += You feel more conspicuous
+more += You flicker for a moment
+more += You flicker back
+# Ozocubu's Armour and Condensation Shield
+more += Your icy (shield|armour) evaporates
+more += Your.*(shield|armour) melts away
+# Phase Shift
+more += You feel closer to the material plane
 more += You are firmly grounded in the material plane once more
+# Repel/Deflect
+stop += missiles spell is about to expire
+more += You feel less protected from missiles
+# Shroud of Golubria
+stop += shroud begins to fray
+stop += shroud unravels
+more += Your shroud falls apart
+# Silence
+more += Your hearing returns
+# Swiftness
+stop += start to feel a little slower
+more += You feel sluggish
+# Transmutations
+more += Your transformation is almost over
+more += You have a feeling this form
+more += Your skin feels tender
+more += You feel yourself come back to life
+
+# Other
+# Potion of Resistance
+more += You start to feel less resistant.
+more += Your resistance to elements expires
+
+############
+# Religion #
+############
+
+# Gifts or abilities are ready
+# Dithmenos
+more += You are shrouded in an aura of darkness
+more += You now sometimes bleed smoke
+more += You.*no longer.*bleed smoke
+more += Your shadow no longer tangibly mimics your actions
+more += Your shadow now sometimes tangibly mimics your actions
+# Gozag
+more += will now duplicate a non-artefact item
+# Jiyva
+more += will now unseal the treasures of the Slime Pits
+# Kikubaaqudgha
+more += Kikubaaqudgha will now enhance your necromancy
+# Lugonu
+more += Lugonu will now corrupt your weapon
+# Qazlal
+more += resistances upon receiving elemental damage
+more += You are surrounded by a storm which can block enemy attacks
+# Ru
+more += you are ready to make a new sacrifice
+# Sif Muna
+more += Sif Muna is protecting you from the effects of miscast magic
+# The Shining One
+more += The Shining One will now bless
+# Zin
+more += will now cure all your mutations
+# You Screwed Up
+more += is no longer ready
+
+# Poor Decisions
+more += You really shouldn't be using
+
+# Wrath
+more += Nemelex gives you another card to finish dealing
+more += Fedhas invokes the elements against you
+more += Lugonu sends minions to punish you
+more += Okawaru sends forces against you
+more += wrath finds you
+
+# Xom Effects
+more += staircase.*moves
+
+# Other
+more += Jiyva alters your body
+: if you.god() == "Xom" then
+	more += god:
+: end
+
+: if not string.find(you.god(), "Jiyva") then
+  more += splits in two
+:end
+
+################
+# Hell Effects #
+################
+
+more += A gut-wrenching scream fills the air
+more += Brimstone rains from above
+more += Die\, mortal
+more += Leave now\, before it is too late
+more += Something frightening happens
+more += Trespassers are not welcome here
+more += We do not forgive those who trespass against us
+more += We have you now
+more += You do not belong in this place
+more += You feel a terrible foreboding
+more += You feel lost and a long\, long way from home
+more += You hear diabolical laughter
+more += You hear words spoken in a strange and terrible language
+more += You sense a hostile presence
+more += You sense an ancient evil watching you
+more += You shiver with fear
+more += You smell brimstone
+more += You suddenly feel all small and vulnerable
+more += You will not leave this place
+
+############
+# Monsters #
+############
+
+# Arriving Unexpectedly
+more += appears in a shower of sparks
+more += appears out of thin air
+more += comes (up|down) the stairs
+more += Something appears in a flash of light
+more += The.*is a mimic
+more += You sense the presence of something unfriendly
+more += The.*answers the.*call
+more += Wisps of shadow swirl around
+
+# Item Use
+more += drinks a potion
+more += evokes.*(amulet|ring)
+more += reads a scroll
+more += zaps a (wand|rod)
+
+# Terrible Monsters
+more += 's ghost.*(comes? into view|opens the)
+more += A player ghost.*(comes? into view|opens the)
+more += boggarts?.*(comes? into view|opens the)
+more += curse skull.*comes? into view
+more += fiend.*(comes? into view|opens the)
+more += flayed ghost.*(comes? into view|opens the)
+more += giant eyeball.*comes? into view
+more += giant orange brains?.*(comes? into view|opens the)
+more += giant spore.*comes? into view
+more += hellion.*(comes? into view|opens the)
+more += ironbrand convoker.*(comes? into view|opens the)
+more += Lich.*(comes? into view|opens the)
+more += orange crystal statue.*comes? into view
+more += shadow demons?.*(comes? into view|opens the)
+more += silver statue.*comes? into view
+more += tormentor.*(comes? into view|opens the)
 
 # Uniques
 more += 27-headed.*(comes? into view|opens the)
@@ -383,32 +523,3 @@ more += Urug.*(comes? into view|opens the)
 more += Vashnia.*(comes? into view|opens the)
 more += Wiglaf.*(comes? into view|opens the)
 more += Xtahua.*(comes? into view|opens the)
-
-# More dangerous monsters
-more += 's ghost.*(comes? into view|opens the)
-more += A player ghost.*(comes? into view|opens the)
-more += shadow demons?.*(comes? into view|opens the)
-more += boggarts?.*(comes? into view|opens the)
-more += giant orange brains?.*(comes? into view|opens the)
-
-# Others
-more += You have reached level
-more += Your scales start
-more += You can now
-more += You now sometimes bleed smoke
-more += You.*no longer.*bleed smoke
-more += Your shadow now sometimes tangibly mimics your actions
-more += Your shadow no longer tangibly mimics your actions
-more += Sif Muna is protecting you from the effects of miscast magic
-more += You can no longer
-more += Your.*can no longer
-more += The rod doesn't have enough magic points
-more += You feel monstrous
-more += Jiyva alters your body
-: if you.god() == "Xom" then
-	more += god:
-: end
-
-: if not string.find(you.god(), "Jiyva") then
-  more += splits in two
-:end

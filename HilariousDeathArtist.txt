@@ -369,12 +369,6 @@ ignore := runrest_ignore_message
 
 ignore += You regained.*mp
 
-# Jiyva Messages
-ignore += Jiyva appreciates your sacrifice
-ignore += Jiyva gurgles merrily
-ignore += Jiyva says: Divide and consume
-ignore += You hear.*splatter
-
 # Annoyances  -- Don't stop autotravel for these events
 ignore += A.*toadstool withers and dies
 ignore += disappears in a puff of smoke
@@ -387,12 +381,17 @@ ignore += standing in the rain
 ignore += toadstools? grow
 ignore += You feel.*sick
 ignore += You walk carefully through the
+# Jiyva Messages
+ignore += Jiyva appreciates your sacrifice
+ignore += Jiyva gurgles merrily
+ignore += Jiyva says: Divide and consume
+ignore += You hear.*splatter
 # Qazlal
 ignore += The plant is engulfed
 ignore += You destroy the (bush|fungus|plant)
 ignore += You displace your
 
-# Bad things -- Stop autotravel for these events
+# Bad things -- Stop autotravel for these events (duplicates some of HDAForceMore)
 stop += (blundered into a|invokes the power of) Zot
 stop += (devoid of blood|starving)
 stop += A huge blade swings out and slices into you[^r]
@@ -406,38 +405,42 @@ stop += Wait a moment
 stop += wrath finds you
 stop += You fall through a shaft
 
-# Expiring effects -- Stop autotravel for spells beginning to expire (to allow recasts)
+# Expiring spells effects -- Stop to allow recasts (duplicates some of HDAForceMore)
 # Control Teleport
-stop += uncertain
-# Deaths Door
-stop += time is quickly running out
-stop += life is in your own
+stop += you feel uncertain
+# Death's Door
+more += time is quickly running out
+more += life is in your own
 # Enslavement
-stop += is no longer charmed
+more += is no longer charmed
 # Flight
-stop += You are starting to lose your buoyancy
+more += You are starting to lose your buoyancy
 stop += You lose control over your flight
 # Haste
-stop += You feel yourself slow down
-# Necromutation
-stop += Your transformation is almost over
-stop += You have a feeling this form
-stop += You feel yourself come back to life
+more += You feel yourself slow down
+# Phase Shift
+more += You feel closer to the material plane
 # Repel/Deflect
 stop += missiles spell is about to expire
-# Shroud
+# Shroud of Golubria
 stop += shroud begins to fray
 stop += shroud unravels
+more += Your shroud falls apart
 # Swiftness
 stop += start to feel a little slower
+# Transmutations
+more += Your transformation is almost over
+more += You have a feeling this form
+more += Your skin feels tender
+more += You feel yourself come back to life
 
-# Ghouls
+# Ghouls (Not part of HDAForceMore)
 : if you.race() == "Ghoul" then
 	stop += smell.*(rott(ing|en)|decay)
 	stop += something tasty in your inventory
 : end
 
-# Good things - Bad things wearing off
+# Good things - Bad things wearing off (Duplicates some of HDAForceMore)
 stop += contamination has completely
 stop += You are no longer firmly anchored in space
 
