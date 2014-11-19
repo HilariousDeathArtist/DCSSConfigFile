@@ -408,6 +408,7 @@ msc ^= $danger:Your.*is no longer beserk
 msc += $danger:You swing wildly
 msc += $danger:You lose your focus
 msc += $danger:You feel threatened and lose the ability
+msc += $danger:is too large for the net to hold
 msc ^= $danger:Your.*looks rather confused
 
 # Item Destruction, gaining bad mutations, or losing good ones, penance, and gong
@@ -487,6 +488,7 @@ msc += $item_dmg:Your vision seems duller
 msc += $item_dmg:You feel less energetic
 
 #msc += $warning:
+msc ^= $warning:Creating passages of Golubria requires sufficient empty space
 msc += $warning:You yowl
 msc += $warning:You scream at
 msc += $warning:is no longer distracted by gold
@@ -2346,6 +2348,7 @@ msc += $takesaction:great orb of eyes gazes at
 msc += $takesaction:You radiate an aura of cold
 
 #msc += $godaction:
+msc += $godaction:You reveal the great annihilating truth to your foes
 msc ^= $godaction:Dithmenos does not appreciate your starting fires
 msc += $godaction:Beogh throws an implement of electrocution at you
 msc += $godaction:Beogh throws implements of electrocution at you

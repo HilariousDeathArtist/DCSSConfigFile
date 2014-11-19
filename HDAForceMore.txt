@@ -369,6 +369,7 @@ more += wrath finds you
 
 # Xom Effects
 more += staircase.*moves
+more += is too large for the net to hold
 
 # Other
 more += Jiyva alters your body
