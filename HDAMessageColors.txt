@@ -2,11 +2,11 @@
 # Message coloring #
 ####################
 
-# black, blue, green, cyan, red, magenta, brown, lightgrey,
-# darkgrey, lightblue, lightgreen, lightcyan, lightred,
-# lightmagenta, yellow, white
+# Standard Colors
+# black, blue, brown, cyan, darkgrey, green, lightblue, lightcyan, lightgreen,
+# lightgrey, lightmagenta, lightred, magenta, red, yellow, white
 
-# Standard colours to be used for message highlighting
+# Variables for message highlighting
 $danger   := lightred
 $item_dmg := red
 $warning  := yellow
@@ -412,7 +412,6 @@ msc += $danger:is too large for the net to hold
 msc ^= $danger:Your.*looks rather confused
 
 # Item Destruction, gaining bad mutations, or losing good ones, penance, and gong
-#msc += $item_dmg:
 msc += $item_dmg:Your teeth shrink to normal size
 msc += $item_dmg:Your.*scales disappear
 msc += $item_dmg:You feel a strong urge to yell
@@ -487,7 +486,7 @@ msc += $item_dmg:You no longer feel resistant to poison
 msc += $item_dmg:Your vision seems duller
 msc += $item_dmg:You feel less energetic
 
-#msc += $warning:
+# Warning Messages
 msc ^= $warning:Creating passages of Golubria requires sufficient empty space
 msc += $warning:You yowl
 msc += $warning:You scream at
@@ -1012,7 +1011,7 @@ msc += $warning:Your divine protection wanes
 msc += $warning:The sheep \"Baaaas\" balefully
 msc += $warning:is blown backwards by the freezing wind
 
-#msc += $boring:
+# Boring Messages
 msc += $boring:Your tentacles glow momentarily
 msc += $boring:You feel a little dazed
 msc += $boring:You feel mildly nauseous
@@ -1514,7 +1513,6 @@ msc += $good:Space warps around
 msc ^= $good:statue shatters
 
 # Non-damage combat messages
-#msc += $positive:
 msc += $positive:You pounce on
 msc += $positive:but is stunned by your will
 msc += $positive:by your wave of power
@@ -1880,8 +1878,7 @@ msc += $verypositive:Your demonic ancestry asserts itself
 msc += $verypositive:You feel (agile|clever|stronger)
 msc += $verypositive:You feel more protected from negative energy
 
-#Positive mutation - or losing bad ones
-#msc += $awesome:
+#Gaining positive mutations, or losing bad ones
 msc += $awesome:You feel more jittery
 msc += $awesome:You feel more resistant to cold
 msc += $awesome:Your fur grows into a thick mane
@@ -2105,7 +2102,6 @@ msc ^= $awesome:Your.*glows (green|purple|red|.*yellow)
 msc += $awesome:briefly pass through it before
 
 # You or an ally takes damage
-#msc += $negative:
 msc += $negative:you trip and fall down the stairs
 msc += $negative:You are engulfed in blessed fire
 msc += $negative:The fountain mimic splashes you
@@ -2232,8 +2228,7 @@ msc += $negative:The wandering mushroom releases spores at your?
 msc += $danger:completely resists
 msc += $warning:resists
 
-# For the text that describes ranged attacks and spells
-#msc += $takesaction:
+# Text describing ranged attacks and spells
 msc += $takesaction:chants a haunting song
 msc += $takesaction:You release an incredible blast of power in all directions
 msc += $takesaction:calls upon its god to speed up
@@ -2347,7 +2342,7 @@ msc += $takesaction:summons
 msc += $takesaction:great orb of eyes gazes at
 msc += $takesaction:You radiate an aura of cold
 
-#msc += $godaction:
+# Gods performing actions
 msc += $godaction:You reveal the great annihilating truth to your foes
 msc ^= $godaction:Dithmenos does not appreciate your starting fires
 msc += $godaction:Beogh throws an implement of electrocution at you
@@ -2453,7 +2448,6 @@ msc += boring:You feel mildly nauseous
 msc += boring:Multicoloured lights dance around
 
 # Interface Messages - These shouldn't take any turns
-#msc += $interface:
 msc += $interface:You cannot read scrolls
 msc += $interface:You cannot drink potions
 msc += $interface:too exhausted to
@@ -2586,7 +2580,6 @@ msc += $interface:Created macro
 msc += $interface:Saving macro
 
 # Muted - unnecessary
-#msc += mute:
 msc += mute:The (bush|fungus|plant) is engulfed
 msc += mute:The (bush|fungus|plant) is struck by lightning
 msc += mute:Cast which spell

@@ -7,7 +7,7 @@ menu := menu_colour
 # Clear defaults
 menu =
 
-# Variables
+# Variables for item colouring
 $decent := white
 $mp := lightcyan
 $interface := cyan
@@ -21,7 +21,7 @@ $good := lightblue
 $verypositive := lightgreen
 $awesome := lightmagenta
 
-# General
+# General Categories
 menu += $boring:(melded)
 menu += $boring:.*useless_item.*
 menu += $item_dmg:.*evil_item.*
@@ -33,6 +33,7 @@ menu += $negative:shield of the gong
 menu += $danger:.*artefact.* cursed
 menu += $awesome:manual
 
+# Unidentified Items
 menu += $warning:^unidentified .*(jewellery|potion|scroll|wand).*
 menu += $good:^unidentified .*weapon.*(runed|glowing)
 menu += $good:^unidentified .*armour.*(runed|glowing|embroidered)
@@ -41,7 +42,7 @@ menu += $good:^unidentified .*armour.*(shiny|dyed)
 # Staves
 menu += $mp:staff of energy
 menu += $positive:[^r]staff of
-# rod
+# Rods
 menu += $verypositive:rod
 
 # Wands
