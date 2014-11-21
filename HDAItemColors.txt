@@ -1,69 +1,114 @@
-##################
-# Item colouring #
-##################
+#########################
+# Aliases and Variables #
+#########################
 
 # Set Alias
 menu := menu_colour
 # Clear defaults
 menu =
 
-# Variables for item colouring
-$decent := white
-$mp := lightcyan
-$interface := cyan
+# Variables (Worst to Best)
+$evil := red
+$negative := brown
 $danger := lightred
-$item_dmg := red
 $warning := yellow
 $boring := darkgrey
-$negative := brown
-$positive := green
+$decent := white
 $good := lightblue
+$positive := green
 $verypositive := lightgreen
 $awesome := lightmagenta
+
+# Unusual Variables
+$mp := lightcyan
+$equipped := cyan
+$mutation := magenta
+
+##################
+# Basic Settings #
+##################
 
 # General Categories
 menu += $boring:(melded)
 menu += $boring:.*useless_item.*
-menu += $item_dmg:.*evil_item.*
+menu += $evil:.*evil_item.*
 menu += $danger:[^n]cursed
 menu += inventory:$danger:[^n]cursed
-menu += inventory:$interface:.*equipped.*
+menu += inventory:$equipped:.*equipped.*
 menu += $decent:.*artefact.*
-menu += $negative:shield of the gong
-menu += $danger:.*artefact.* cursed
-menu += $awesome:manual
 
 # Unidentified Items
 menu += $warning:^unidentified .*(jewellery|potion|scroll|wand).*
-menu += $good:^unidentified .*weapon.*(runed|glowing)
-menu += $good:^unidentified .*armour.*(runed|glowing|embroidered)
-menu += $good:^unidentified .*armour.*(shiny|dyed)
+menu += $good:^unidentified .*armour.*(embroidered|dyed|glowing|shiny|runed)
+menu += $good:^unidentified .*weapon.*(glowing|runed)
 
-# Staves
-menu += $mp:staff of energy
-menu += $positive:[^r]staff of
-# Rods
-menu += $verypositive:rod
+#################
+# Various Items #
+#################
 
-# Wands
-menu += $boring:wand of (flame|frost|magic darts|random effects)
-menu += $decent:wand of (confusion|enslavement|paralysis|polymorph|slowing)
-menu += $good:wand of (cold|digging|disintegration|draining)
-menu += $good:wand of (fire|fireball|invisibility|lightning)
-menu += $positive:wand of hasting
-menu += $verypositive:wand of heal wounds
-menu += $awesome:wand of teleportation
+# Amulets
+menu += $boring:amulet of inaccuracy
+menu += $good:amulet of (guardian spirit|stasis|warding)
+menu += $positive:amulet of (faith|rage|resist corrosion)
+menu += $verypositive:amulet of (clarity|regeneration|resist mutation|the gourmand)
+
+# Decks (keep warning as default in case of new decks)
+menu += $evil:deck of punishments
+menu += $warning:deck of (changes|destruction)
+menu += $decent:deck of cards
+menu += $good:deck of war
+menu += $positive:deck of (defence|summoning)
+menu += $verypositive:deck of escape
+menu += $awesome:deck of wonders
+menu += $warning:deck of 
+
+# Evokables
+menu += blue:inert
+menu += $warning:disc of storms
+menu += $warning:tome of Destruction
+menu += $decent:box of beasts
+menu += $decent:lantern of shadows
+menu += $decent:stone of tremors
+menu += $good:fan of gales
+menu += $good:lamp of fire
+menu += $good:phial of floods
+menu += $good:sack of spiders
+menu += $positive:phantom mirror
+menu += $mp:crystal ball of energy
 
 # Food
-menu += $danger:evil_eating
+menu += $evil:evil_eating
 menu += $danger:rot-inducing
-menu += magenta:mutagenic
 menu += $warning:poisonous
 menu += $boring:inedible
-menu += $good:meat ration
 menu += $good:bread ration
+menu += $good:meat ration
 menu += $good:preferred
 menu += $good:(corpse|chunk)
+menu += $mutation:mutagenic
+
+# Potions
+menu += $danger:potions? of berserk
+menu += $decent:potions? of (flight|lignification|restore)
+menu += $good:potions? of (agility|brilliance|cancellation|invisibility|might|resistance)
+menu += $positive:potions? of curing
+menu += $verypositive:potions? of (haste|heal wounds)
+menu += $awesome:potions? of (beneficial|cure mutation|experience|gain)
+menu += $mp:potions? of magic
+menu += $mutation:potions? of mutation
+
+# Rings
+menu += $negative:ring of \-.*(dexterity|evasion|intelligence|protection|slaying|strength)
+menu += $negative:ring of loudness
+menu += $warning:ring of (fire|ice)
+menu += $decent:ring of flight
+menu += $good:ring of (.*evasion|invisibility|magical power|.*protection|stealth|sustain abilities|wizardry)
+menu += $positive:ring of (poison resistance|protection from cold|protection from fire|protection from magic|see invisible)
+menu += $verypositive:ring of (regeneration|.*slaying)
+menu += $awesome:ring of teleport
+
+# Rods
+menu += $verypositive:rod
 
 # Scrolls
 menu += $danger:scrolls? of torment
@@ -74,55 +119,22 @@ menu += $positive:scrolls? of (brand|enchant|magic mapping|recharging)
 menu += $verypositive:scrolls? of acquirement
 menu += $awesome:scrolls? of (blinking|teleportation)
 
-# Potions
-menu += $danger:potions? of berserk
-menu += magenta:potions? of mutation
-menu += $decent:potions? of (flight|lignification|restore)
-menu += $good:potions? of (agility|brilliance|cancellation|invisibility|might|resistance)
-menu += $positive:potions? of curing
-menu += $mp:potions? of magic
-menu += $verypositive:potions? of (haste|heal wounds)
-menu += $awesome:potions? of (beneficial|cure mutation|experience|gain)
+# Staves
+menu += $mp:staff of (energy|Wucad Mu)
+menu += $positive:[^r]staff of
 
-# Amulets
-menu += $boring:amulet of inaccuracy
-menu += $good:amulet of (guardian spirit|stasis|warding)
-menu += $positive:amulet of (faith|rage|resist corrosion)
-menu += $verypositive:amulet of (clarity|conservation)
-menu += $verypositive:amulet of (resist mutation|the gourmand)
+# Wands
+menu += $boring:wand of (flame|frost|magic darts|random effects)
+menu += $decent:wand of (confusion|enslavement|paralysis|polymorph|slowing)
+menu += $good:wand of (cold|digging|disintegration|draining)
+menu += $good:wand of (fire|fireball|invisibility|lightning)
+menu += $positive:wand of hasting
+menu += $verypositive:wand of heal wounds
+menu += $awesome:wand of teleportation
 
-# Rings
-menu += $negative:ring of loudness
-menu += $negative:ring of \-.*(dexterity|evasion|intelligence|protection|slaying|strength)
-menu += $warning:ring of (fire|ice)
-menu += $decent:ring of flight
-menu += $verypositive:ring of (regeneration|.*slaying)
-menu += $positive:ring of (poison resistance|protection from cold|protection from fire|protection from magic|see invisible)
-menu += $good:ring of (.*evasion|.*protection|invisibility|magical power|stealth|sustain abilities|wizardry)
-menu += $awesome:ring of teleport
-
-# Misc items
-menu += $warning:tome of Destruction
+# Other
+menu += $negative:shield of the gong
+menu += $good:throwing net
 menu += $awesome:.*misc.*rune( of Zot)?
 menu += $awesome:.*orb.*Zot
-menu += blue:inert
-menu += $good:fan of gales
-menu += $good:lamp of fire
-menu += $good:phial of floods
-menu += $good:sack of spiders
-menu += $good:throwing net
-menu += $decent:box of beasts
-menu += $decent:lantern of shadows
-menu += $decent:stone of tremors
-menu += $warning:disc of storms
-menu += $mp:crystal ball of energy
-menu += $mp:Staff of Wucad Mu
-
-# Deck colouring
-menu += $awesome:deck of wonders
-menu += $verypositive:deck of escape
-menu += $positive:deck of summoning
-menu += $danger:deck of destruction
-menu += $warning:deck of (dungeon|changes)
-menu += $decent:deck of cards
-menu += $good:deck of 
+menu += $awesome:manual
