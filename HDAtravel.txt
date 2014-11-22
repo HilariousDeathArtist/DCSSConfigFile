@@ -66,7 +66,8 @@ autoinscribe += staff of energy:@w1
 :   local vamp_weapon = is_weapon("vamp") and not chunks_are_equipped
 :   local have_a_weapon = weapon_in_inventory()
 :   local gourmand_and_hungry = you_are_gourmand() and not (you_are_very_full() or you_are_engorged())
-:   local want_to_eat = (you_are_hungry() or gourmand_and_hungry) and not you_do_not_eat
+:   local ghoul_missing_hp = not you_are_not_ghoul() and ((hp < (max_hp - 5)) or you.rot() > 0)
+:   local want_to_eat = (you_are_hungry() or gourmand_and_hungry or ghoul_missing_hp) and not you_do_not_eat
 :   local have_spare_chunks = not have_no_chunks and not you_are_hungry()
 :   local you_have_staff_of_energy = is_in_inventory("staff of energy")
 :   local staff_of_energy_is_equipped = is_weapon("staff of energy")
@@ -84,19 +85,19 @@ autoinscribe += staff of energy:@w1
 :   local should_sublimate = (not you_are_good) and ((mp/max_mp) < 0.60) and you_know_sublimation and mp>2 and ((hp/max_hp) > 0.95)
 :   local should_animate_skeleton = (not you_are_good) and you_know_animate_skeleton and mp>1 and (not can_not_animate())
 :   local should_animate_dead = (not you_are_good) and you_know_animate_dead and mp>4 and (not can_not_animate())
-:   local you_want_spare_chunks = (not have_spare_chunks) and (can_cast_regen or you_have_staff_of_energy or (you_are_sif and not you_are_mummy))
-:   local you_want_chunks = not you_are_hungerless and (not have_edible_chunks()) and (want_to_eat or you_want_spare_chunks)
+:   local you_want_spare_chunks = (not have_spare_chunks) and ((can_cast_regen or you_have_staff_of_energy or you_are_sif) and not you_do_not_eat)
+:   local you_want_chunks = (not you_are_hungerless and (not have_edible_chunks()) and (want_to_eat or you_want_spare_chunks)) or not you_are_not_ghoul()
 :   --crawl.mpr(string.format("you.piety_rank() is: %s", you.piety_rank()))
 :   --crawl.mpr(string.format("want_to_eat is: %s", want_to_eat and "True" or "False"))
 :   --crawl.mpr(string.format("have_edible_chunks is: %s", have_edible_chunks() and "True" or "False"))
 :   --crawl.mpr(string.format("should_animate_skeleton is: %s", should_animate_skeleton and "True" or "False"))
 :   --crawl.mpr(string.format("have_spare_chunks is: %s", have_spare_chunks and "True" or "False"))
 :   --crawl.mpr(string.format("can_cast_regen is: %s", can_cast_regen and "True" or "False"))
-:   --crawl.mpr(string.format("you_know_sublimation is: %s", you_know_sublimation and "True" or "False"))
-:   --crawl.mpr(string.format("you_know_simulacrum is: %s", you_know_simulacrum and "True" or "False"))
-:   --crawl.mpr(string.format("you_have_staff_of_energy is: %s", you_know_simulacrum and "True" or "False"))
+:   --crawl.mpr(string.format("you_are_not_ghoul is: %s", you_are_not_ghoul and "True" or "False"))
+:   --crawl.mpr(string.format("you_want_spare_chunks is: %s", you_want_spare_chunks and "True" or "False"))
+:   --crawl.mpr(string.format("you_are_hungerless is: %s", you_are_hungerless and "True" or "False"))
 :   --crawl.mpr(string.format("have_no_chunks is: %s", have_no_chunks and "True" or "False"))
-:   --crawl.mpr(string.format("you_are_hungry is: %s", you_are_hungry() and "True" or "False"))
+:   --crawl.mpr(string.format("you_want_chunks is: %s", you_want_chunks and "True" or "False"))
 :   if (is_safe) then
 :     if you_are_barbed then
 :       rest()
@@ -255,7 +256,7 @@ autoinscribe += staff of energy:@w1
   end
 
   function already_animated()
-    return string.find(crawl.messages(10), escape("Autocasting Animate Dead"))
+    return string.find(crawl.messages(20), escape("Autocasting Animate Dead"))
   end
 
   function removed_barbs()
@@ -323,7 +324,7 @@ autoinscribe += staff of energy:@w1
       --if string.find(it.name(), "chunk") then
         --crawl.mpr(it.name() .." is edible: " .. (food.can_eat(it) and "True" or "False") .. " and dangerous: " .. (food.dangerous(it) and "True" or "False"))
       --end
-      if string.find(it.name(), "chunk") and food.can_eat(it) and not food.dangerous(it) then
+      if string.find(it.name(), "chunk") and (not string.find(it.name(), "book")) and food.can_eat(it) and not food.dangerous(it) then
         return true
       end
     end
