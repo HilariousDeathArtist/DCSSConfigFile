@@ -77,11 +77,11 @@ menu += $awesome:scrolls? of (blinking|teleportation)
 menu += $danger:potions? of berserk
 menu += magenta:potions? of mutation
 menu += $decent:potions? of (flight|lignification|restore)
-menu += $good:potions? of (agility|brilliance|cancellation|invisibility|might|resistance)
+menu += $good:potions? of (agility|brilliance|invisibility|might|resistance)
 menu += $positive:potions? of curing
 menu += $mp:potions? of magic
 menu += $verypositive:potions? of (haste|heal wounds)
-menu += $awesome:potions? of (beneficial|cure mutation|experience|gain)
+menu += $awesome:potions? of (beneficial|cure mutation|experience|gain|cancellation)
 
 # Amulets
 menu += $boring:amulet of inaccuracy
