@@ -90,10 +90,10 @@ menu += $mutation:mutagenic
 # Potions
 menu += $danger:potions? of berserk
 menu += $decent:potions? of (flight|lignification|restore)
-menu += $good:potions? of (agility|brilliance|cancellation|invisibility|might|resistance)
+menu += $good:potions? of (agility|brilliance|invisibility|might|resistance)
 menu += $positive:potions? of curing
 menu += $verypositive:potions? of (haste|heal wounds)
-menu += $awesome:potions? of (beneficial|cure mutation|experience|gain)
+menu += $awesome:potions? of (beneficial|cure mutation|experience|gain|cancellation)
 menu += $mp:potions? of magic
 menu += $mutation:potions? of mutation
 
