@@ -207,9 +207,11 @@ add_autopickup_func(function(it, name)
         if lb > 8 then
           if name:find("demon blade") then return true end
           if name:find("bastard sword") then return true end
+          if name:find("double sword") then return true end
         end
         if lb > 14 then
           if name:find("claymore") then return true end
+          if name:find("triple sword") then return true end
         end
         if axe > 8 then
           if name:find("battleaxe") then return true end
