@@ -526,6 +526,8 @@ ai += gold dragon (armour|hide):rC+, rF+, rPois
 ai += ice dragon (armour|hide):rC++, rF-
 ai += mottled dragon (armour|hide):rSticky
 ai += pearl dragon (armour|hide):rN+
+ai += quicksilver dragon armour:MR+
+ai += shadow dragon (armour|hide):Stlth++++
 ai += steam dragon (armour|hide):rSteam
 ai += storm dragon (armour|hide):rElec
 ai += swamp dragon (armour|hide):rPois
@@ -569,6 +571,7 @@ ai += amulet of clarity:Clar, !d
 ai += amulet of faith:Faith, !P
 ai += amulet of guardian spirit:Spirit
 ai += amulet of rage:+Rage, !d
+ai += amulet of regeneration:+regen, !d
 ai += amulet of resist corrosion:rCorr, !d
 ai += amulet of resist mutation:rMut, !d
 ai += amulet of stasis:Stasis, !d
@@ -587,13 +590,14 @@ ai += ring of positive energy:rN+
 ai += ring of protection from cold:rC+, !d
 ai += ring of protection from fire:rF+, !d
 ai += ring of protection from magic:MR+, !d
-ai += ring of regeneration:regen, !d
 ai += ring of see invisible:sInv, !d
 ai += ring of stealth:Stlth+
 ai += ring of sustain abilities:SustAb
 ai += ring of teleport control:cTele, !d
 ai += ring of teleportation:+/*tele, !d
 ai += ring of wizardry:Wiz+, !d
+# Obsolete in 0.16
+ai += ring of regeneration:regen, !d
 
 # Staves
 ai += staff of air:rElec
