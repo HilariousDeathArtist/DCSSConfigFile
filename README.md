@@ -15,7 +15,7 @@ This will ensure you get updates regularly without having to check back.
 
 The other option is to make a branch and then copy and paste the whole thing (including any changes you want) into your config file.
 
-I recommend reading through HilariousDeathArtist.txt at least once, and trying to get an understanding of the various sections.
+I recommend reading through HilariousDeathArtist.txt at least once, to better understand the various sections. If you want to know how a specific option works, the official documentation is at https://gitorious.org/crawl/crawl/blobs/master/crawl-ref/docs/options_guide.txt
 
 You can include individual features by including specific files:
 
