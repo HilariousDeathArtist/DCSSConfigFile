@@ -1,2 +1,2 @@
-include += HDAMessageColors.rc
 include += HDAItemColors.rc
+include += HDAMessageColors.rc

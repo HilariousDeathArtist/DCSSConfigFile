@@ -59,15 +59,16 @@ autoinscribe += staff of energy:@w1
 :   local dragonform = string.find(you.transform(), "dragon")
 :   local melded_weapon = (bladehands or dragonform)
 :   local you_are_regen = you.regenerating()
-:   local you_know_sublimation = known_spells["Sublimation of Blood"] and (you.skill("Necromancy") >= 5)
-:   local you_know_animate_skeleton = known_spells["Animate Skeleton"]
-:   local you_know_animate_dead = known_spells["Animate Dead"]
+:   local you_know_sublimation = known_spells["Sublimation of Blood"] and (spells.fail("Sublimation of Blood") < 20) and (mp>3)
+:   local you_know_animate_skeleton = known_spells["Animate Skeleton"] and (spells.fail("Animate Skeleton") < 20) and (mp>1)
+:   local you_know_animate_dead = known_spells["Animate Dead"] and (spells.fail("Animate Dead") < 20) and (mp>4)
 :   local chunks_are_equipped = is_weapon("chunk")
 :   local distort_weapon = is_weapon("distort")
 :   local vamp_weapon = is_weapon("vamp") and not chunks_are_equipped
 :   local have_a_weapon = weapon_in_inventory()
 :   local gourmand_and_hungry = you_are_gourmand() and not (you_are_very_full() or you_are_engorged())
-:   local want_to_eat = (you_are_hungry() or gourmand_and_hungry) and not you_do_not_eat
+:   local ghoul_missing_hp = not you_are_not_ghoul() and ((hp < (max_hp - 5)) or you.rot() > 0)
+:   local want_to_eat = (you_are_hungry() or gourmand_and_hungry or ghoul_missing_hp) and not you_do_not_eat
 :   local have_spare_chunks = not have_no_chunks and not you_are_hungry()
 :   local you_have_staff_of_energy = is_in_inventory("staff of energy")
 :   local staff_of_energy_is_equipped = is_weapon("staff of energy")
@@ -77,7 +78,7 @@ autoinscribe += staff of energy:@w1
 :   local you_are_hungerless = you_are_mummy or lichform
 :   local no_food_issues = (you_are_hungerless or have_spare_chunks)
 :   local should_channel_mp = ((max_mp - mp) > 5) and no_food_issues
-:   local can_cast_regen = known_spells["Regeneration"] and (mp>3)
+:   local can_cast_regen = known_spells["Regeneration"] and (mp>3) and (spells.fail("Regeneration") < 20)
 :   local you_have_regen_ring = is_in_inventory("regeneration")
 :   local regen_ring_letter = find_item_letter("regeneration")
 :   local regen_ring_is_equipped = is_ring("regeneration")
@@ -93,11 +94,11 @@ autoinscribe += staff of energy:@w1
 :   --crawl.mpr(string.format("should_animate_skeleton is: %s", should_animate_skeleton and "True" or "False"))
 :   --crawl.mpr(string.format("have_spare_chunks is: %s", have_spare_chunks and "True" or "False"))
 :   --crawl.mpr(string.format("can_cast_regen is: %s", can_cast_regen and "True" or "False"))
-:   --crawl.mpr(string.format("you_know_sublimation is: %s", you_know_sublimation and "True" or "False"))
-:   --crawl.mpr(string.format("you_know_simulacrum is: %s", you_know_simulacrum and "True" or "False"))
-:   --crawl.mpr(string.format("you_have_staff_of_energy is: %s", you_know_simulacrum and "True" or "False"))
+:   --crawl.mpr(string.format("you_are_not_ghoul is: %s", you_are_not_ghoul and "True" or "False"))
+:   --crawl.mpr(string.format("you_want_spare_chunks is: %s", you_want_spare_chunks and "True" or "False"))
+:   --crawl.mpr(string.format("you_are_hungerless is: %s", you_are_hungerless and "True" or "False"))
 :   --crawl.mpr(string.format("have_no_chunks is: %s", have_no_chunks and "True" or "False"))
-:   --crawl.mpr(string.format("you_are_hungry is: %s", you_are_hungry() and "True" or "False"))
+:   --crawl.mpr(string.format("you_want_chunks is: %s", you_want_chunks and "True" or "False"))
 :   if (is_safe) then
 :     if you_are_barbed then
 :       rest()
@@ -256,7 +257,7 @@ autoinscribe += staff of energy:@w1
   end
 
   function already_animated()
-    return string.find(crawl.messages(10), escape("Autocasting Animate Dead"))
+    return string.find(crawl.messages(20), escape("Autocasting Animate Dead"))
   end
 
   function removed_barbs()
@@ -328,7 +329,7 @@ autoinscribe += staff of energy:@w1
       --if string.find(it.name(), "chunk") then
         --crawl.mpr(it.name() .." is edible: " .. (food.can_eat(it) and "True" or "False") .. " and dangerous: " .. (food.dangerous(it) and "True" or "False"))
       --end
-      if string.find(it.name(), "chunk") and food.can_eat(it) and not food.dangerous(it) then
+      if string.find(it.name(), "chunk") and (not string.find(it.name(), "book")) and food.can_eat(it) and not food.dangerous(it) then
         return true
       end
     end

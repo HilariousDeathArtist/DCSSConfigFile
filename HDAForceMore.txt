@@ -168,6 +168,7 @@ more += cast banishment
 more += cast paralyse
 more += cast Torment
 more += goes berserk
+more += The moth of wrath goads something on
 more += is duplicated
 more += is no longer invulnerable
 more += Its appearance distorts for a moment
