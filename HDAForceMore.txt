@@ -104,7 +104,7 @@ more += Your body armour is too heavy
 #############################
 
 # Bad things happening to you
-more += acid corrodes your equipment
+more += corrodes your equipment
 more += are blown away by the wind
 more += dispelling energy hits you
 more += infuriates you
@@ -179,11 +179,9 @@ more += stands defiantly in death's doorway
 more += steals.*your
 more += swoops through the air toward you
 more += The forest starts to sway and rumble
-more += The ghost moth stares at you
 more += The jumping spider pounces on you [^but]
 more += The octopode crusher throws you
 more += The shadow imp is revulsed by your support of nature
-more += The vault warden activates a sealing rune
 more += The water nymph flows with the water
 more += The.*offers itself to Yredelemnul
 more += The.*seems to speed up
