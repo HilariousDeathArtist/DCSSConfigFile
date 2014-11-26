@@ -51,8 +51,9 @@ autoinscribe += staff of energy:@w1
 :   local sacrifice_god = you_worship_sacrifice_god()
 :   local you_are_mummy = string.find(you.race(), "Mummy")
 :   local you_are_vampire = string.find(you.race(), "Vampire")
+:	local you_are_bloodless = you.hunger_name() == "bloodless"
 :   local can_bottle_blood = you_are_vampire and (you.xl() >= 6)
-:   local you_do_not_eat = string.find(you.race(), "Spriggan") or you_are_mummy
+:   local you_do_not_eat = string.find(you.race(), "Spriggan") or you_are_mummy or you_are_vampire
 :   local lichform = string.find(you.transform(), "lich")
 :   local bladehands = string.find(you.transform(), "blade")
 :   local dragonform = string.find(you.transform(), "dragon")
@@ -81,12 +82,12 @@ autoinscribe += staff of energy:@w1
 :   local you_have_regen_ring = is_in_inventory("regeneration")
 :   local regen_ring_letter = find_item_letter("regeneration")
 :   local regen_ring_is_equipped = is_ring("regeneration")
-:   local should_regen_hp = (not you_are_good) and ((hp/max_hp) < 0.80) and (not you_are_regen) and (you_have_regen_ring or can_cast_regen)
+:   local should_regen_hp = (not you_are_good) and ((hp/max_hp) < 0.80) and (not you_are_regen) and (you_have_regen_ring or can_cast_regen) and not you_are_bloodless
 :   local should_sublimate = (not you_are_good) and ((mp/max_mp) < 0.60) and you_know_sublimation and mp>2 and ((hp/max_hp) > 0.95)
 :   local should_animate_skeleton = (not you_are_good) and you_know_animate_skeleton and mp>1 and (not can_not_animate())
 :   local should_animate_dead = (not you_are_good) and you_know_animate_dead and mp>4 and (not can_not_animate())
-:   local you_want_spare_chunks = (not have_spare_chunks) and ((can_cast_regen or you_have_staff_of_energy or you_are_sif) and not you_do_not_eat)
-:   local you_want_chunks = (not you_are_hungerless and (not have_edible_chunks()) and (want_to_eat or you_want_spare_chunks)) or not you_are_not_ghoul()
+:   local you_want_spare_chunks = (not (have_spare_chunks or you_do_not_eat)) and (can_cast_regen or you_have_staff_of_energy or you_are_sif)
+:   local you_want_chunks = (not you_are_not_ghoul()) or (not you_are_hungerless and (not have_edible_chunks()) and (want_to_eat or you_want_spare_chunks))
 :   --crawl.mpr(string.format("you.piety_rank() is: %s", you.piety_rank()))
 :   --crawl.mpr(string.format("want_to_eat is: %s", want_to_eat and "True" or "False"))
 :   --crawl.mpr(string.format("have_edible_chunks is: %s", have_edible_chunks() and "True" or "False"))
@@ -101,7 +102,7 @@ autoinscribe += staff of energy:@w1
 :   if (is_safe) then
 :     if you_are_barbed then
 :       rest()
-:     elseif should_sublimate then
+:     elseif should_sublimate and not you_are_vampire then
 :       crawl.mpr("<lightcyan>Autocasting Sublimation of Blood.</lightcyan>")
 :       sendkeys('zm')
 :     elseif should_channel_mp and you_are_sif then
@@ -130,18 +131,16 @@ autoinscribe += staff of energy:@w1
 :       crawl.mpr("<cyan>Autoeating chunks.</cyan>")
 :       sendkeys('e')
 :     elseif you_want_chunks and on_corpses() and not on_chunks() and (not can_not_butcher()) then
-:       if should_animate_skeleton and not can_bottle_blood then
+:       if should_animate_skeleton then
 :         crawl.mpr("<cyan>Autocasting Animate Skeleton for chunks.</cyan>")
 :         sendkeys('zA')
 :       else
-:         if can_bottle_blood then
-:           crawl.mpr("<cyan>Auto Bottling Blood (uses aB).</cyan>")
-:           sendkeys('aB')
-:         else
-:           crawl.mpr("<cyan>Autochopping corpse.</cyan>")
-:           sendkeys('c')
-:         end
+:         crawl.mpr("<cyan>Autochopping corpse.</cyan>")
+:         sendkeys('c')
 :       end
+:	  elseif on_corpses() and can_bottle_blood and (not can_not_bottle()) then
+:		crawl.mpr("<cyan>Auto Bottling Blood (uses aB).</cyan>")
+:       sendkeys('aB')
 :     elseif (not you_are_zin) and (not need_to_recover) and you_want_chunks and (not on_chunks()) and (not on_corpses()) and (not already_checked) then
 :       crawl.mpr("<yellow>You may need something to eat soon, looking for food.</yellow>")
 :       find_corpses()
@@ -199,13 +198,15 @@ autoinscribe += staff of energy:@w1
   function should_rest(hp, mp, max_hp, max_mp)
     local you_are_mummy = string.find(you.race(), "Mummy")
     local you_are_deep_dwarf = string.find(you.race(), "Deep Dwarf")
+	local you_are_bloodless = you.hunger_name() == "bloodless"
     return (not you_are_deep_dwarf)
             and (mp < (max_mp*0.50)
-                or (hp < (max_hp*0.80))
-                or ((max_hp-hp) > 30)
+                or ((not you_are_bloodless) 
+                    and ((hp < (max_hp*0.80))
+						or ((max_hp-hp) > 30)))
                 or ((max_mp-mp) > 20)
                 or (you.slowed())
-                or (you.poisoned())
+                or (you.poisoned() and not you_are_bloodless)
                 or (you.confused())
                 or (you.exhausted())
                 or (((hp < max_hp) or (mp < max_mp)) and you_are_mummy))
@@ -278,6 +279,10 @@ autoinscribe += staff of energy:@w1
     return string.find(crawl.messages(10), escape("There is nothing here that can be animated"))
   end
 
+  function can_not_bottle()
+    return string.find(crawl.messages(10), escape("There isn't anything to bottle here"))
+  end
+  
   function recently_mass_animated()
     return string.find(crawl.messages(10), escape("Autocasting Mass Animate Remains"))
   end

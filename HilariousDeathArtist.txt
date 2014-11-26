@@ -134,21 +134,24 @@ ae += useless_item, dangerous_item, evil_item
 # Autopickup artefacts
 ae += <artefact
 
-# Armour/Weapon autopickup by rwbarton, enhanced by HDA
+# Armour/Weapon autopickup by rwbarton, enhanced by HDA with fixes from Bloaxor
 {
 add_autopickup_func(function(it, name)
-
+  if it.is_useless then
+    return false
+  end
+  
   if name:find("curare") then return true end
   if name:find("dispersal") and (name:find("dart") or name:find("tomahawk")) then return true end
   if name:find("throwing net") then return true end
-
+ 
   local class = it.class(true)
   local armour_slots = {cloak="Cloak", helmet="Helmet", gloves="Gloves", boots="Boots", body="Armour", shield="Shield"}
 
   if (class == "armour") then
     sub_type = it.subtype()
     equipped_item = items.equipped_at(armour_slots[sub_type])
-
+ 
     if (sub_type == "cloak") or (sub_type == "helmet") or (sub_type == "gloves") or (sub_type == "boots") then
       if not equipped_item then
         return true
@@ -156,7 +159,7 @@ add_autopickup_func(function(it, name)
         return it.artefact or it.branded or it.ego
       end
     end
-
+ 
     if (sub_type == "body") then
       if equipped_item then
         local armourname = equipped_item.name()
@@ -168,26 +171,20 @@ add_autopickup_func(function(it, name)
       end
       return true
     end
-
+ 
     if (sub_type == "shield") then
       if equipped_item then
-        if equipped_item.artefact or equipped_item.branded or equipped_item.ego or (equipped_item.plus > 2) then
           return it.artefact or it.branded or it.ego
-        else
-          return true
-        end
-      else
-        return it.artefact or it.branded or it.ego
       end
     end
   end
-
+ 
   if (class == "weapon") then
     if (you.xl() < 12) or (you.god():find("Nemelex")
                            or (you.god():find("Yred"))
                            or (you.god():find("Beogh"))) then
       if it.branded and not (it.name() == "club") then
-        return true
+        return false
       end
     end
     local weapon = items.equipped_at("Weapon")
@@ -211,7 +208,7 @@ add_autopickup_func(function(it, name)
         if lb > 14 then
           if name:find("claymore") then return true end
         end
-        if axe > 8 then
+        if axe > 8 and mf <= 8 then
           if name:find("battleaxe") then return true end
           if name:find("broad axe") then return true end
           if name:find("war axe") then return true end
@@ -220,21 +217,21 @@ add_autopickup_func(function(it, name)
         if axe > 18 then
           if name:find("executioner") then return true end
         end
-        if mf > 8 then
+        if mf > 8 and staff <= 8 and axe <= 8 then
           if name:find("eveningstar") then return true end
           if name:find("demon whip") then return true end
           if name:find("sacred scourge") then return true end
           if name:find("dire flail") then return true end
         end
-        if mf > 14 then
+        if mf > 14 and staff <= 14 and axe <= 14 then
           if name:find("great mace") then return true end
         end
-        if pole > 8 then
+        if pole > 8 and staff <= 8 then
           if name:find("trident") then return true end
           if name:find("demon trident") then return true end
           if name:find("trishula") then return true end
         end
-        if pole > 14 then
+        if pole > 14 and staff <= 14 then
           if name:find("glaive") then return true end
           if name:find("bardiche") then return true end
         end
@@ -524,15 +521,17 @@ ai += scrolls? of magic mapping:!r
 ai += scrolls? of vulnerability:!r
 
 # Body Armour
-ai += fire dragon (armour|hide):rF++, rC-
-ai += gold dragon (armour|hide):rC+, rF+, rPois
-ai += ice dragon (armour|hide):rC++, rF-
-ai += mottled dragon (armour|hide):rSticky
-ai += pearl dragon (armour|hide):rN+
-ai += steam dragon (armour|hide):rSteam
-ai += storm dragon (armour|hide):rElec
-ai += swamp dragon (armour|hide):rPois
-ai += troll (hide|leather armour):regen
+#ai += fire dragon (armour|hide):rF++, rC-
+#ai += gold dragon (armour|hide):rC+, rF+, rPois
+#ai += ice dragon (armour|hide):rC++, rF-
+#ai += mottled dragon (armour|hide):rSticky
+#ai += pearl dragon (armour|hide):rN+
+#ai += quicksilver dragon (armour|hide):MR+
+#ai += shadow dragon (armour|hide):Stealth++++
+#ai += steam dragon (armour|hide):rSteam
+#ai += storm dragon (armour|hide):rElec
+#ai += swamp dragon (armour|hide):rPois
+#ai += troll (hide|leather armour):regen
 
 # Body Armour Egos
 #ai += ([^l] leather armour|mail|plate armour|robe|skin) of cold resistance:rC+
