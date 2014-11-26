@@ -7,7 +7,7 @@
 # include += HilariousDeathArtist.rc
 
 # SUCH EXCITEMENT!!!
-language = !!!
+# language = !!!
 # To override this setting, add the following line after include += HilariousDeathArtist.rc
 # language = en
 # To override other settings you don't like, you may redefine them after the include like the language setting
@@ -494,7 +494,10 @@ ai := autoinscribe
 # Inscribe vampiric weapons if you are not a vampire
 : if you.race() ~= "Vampire" then
 	ai += vampiric:!w
-: end
+# Inscribe potions of blood if you are a vampire
+: else
+  ai += potion.*blood:@q1
+: end 
 
 # Inscribe distortion weapons if you are not worshipping Lugonu
 : if you.god() ~= "Lugonu" then
