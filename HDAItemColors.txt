@@ -87,7 +87,7 @@ menu += $awesome:potions? of (beneficial|cure mutation|experience|gain)
 menu += $boring:amulet of inaccuracy
 menu += $good:amulet of (guardian spirit|stasis|warding)
 menu += $positive:amulet of (faith|rage|resist corrosion)
-menu += $verypositive:amulet of (clarity|conservation)
+menu += $verypositive:amulet of (clarity|conservation|regeneration)
 menu += $verypositive:amulet of (resist mutation|the gourmand)
 
 # Rings
