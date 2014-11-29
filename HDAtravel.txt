@@ -105,7 +105,7 @@ autoinscribe += staff of energy:@w1
 :     elseif should_sublimate and not you_are_vampire then
 :       crawl.mpr("<lightcyan>Autocasting Sublimation of Blood.</lightcyan>")
 :       sendkeys('zm')
-:     elseif should_channel_mp and you_are_sif then
+:     elseif should_channel_mp and you_are_sif and (you.piety_rank() > 0) then
 :       crawl.mpr("<lightcyan>Autochanneling using Sif.</lightcyan>")
 :       sendkeys('aa')
 :     elseif should_regen_hp and can_cast_regen then
