@@ -42,7 +42,7 @@ more += wave of frost
 more += You hear the drain falling apart
 more += You hear.*crackle.*magical portal
 more += You hear.*crackling.*archway
-more += You hear.*creaking.*oriflamme
+more += You hear.*creaking.*(oriflamme|portcullis)
 more += You hear.*hiss.*sand
 more += You hear.*rumble.*avalanche
 more += You hear.*rusting.*drain
@@ -120,6 +120,7 @@ more += Terrible wounds (open|spread) all over you
 more += The acid corrodes your
 more += The air around.*erupts in flames
 more += The air twists around and violently strikes you in flight
+more += You shudder from the earth-shattering force
 more += The arrow of dispersal hits you[^r]
 more += The barbed spikes become lodged in your body
 more += The barbed spikes dig painfully into your body as you move
@@ -234,6 +235,7 @@ more += You can move again
 more += You slip out of the net
 more += You.*and break free
 more += Your fit of retching subsides
+more += seems mollified
 
 # Ghouls
 : if you.race() == "Ghoul" then
@@ -417,6 +419,7 @@ more += The.*is a mimic
 more += You sense the presence of something unfriendly
 more += The.*answers the.*call
 more += Wisps of shadow swirl around
+more += Shadows whirl around
 
 # Item Use
 more += drinks a potion
