@@ -35,7 +35,7 @@
   --Escapes the special characters in a string for pattern matching
   function escape(str)
     --Escapes parens and dash "()-"
-    local escaped = str:gsub('[%(%)%-]','%\%1')
+    local escaped = str:gsub('[%(%)%-]','\\%1')
     --Removes any coloration parts of the string
     return (escaped:gsub('<[^<]*>',''))
   end
