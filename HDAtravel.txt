@@ -501,8 +501,8 @@ autoinscribe += staff of energy:@w1
   -- Returns a table where the key is the monster description and value is the total number of that mob in your vision
   function getMonsterList()
     local monsters = {}
-    for x = -8,8 do
-      for y = -8,8 do
+    for x = -7,7 do
+      for y = -7,7 do
         m = monster.get_monster_at(x, y)
         local attitude_hostile = 0
         if m and (m:attitude() == attitude_hostile) and not (m:is_firewood()) then
