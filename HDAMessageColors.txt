@@ -500,6 +500,7 @@ msc += $item_dmg:You begin to rot
 msc += $item_dmg:Your tentacle spike disappears
 msc += $item_dmg:You feel less repulsive
 msc += $item_dmg:The jelly growth is reabsorbed into your body
+msc += $item_dmg:Your pseudopods become smaller
 
 # Warning Messages
 msc ^= $warning:Creating passages of Golubria requires sufficient empty space
