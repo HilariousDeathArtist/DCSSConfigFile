@@ -1544,7 +1544,7 @@ msc += $good:collides with
 msc += $good:slams into the
 
 # Non-damage combat messages
-msc += $positive:the.*corpse armor sloughs away
+msc += $positive:the.*corpse armour sloughs away
 msc += $positive:You grow two more
 msc += $positive:You draw.*blood
 msc += $positive:You feel.*less thirsty
