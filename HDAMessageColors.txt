@@ -65,6 +65,7 @@ msc =
 msc += $mp:You feel your power returning
 
 #msc += $danger:
+msc += $danger:cannot move out of your way
 msc += $danger:Tentacles burst from Mnoleg
 msc += $danger:tentacle flies out from Mnoleg
 msc += $danger:roused to righteous anger
