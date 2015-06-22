@@ -105,6 +105,7 @@ more += Your body armour is too heavy
 
 # Bad things happening to you
 more += corrodes your equipment
+more += Your corrosive artefact corrodes you
 more += are blown away by the wind
 more += dispelling energy hits you
 more += infuriates you
