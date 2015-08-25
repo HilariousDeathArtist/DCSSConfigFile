@@ -1948,6 +1948,7 @@ msc += $awesome:You feel power rushing into your body
 msc += $awesome:Your blood runs red-hot
 msc += $awesome:Your feet have mutated into hooves
 msc ^= $awesome:You feel resistant to hostile enchantments
+msc += $awesome:You feel genetically immutable
 msc += $awesome:You feel power flowing into your body
 msc ^= $awesome:You feel more in touch with the powers of death
 msc ^= $awesome:You feel resistant to poisons?
