@@ -65,6 +65,7 @@ msc =
 msc += $mp:You feel your power returning
 
 #msc += $danger:
+msc += $danger:The entropy weaver begins to chant a word of entropy
 msc += $danger:Your corrosive artefact corrodes you
 msc += $danger:cannot move out of your way
 msc += $danger:Tentacles burst from Mnoleg
