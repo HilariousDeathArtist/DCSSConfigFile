@@ -226,7 +226,6 @@ more += Your guardian golem overheats
 more += your magic stops regenerating
 more += Your scales start
 more += your.*devoured
-more += Your?.*can no longer
 more += Green shoots are pushing up through the earth
 
 # Things getting better
@@ -365,6 +364,7 @@ more += You really shouldn't be using
 # Gaining new abilities
 : if you.god() ~= "Uskayaw" then
 more += You can now
+more += Your?.*can no longer
 : end
 
 # Wrath
