@@ -209,7 +209,6 @@ more += The divine light dispels your darkness!
 more += The walls disappear
 more += There is a sealed passage
 more += You are wearing\:
-more += You can now
 more += You cannot afford.*fee
 more += You feel (dopey|clumsy|weak)
 more += You feel a genetic drift
@@ -356,11 +355,18 @@ more += Sif Muna is protecting you from the effects of miscast magic
 more += The Shining One will now bless
 # Zin
 more += will now cure all your mutations
+
 # You Screwed Up
 more += is no longer ready
 
 # Poor Decisions
 more += You really shouldn't be using
+
+# Gaining and losing new abilities
+: if you.god() == "Uskayaw" then
+more -= You can now
+more -= You can no longer
+: end
 
 # Wrath
 more += Nemelex gives you another card to finish dealing
