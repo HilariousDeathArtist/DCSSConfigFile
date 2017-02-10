@@ -362,10 +362,9 @@ more += is no longer ready
 # Poor Decisions
 more += You really shouldn't be using
 
-# Gaining and losing new abilities
-: if you.god() == "Uskayaw" then
-more -= You can now
-more -= You can no longer
+# Gaining new abilities
+: if you.god() ~= "Uskayaw" then
+more += You can now
 : end
 
 # Wrath
