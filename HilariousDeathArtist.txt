@@ -188,7 +188,7 @@ add_autopickup_func(function(it, name)
 		
     if (you.xl() < 12) or (you.god():find("Nemelex")
                            or (you.god():find("Yred"))
-                           or (beogh_autopickup) then
+                           or (beogh_autopickup)) then
       if it.branded and not (it.name() == "club") then
         return false
       end
