@@ -13,7 +13,12 @@
 # To override other settings you don't like, you may redefine them after the include like the language setting
 
 # Logs chat messages into the notes
+# Set this to false before including my rcfile to disable
 note_chat_messages = true
+
+# Picks up all ego weapons if you worship Beogh
+# Set this to false before including my rcfile to disable
+beogh_autopickup = you.god():find("Beogh")
 
 <
   function ready()
@@ -183,7 +188,7 @@ add_autopickup_func(function(it, name)
 		
     if (you.xl() < 12) or (you.god():find("Nemelex")
                            or (you.god():find("Yred"))
-                           or (you.god():find("Beogh"))) then
+                           or (beogh_autopickup) then
       if it.branded and not (it.name() == "club") then
         return false
       end
